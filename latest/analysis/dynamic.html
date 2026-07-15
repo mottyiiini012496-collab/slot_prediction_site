@@ -127,7 +127,10 @@ async function initDB(){
       SQLmod=SQL;
       // data.db は店舗レベルの軽量データのみ（台別の重いデータは含まない。
       // 台別データは店舗ごとに分割された db/<slug>.db を選択時に個別取得する）
-      fetch('../data.db').then(r=>{
+      // data.db / db/ は publish_site/（リポジトリ直下）に置かれる。
+      // このページは publish_site/<日付 or latest>/analysis/dynamic.html なので、
+      // リポジトリ直下までは2階層上（../../）。
+      fetch('../../data.db').then(r=>{
         if(!r.ok) throw new Error(`data.db HTTP ${r.status}`);
         return r.arrayBuffer();
       }).then(buf=>{
@@ -142,7 +145,7 @@ async function initDB(){
 
 async function loadMachineDb(slug){
   if(machineDbCache[slug]) return machineDbCache[slug];
-  const buf=await fetch(`../db/${slug}.db`).then(r=>{
+  const buf=await fetch(`../../db/${slug}.db`).then(r=>{
     if(!r.ok) throw new Error(`db/${slug}.db not found`);
     return r.arrayBuffer();
   });
