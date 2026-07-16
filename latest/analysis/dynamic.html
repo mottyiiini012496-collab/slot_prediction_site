@@ -1,0 +1,415 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>分析（動的版）｜外部公開版</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="https://sql.js.org/dist/sql-wasm.js"></script>
+<style>
+:root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f1f5f9;--line:#e5e9ef;--ink:#0f172a;--sub:#64748b;
+--accent:#4f46e5;--blue:#4f46e5;--green:#15a34a;--red:#dc2626;--orange:#ea580c;--chip:#eef2ff;
+--shadow:0 1px 3px rgba(15,23,42,.06);--shadow2:0 8px 24px rgba(79,70,229,.10);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(6px);
+border-bottom:1px solid var(--line);box-shadow:var(--shadow);
+display:flex;align-items:center;gap:12px;padding:11px 20px;flex-wrap:wrap}
+header.top .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
+header.top nav{display:flex;gap:4px;flex-wrap:wrap}
+header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
+header.top nav a.on{background:var(--chip);color:var(--accent)}
+header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
+.crumb{color:var(--sub);font-size:12.5px;margin-bottom:14px}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:.01em}
+h2{font-size:18px;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:16px 0 8px;color:#334155}
+.sub{color:var(--sub);font-size:13px;margin-bottom:18px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+select,input{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
+.note{background:#eef2ff;border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:12.5px;color:#3730a3;margin:12px 0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:right;white-space:nowrap}
+th{color:var(--sub);position:sticky;top:0;background:var(--panel2);cursor:pointer;user-select:none;font-weight:700}
+td.l,th.l{text-align:left}tbody tr:last-child td{border-bottom:none}tr:hover td{background:#f8fafc}
+.pos{color:var(--green)}.neg{color:var(--red)}.muted{color:var(--sub);font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#loader{text-align:center;padding:20px;color:var(--sub)}
+#content{display:none}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+@media(max-width:640px){.wrap{padding:16px 13px 60px}h1{font-size:20px}}
+</style>
+</head><body>
+<header class="top"><span class="brand">🎰 スロット分析 <span class="muted">動的版</span></span>
+<nav>
+<a href="../index.html">トップ</a>
+
+<a href="index.html">店舗分析（静的版）</a>
+<a href="../archive.html">過去ログ</a>
+</nav>
+</header>
+<div class="wrap">
+<div class="crumb"><a href="index.html">店舗分析</a> ／ <span id="breadcrumb">選択してください</span></div>
+
+<div id="loader">
+<p>データを読み込み中...</p>
+</div>
+
+<div id="content">
+<h1 id="page-title"></h1>
+<div class="sub" id="page-sub"></div>
+
+<h2>日別実績（直近90日）</h2>
+<div id="daily" style="width:100%;height:340px"></div>
+
+<div class="two">
+<div><h3>曜日の傾向（平均差枚）</h3><div id="wk" style="width:100%;height:240px"></div></div>
+<div><h3>日別サマリ</h3>
+<div class="tablewrap" style="max-height:270px"><table><thead><tr><th class="l">日付</th><th>曜</th><th>合計</th><th>平均</th><th>勝率</th><th>台数</th></tr></thead><tbody id="dtb"></tbody></table></div></div>
+</div>
+
+<h2>機種ランキング（直近30日・平均差枚順・実績のみ）</h2>
+<div class="muted" style="margin-bottom:6px">機種名クリックで台一覧を表示します。</div>
+<div class="tablewrap"><table id="mtbl"><thead><tr><th class="l">機種</th><th>台日数</th><th>平均差枚</th><th>勝ち台率</th></tr></thead><tbody id="mtb"></tbody></table></div>
+
+<div id="machine-list-section" style="display:none">
+<h2>台一覧 <span class="muted" id="ml-model-name" style="font-size:13px;font-weight:normal"></span></h2>
+<div class="muted" style="margin-bottom:6px">台番号クリックで台ごとの実績詳細を表示します。</div>
+<div class="tablewrap"><table id="mltbl"><thead><tr><th class="l">台番号</th><th>直近3日平均</th><th>直近7日平均</th><th>当月平均</th><th>当月累積</th><th>収録日数</th></tr></thead><tbody id="mltb"></tbody></table></div>
+</div>
+
+<div id="machine-detail-section" style="display:none">
+<h2>台別実績詳細 <span class="muted" id="md-title" style="font-size:13px;font-weight:normal"></span></h2>
+<div class="sub" id="md-sub"></div>
+<div id="md-daily" style="width:100%;height:280px"></div>
+<div class="two">
+<div><h3>曜日の傾向（平均差枚）</h3><div id="md-wk" style="width:100%;height:220px"></div></div>
+<div><h3>日にちの傾向（1〜31日・平均差枚）</h3><div id="md-dom" style="width:100%;height:220px"></div></div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+const CPOS='#16a34a',CNEG='#dc2626',CLINE='#4f46e5',CGRID='#e6e9ef',CNULL='#cbd5e1';
+const PLT={paper_bgcolor:'#ffffff',plot_bgcolor:'#ffffff',font:{color:'#334155'},margin:{l:56,r:14,t:10,b:40},
+ xaxis:{gridcolor:CGRID,zeroline:false},yaxis:{gridcolor:CGRID,zeroline:false}};
+function ax(o){return Object.assign({gridcolor:CGRID,zeroline:false,automargin:true,titlefont:{size:12},tickfont:{size:11}},o||{});}
+function axDate(title){return ax({title:title,type:'category',tickmode:'linear',dtick:1,tickangle:-60,tickfont:{size:9}});}
+function axCat(title){return ax({title:title,type:'category'});}
+function fmtPct(v){return v==null?'-':Math.round(v*100)+'%';}
+function fmtNum(v){return v==null?'-':(v>0?'+':'')+Math.round(v);}
+function cls(v){return v==null?'':(v>0?'pos':'neg');}
+function sortRows(rows,key,dir){rows.sort((a,b)=>((b[key]??-1e18)-(a[key]??-1e18))*(dir||1));return rows;}
+
+const WK=['月','火','水','木','金','土','日'];
+let SQLmod=null,db=null,stores=[],storeSlug={},selectedStore=null;
+const machineDbCache={}; // slug -> SQL.Database（店舗選択のたびに毎回ダウンロードしないようキャッシュ）
+
+function _showLoadError(msg){
+  const el=document.getElementById('loader');
+  if(el) el.innerHTML=`<div class="note">読み込みに失敗しました: ${msg}<br>ブラウザのコンソール（F12）にエラー詳細が出ています。</div>`;
+  console.error('[analysis-dynamic]',msg);
+}
+
+async function initDB(){
+  return new Promise(resolve=>{
+    // sql.jsはデフォルトだと「今のページと同じディレクトリ」からsql-wasm.wasmを
+    // 探しに行くため、CDN配信のsql-wasm.jsをそのまま呼ぶとwasmが404になり
+    // initSqlJs()がrejectして無限に「読み込み中」のまま止まる。
+    // locateFileでCDN上のwasmを明示的に指定する。
+    initSqlJs({locateFile:file=>`https://sql.js.org/dist/${file}`}).then(SQL=>{
+      SQLmod=SQL;
+      // data.db は店舗レベルの軽量データのみ（台別の重いデータは含まない。
+      // 台別データは店舗ごとに分割された db/<slug>.db を選択時に個別取得する）
+      // data.db / db/ は publish_site/（リポジトリ直下）に置かれる。
+      // このページは publish_site/<日付 or latest>/analysis/dynamic.html なので、
+      // リポジトリ直下までは2階層上（../../）。
+      fetch('../../data.db').then(r=>{
+        if(!r.ok) throw new Error(`data.db HTTP ${r.status}`);
+        return r.arrayBuffer();
+      }).then(buf=>{
+        db=new SQL.Database(new Uint8Array(buf));
+        console.log('[SQLite] data.db loaded');
+        loadStores();
+        resolve();
+      }).catch(e=>{_showLoadError(`data.db取得エラー: ${e.message}`);resolve();});
+    }).catch(e=>{_showLoadError(`sql.js初期化エラー: ${e.message||e}`);resolve();});
+  });
+}
+
+async function loadMachineDb(slug){
+  if(machineDbCache[slug]) return machineDbCache[slug];
+  const buf=await fetch(`../../db/${slug}.db`).then(r=>{
+    if(!r.ok) throw new Error(`db/${slug}.db not found`);
+    return r.arrayBuffer();
+  });
+  const mdb=new SQLmod.Database(new Uint8Array(buf));
+  machineDbCache[slug]=mdb;
+  return mdb;
+}
+
+function loadStores(){
+  try{
+    const res=db.exec("SELECT store_name,slug FROM stores ORDER BY store_name");
+    if(res.length>0){
+      stores=res[0].values.map(r=>r[0]);
+      res[0].values.forEach(([name,slug])=>{storeSlug[name]=slug;});
+      console.log(`[SQLite] ${stores.length} stores loaded`);
+      buildStoreSelector();
+      document.getElementById('loader').style.display='none';
+      if(stores.length>0){
+        selectStore(stores[0]);
+      }
+    }
+  }catch(e){
+    console.error('loadStores error:',e);
+  }
+}
+
+function buildStoreSelector(){
+  let html='<label>店舗を選択: <select id="storeSelect" onchange="selectStore(this.value)">';
+  html+='<option value="">--選択してください--</option>';
+  stores.forEach(s=>{html+=`<option value="${s}">${s}</option>`;});
+  html+='</select></label>';
+  const existing=document.querySelector('.controls');
+  if(existing){
+    existing.innerHTML=html;
+  }else{
+    const ctrl=document.createElement('div');
+    ctrl.className='controls';
+    ctrl.innerHTML=html;
+    document.querySelector('.wrap').insertBefore(ctrl,document.getElementById('content'));
+  }
+}
+
+function selectStore(store){
+  if(!store){return;}
+  selectedStore=store;
+  document.getElementById('breadcrumb').textContent=store;
+  document.getElementById('storeSelect').value=store;
+  renderStoreData(store);
+}
+
+function renderStoreData(store){
+  try{
+    // 店舗基本情報
+    const storeRes=db.exec(`SELECT nm,dmin,dmax,avg30,win30 FROM stores WHERE store_name=?`,[store]);
+    if(storeRes.length===0){
+      document.getElementById('content').innerHTML='<div class="note">データがありません。</div>';
+      return;
+    }
+    const[nm,dmin,dmax,avg30,win30]=storeRes[0].values[0];
+
+    document.getElementById('page-title').textContent=store;
+    document.getElementById('page-sub').innerHTML=
+      `台数 ${nm} ／ 収録 ${dmin}〜${dmax} ／ 直近30日 勝ち台率 ${Math.round(win30*100)}% ／ 平均差枚<span class="${avg30>0?'pos':'neg'}">${avg30>=0?'+':''}${Math.round(avg30)}</span>`;
+    document.getElementById('content').style.display='block';
+
+    // 日別実績（直近90日）
+    const dailyRes=db.exec(`SELECT date,tot,avg,win,n,dow FROM daily_results WHERE store_name=? ORDER BY date`,[store]);
+    const dailyData={dates:[],tot:[],win:[],rows:[]};
+    if(dailyRes.length>0){
+      dailyRes[0].values.forEach(([date,tot,avg,win,n,dow])=>{
+        dailyData.dates.push(date);
+        dailyData.tot.push(Math.round(tot));
+        dailyData.win.push(Math.round(win*100*10)/10);
+        dailyData.rows.push({date,dow,tot:Math.round(tot),avg:Math.round(avg),win:Math.round(win*1000)/1000,n});
+      });
+    }
+
+    // 日別グラフ
+    Plotly.newPlot('daily',
+      [{type:'bar',x:dailyData.dates,y:dailyData.tot,name:'合計差枚',marker:{color:dailyData.tot.map(v=>v<0?CNEG:CPOS)}},
+       {type:'scatter',x:dailyData.dates,y:dailyData.win,name:'勝ち台率%',yaxis:'y2',line:{color:CLINE}}],
+      {...PLT,xaxis:axDate('日付'),yaxis:ax({title:'合計差枚'}),
+       yaxis2:Object.assign(ax({title:'勝率%'}),{overlaying:'y',side:'right',range:[0,60],gridcolor:'transparent'}),
+       legend:{orientation:'h'}},
+      {responsive:true,displayModeBar:false,staticPlot:true});
+
+    // 曜日別傾向
+    const wkRes=db.exec(`SELECT dow,wk_avg FROM weekly_trends WHERE store_name=? ORDER BY dow`,[store]);
+    const wkData=[null,null,null,null,null,null,null];
+    if(wkRes.length>0){
+      wkRes[0].values.forEach(([dow,wk_avg])=>{wkData[dow]=Math.round(wk_avg);});
+    }
+    Plotly.newPlot('wk',
+      [{type:'bar',x:WK,y:wkData,marker:{color:wkData.map(v=>v==null?CNULL:(v<0?CNEG:CPOS))}}],
+      {...PLT,xaxis:axCat('曜日'),yaxis:ax({title:'平均差枚'}),margin:{l:56,r:10,t:6,b:36}},
+      {responsive:true,displayModeBar:false,staticPlot:true});
+
+    // 日別テーブル
+    const tb=document.getElementById('dtb');
+    tb.innerHTML='';
+    dailyData.rows.reverse().forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="l">${r.date}</td><td>${WK[r.dow]}</td><td class="${cls(r.tot)}">${fmtNum(r.tot)}</td><td class="${cls(r.avg)}">${fmtNum(r.avg)}</td><td>${fmtPct(r.win)}</td><td>${r.n}</td>`;
+      tb.appendChild(tr);
+    });
+
+    // 機種ランキング（実績のみ。台一覧・台詳細セクションは切り替えるので毎回隠す）
+    document.getElementById('machine-list-section').style.display='none';
+    document.getElementById('machine-detail-section').style.display='none';
+
+    const modelRes=db.exec(`SELECT model,n,avg,win FROM model_rankings WHERE store_name=? ORDER BY avg DESC`,[store]);
+    const models=[];
+    if(modelRes.length>0){
+      modelRes[0].values.forEach(([model,n,avg,win])=>{
+        models.push({model,n:parseInt(n),avg:Math.round(avg),win:Math.round(win*1000)/1000});
+      });
+    }
+    let mdir=-1,mkey='avg';
+    function renderModels(){
+      const mtb=document.getElementById('mtb');
+      mtb.innerHTML='';
+      sortRows(models,mkey,mdir);
+      models.forEach(r=>{
+        const tr=document.createElement('tr');
+        tr.className='clk';
+        tr.innerHTML=`<td class="l"><a href="javascript:void(0)" onclick="selectModel('${store.replace(/'/g,"\\'")}','${r.model.replace(/'/g,"\\'")}')">${r.model}</a></td><td>${r.n}</td><td class="${cls(r.avg)}">${fmtNum(r.avg)}</td><td>${fmtPct(r.win)}</td>`;
+        mtb.appendChild(tr);
+      });
+    }
+    document.querySelectorAll('#mtbl th').forEach((th,i)=>{
+      const ks=['model','n','avg','win'];
+      th.addEventListener('click',()=>{
+        if(mkey===ks[i])mdir*=-1;else{mkey=ks[i];mdir=-1;}
+        renderModels();
+      });
+    });
+    renderModels();
+
+  }catch(e){
+    console.error('renderStoreData error:',e);
+    document.getElementById('content').innerHTML=`<div class="note">エラー: ${e.message}</div>`;
+  }
+}
+
+// ============================================================
+// 台一覧（機種選択後）— 店舗ごとに分割された db/<slug>.db を遅延取得
+// ============================================================
+async function selectModel(store,model){
+  try{
+    document.getElementById('machine-list-section').style.display='block';
+    document.getElementById('ml-model-name').textContent=`／ ${model}（読み込み中…）`;
+    document.getElementById('machine-detail-section').style.display='none';
+
+    const slug=storeSlug[store];
+    const mdb=await loadMachineDb(slug);
+
+    document.getElementById('ml-model-name').textContent=`／ ${model}`;
+
+    const res=mdb.exec(
+      `SELECT machine,last3,last7,monthly_avg,monthly_cumsum,n_days FROM machine_summary
+       WHERE model=? ORDER BY CAST(machine AS INTEGER)`,
+      [model]
+    );
+    const rows=[];
+    if(res.length>0){
+      res[0].values.forEach(([machine,last3,last7,monthly_avg,monthly_cumsum,n_days])=>{
+        rows.push({machine,last3,last7,monthly_avg,monthly_cumsum,n_days});
+      });
+    }
+    const tb=document.getElementById('mltb');
+    tb.innerHTML='';
+    if(rows.length===0){
+      tb.innerHTML='<tr><td colspan="6" class="muted">台データがありません。</td></tr>';
+      return;
+    }
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      tr.className='clk';
+      tr.innerHTML=`<td class="l"><a href="javascript:void(0)" onclick="selectMachine('${store.replace(/'/g,"\\'")}','${model.replace(/'/g,"\\'")}','${String(r.machine).replace(/'/g,"\\'")}')">台${r.machine}</a></td>`
+        +`<td class="${cls(r.last3)}">${fmtNum(r.last3)}</td><td class="${cls(r.last7)}">${fmtNum(r.last7)}</td>`
+        +`<td class="${cls(r.monthly_avg)}">${fmtNum(r.monthly_avg)}</td><td class="${cls(r.monthly_cumsum)}">${fmtNum(r.monthly_cumsum)}</td><td>${r.n_days}</td>`;
+      tb.appendChild(tr);
+    });
+    document.getElementById('machine-list-section').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){
+    console.error('selectModel error:',e);
+    document.getElementById('ml-model-name').textContent='／ 読み込みに失敗しました';
+  }
+}
+
+// ============================================================
+// 台別実績詳細（同じ店舗の db/<slug>.db は既にキャッシュ済みのはず）
+// ============================================================
+async function selectMachine(store,model,machine){
+  try{
+    document.getElementById('machine-detail-section').style.display='block';
+    document.getElementById('md-title').textContent=`／ ${model} ／ 台${machine}`;
+
+    const slug=storeSlug[store];
+    const mdb=await loadMachineDb(slug);
+
+    // サマリ
+    const sumRes=mdb.exec(
+      `SELECT last3,last7,monthly_avg,monthly_cumsum,n_days FROM machine_summary
+       WHERE model=? AND machine=?`,
+      [model,machine]
+    );
+    if(sumRes.length>0){
+      const[last3,last7,monthly_avg,monthly_cumsum,n_days]=sumRes[0].values[0];
+      document.getElementById('md-sub').innerHTML=
+        `直近3日平均 <span class="${cls(last3)}">${fmtNum(last3)}</span>`
+        +` ／ 直近7日平均 <span class="${cls(last7)}">${fmtNum(last7)}</span>`
+        +` ／ 当月平均 <span class="${cls(monthly_avg)}">${fmtNum(monthly_avg)}</span>`
+        +` ／ 当月累積 <span class="${cls(monthly_cumsum)}">${fmtNum(monthly_cumsum)}</span>`
+        +` ／ 収録日数 ${n_days}日`;
+    }
+
+    // 日別推移
+    const dailyRes=mdb.exec(
+      `SELECT date,diff FROM machine_daily WHERE model=? AND machine=? ORDER BY date`,
+      [model,machine]
+    );
+    const dates=[],diffs=[];
+    if(dailyRes.length>0){
+      dailyRes[0].values.forEach(([date,diff])=>{dates.push(date);diffs.push(Math.round(diff));});
+    }
+    Plotly.newPlot('md-daily',
+      [{type:'bar',x:dates,y:diffs,marker:{color:diffs.map(v=>v<0?CNEG:CPOS)}}],
+      {...PLT,xaxis:axDate('日付'),yaxis:ax({title:'差枚'})},
+      {responsive:true,displayModeBar:false,staticPlot:true});
+
+    // 曜日別傾向
+    const wkRes=mdb.exec(
+      `SELECT dow,avg_diff FROM machine_weekday WHERE model=? AND machine=? ORDER BY dow`,
+      [model,machine]
+    );
+    const wkData=[null,null,null,null,null,null,null];
+    if(wkRes.length>0){
+      wkRes[0].values.forEach(([dow,avg_diff])=>{wkData[dow]=Math.round(avg_diff);});
+    }
+    Plotly.newPlot('md-wk',
+      [{type:'bar',x:WK,y:wkData,marker:{color:wkData.map(v=>v==null?CNULL:(v<0?CNEG:CPOS))}}],
+      {...PLT,xaxis:axCat('曜日'),yaxis:ax({title:'平均差枚'}),margin:{l:56,r:10,t:6,b:36}},
+      {responsive:true,displayModeBar:false,staticPlot:true});
+
+    // 日にち別傾向（1〜31日）
+    const domRes=mdb.exec(
+      `SELECT day,avg_diff FROM machine_day_of_month WHERE model=? AND machine=? ORDER BY day`,
+      [model,machine]
+    );
+    const domLabels=[],domData=[];
+    if(domRes.length>0){
+      domRes[0].values.forEach(([day,avg_diff])=>{domLabels.push(String(day));domData.push(Math.round(avg_diff));});
+    }
+    Plotly.newPlot('md-dom',
+      [{type:'bar',x:domLabels,y:domData,marker:{color:domData.map(v=>v==null?CNULL:(v<0?CNEG:CPOS))}}],
+      {...PLT,xaxis:axCat('日'),yaxis:ax({title:'平均差枚'}),margin:{l:56,r:10,t:6,b:36}},
+      {responsive:true,displayModeBar:false,staticPlot:true});
+
+    document.getElementById('machine-detail-section').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(e){
+    console.error('selectMachine error:',e);
+  }
+}
+
+// 初期化
+initDB();
+</script>
+</body></html>

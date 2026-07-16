@@ -1,0 +1,1050 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>狙いナビ — 本日｜外部公開版</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f1f5f9;--line:#e5e9ef;--ink:#0f172a;--sub:#64748b;
+--accent:#4f46e5;--blue:#4f46e5;--green:#15a34a;--red:#dc2626;--orange:#ea580c;--chip:#eef2ff;
+--shadow:0 1px 3px rgba(15,23,42,.06);--shadow2:0 8px 24px rgba(79,70,229,.10);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(6px);
+border-bottom:1px solid var(--line);box-shadow:var(--shadow);
+display:flex;align-items:center;gap:12px;padding:11px 20px;flex-wrap:wrap}
+header.top .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
+header.top nav{display:flex;gap:4px;flex-wrap:wrap}
+header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
+header.top nav a.on{background:var(--chip);color:var(--accent)}
+header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
+header.top .fresh{margin-left:auto;font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
+.crumb{color:var(--sub);font-size:12.5px;margin-bottom:14px}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:.01em}
+h2{font-size:18px;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:16px 0 8px;color:#334155}
+.sub{color:var(--sub);font-size:13px;margin-bottom:18px}
+.grid{display:grid;gap:14px}.cards{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:16px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px 19px;text-decoration:none;color:var(--ink);display:block;box-shadow:var(--shadow)}
+a.card{transition:transform .15s, box-shadow .15s, border-color .15s}
+a.card:hover{border-color:var(--accent);box-shadow:var(--shadow2);transform:translateY(-2px)}
+.card h3{margin:0 0 6px;font-size:16px;color:var(--ink)}.card p{margin:0;color:var(--sub);font-size:13px}
+.kpi .n{font-size:24px;font-weight:800;color:var(--ink)}.kpi .l{font-size:12px;color:var(--sub);margin-top:3px}.kpi .d{font-size:12px;margin-top:2px}
+.pos{color:var(--green)}.neg{color:var(--red)}.muted{color:var(--sub);font-size:12px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:right;white-space:nowrap}
+th{color:var(--sub);position:sticky;top:0;background:var(--panel2);cursor:pointer;user-select:none;font-weight:700}
+td.l,th.l{text-align:left}tbody tr:last-child td{border-bottom:none}tr:hover td{background:#f8fafc}
+.note{background:#eef2ff;border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:12.5px;color:#3730a3;margin:12px 0}
+.rank{color:var(--accent);font-weight:700}
+.panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:14px;padding:15px 17px;margin:14px 0;box-shadow:var(--shadow)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chip{padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#334155;font-size:12px}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+select,input{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
+.store{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0;box-shadow:var(--shadow)}
+.store h3{margin:0 0 4px;font-size:18px;color:var(--ink)}.big{color:var(--orange);font-weight:700}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+@media(max-width:640px){.wrap{padding:16px 13px 60px}h1{font-size:20px}header.top .fresh{width:100%;margin:4px 0 0}}
+/* ---- gate ---- */
+#_gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+#_gatebox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:320px;width:90%;box-shadow:var(--shadow2);text-align:center}
+#_gatebox .t{font-weight:800;font-size:16px;margin-bottom:4px}
+#_gatebox .s{color:var(--sub);font-size:13px;margin-bottom:16px}
+#_gatebox input{width:100%;padding:10px 12px;margin-bottom:10px;text-align:left}
+#_gatebox button{width:100%;padding:10px;border:0;border-radius:9px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+#_gateerr{color:var(--red);font-size:12px;margin-top:8px;display:none}
+#_content{display:none}
+</style>
+<script>
+function fmtPct(v){return v==null?'-':Math.round(v*100)+'%';}
+function fmtNum(v){return v==null?'-':(v>0?'+':'')+Math.round(v);}
+function cls(v){return v==null?'':(v>0?'pos':'neg');}
+function sortRows(rows,key,dir){rows.sort((a,b)=>((b[key]??-1e18)-(a[key]??-1e18))*(dir||1));return rows;}
+const CPOS='#16a34a',CNEG='#dc2626',CLINE='#4f46e5',CGRID='#e6e9ef',CNULL='#cbd5e1';
+const PLT={paper_bgcolor:'#ffffff',plot_bgcolor:'#ffffff',font:{color:'#334155'},margin:{l:56,r:14,t:10,b:40},
+ xaxis:{gridcolor:CGRID,zeroline:false},yaxis:{gridcolor:CGRID,zeroline:false}};
+function ax(o){return Object.assign({gridcolor:CGRID,zeroline:false,automargin:true,titlefont:{size:12},tickfont:{size:11}},o||{});}
+function axDate(title){return ax({title:title,type:'category',tickmode:'linear',dtick:1,tickangle:-60,tickfont:{size:9}});}
+function axCat(title){return ax({title:title,type:'category'});}
+</script>
+</head><body>
+<div id="_gate"><div id="_gatebox">
+<div class="t">🔒 パスワードが必要です</div>
+<div class="s">チーム内限定ページです</div>
+<input id="_gatepw" type="password" placeholder="パスワード" autocomplete="off">
+<button onclick="_gateCheck()">開く</button>
+<div id="_gateerr">パスワードが違います</div>
+</div></div>
+
+<div id="_content">
+<header class="top"><span class="brand">🎰 スロット分析 <span class="muted">外部公開版</span></span>
+<nav>
+<a href="index.html">トップ</a>
+
+<a href="aim_today.html">狙いナビ(本日)</a>
+<a href="aim_tomorrow.html">狙いナビ(翌日)</a>
+<a href="all_today.html">全予想(本日)</a>
+
+<a href="analysis/dynamic.html">店舗分析（実績）</a>
+
+<a href="../archive.html">過去ログ</a>
+
+</nav>
+<span class="fresh">データ最新 <b>2026-07-15</b> <span class="muted" style="font-size:11px">（HTML更新 2026-07-17 07:54:23）</span></header>
+<div class="wrap">
+<div class="crumb"><a href="index.html">トップ</a> ／ 狙いナビ（本日）</div>
+
+<h1>狙いナビ — 本日着席</h1>
+<div class="sub">エリア内は並列抽選できる前提。座れる店の中でML上位台を狙う。全エリアをまとめて表示しています。</div>
+
+<div class="note">
+<b>期待差枚</b>＝1日の平均(期待値)。大勝ちを含むため+の台が多めに出るが、<u>上位台でも当日は約6割がマイナスで終わる</u>（勝つ日の大勝ちでトータル+を作る＝多く座って回収する前提）。
+<b style="color:var(--green)">プラス率</b>＝当日プラスで終わる確率。<b style="color:var(--accent)">大勝ち率</b>＝差枚≥2000で終わる確率。
+</div>
+
+
+
+
+<h2>三鷹市</h2>
+
+
+<div class="store">
+<h3>1. メッセ三鷹店 <span class="big">勝ち台率 予測 9.8%</span>
+<span class="muted">（直近7日 11.1%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>656</td><td class="l">ガメラ2</td>
+<td class="pos">+134</td>
+<td>46%</td>
+<td>7%</td>
+<td>角</td>
+<td>+404</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">2</td><td>685</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+110</td>
+<td>46%</td>
+<td>11%</td>
+<td></td>
+<td>+83</td>
+<td>10%</td></tr>
+
+<tr><td class="l rank">3</td><td>653</td><td class="l">ひぐらしのなく頃に祭2</td>
+<td class="pos">+103</td>
+<td>47%</td>
+<td>4%</td>
+<td>角</td>
+<td>-156</td>
+<td>0%</td></tr>
+
+<tr><td class="l rank">4</td><td>654</td><td class="l">ディスクアップ2</td>
+<td class="pos">+100</td>
+<td>49%</td>
+<td>8%</td>
+<td>角</td>
+<td>-229</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">5</td><td>686</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+95</td>
+<td>46%</td>
+<td>11%</td>
+<td>角</td>
+<td>-33</td>
+<td>10%</td></tr>
+
+<tr><td class="l rank">6</td><td>684</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+95</td>
+<td>46%</td>
+<td>12%</td>
+<td>角</td>
+<td>-496</td>
+<td>10%</td></tr>
+
+<tr><td class="l rank">7</td><td>805</td><td class="l">東京喰種</td>
+<td class="pos">+90</td>
+<td>37%</td>
+<td>19%</td>
+<td></td>
+<td>-89</td>
+<td>22%</td></tr>
+
+<tr><td class="l rank">8</td><td>940</td><td class="l">北斗の拳 転生の章2</td>
+<td class="pos">+80</td>
+<td>33%</td>
+<td>13%</td>
+<td></td>
+<td>-466</td>
+<td>10%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>中野区</h2>
+
+
+<div class="store">
+<h3>1. BIGディッパー東中野店 <span class="big">勝ち台率 予測 17.3%</span>
+<span class="muted">（直近7日 16.2%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>207</td><td class="l">東京喰種</td>
+<td class="pos">+616</td>
+<td>44%</td>
+<td>30%</td>
+<td></td>
+<td>-1500</td>
+<td>27%</td></tr>
+
+<tr><td class="l rank">2</td><td>237</td><td class="l">革命機ヴァルヴレイヴ2</td>
+<td class="pos">+435</td>
+<td>37%</td>
+<td>18%</td>
+<td>角</td>
+<td>-430</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">3</td><td>168</td><td class="l">東京リベンジャーズ</td>
+<td class="pos">+435</td>
+<td>37%</td>
+<td>24%</td>
+<td>角</td>
+<td>-1412</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">4</td><td>257</td><td class="l">マイジャグラーV</td>
+<td class="pos">+360</td>
+<td>42%</td>
+<td>7%</td>
+<td></td>
+<td>-329</td>
+<td>5%</td></tr>
+
+<tr><td class="l rank">5</td><td>247</td><td class="l">マイジャグラーV</td>
+<td class="pos">+355</td>
+<td>41%</td>
+<td>7%</td>
+<td></td>
+<td>+29</td>
+<td>5%</td></tr>
+
+<tr><td class="l rank">6</td><td>187</td><td class="l">アズールレーン THE ANIMATION</td>
+<td class="pos">+336</td>
+<td>37%</td>
+<td>22%</td>
+<td>角</td>
+<td>+416</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">7</td><td>137</td><td class="l">ネオアイムジャグラーEX</td>
+<td class="pos">+331</td>
+<td>41%</td>
+<td>7%</td>
+<td></td>
+<td>+134</td>
+<td>11%</td></tr>
+
+<tr><td class="l rank">8</td><td>225</td><td class="l">いざ！番長</td>
+<td class="pos">+323</td>
+<td>36%</td>
+<td>17%</td>
+<td></td>
+<td>-943</td>
+<td>11%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>千代田区</h2>
+
+
+<div class="store">
+<h3>1. 秋葉原UNO <span class="big">勝ち台率 予測 12.8%</span>
+<span class="muted">（直近7日 12.3%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>298</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+134</td>
+<td>45%</td>
+<td>11%</td>
+<td>角</td>
+<td>+759</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">2</td><td>299</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+127</td>
+<td>45%</td>
+<td>9%</td>
+<td></td>
+<td>+274</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">3</td><td>300</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+98</td>
+<td>45%</td>
+<td>10%</td>
+<td>角</td>
+<td>+413</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">4</td><td>248</td><td class="l">モンスターハンターライズ</td>
+<td class="pos">+84</td>
+<td>36%</td>
+<td>14%</td>
+<td>角</td>
+<td>-146</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">5</td><td>276</td><td class="l">ミスタージャグラー</td>
+<td class="pos">+81</td>
+<td>39%</td>
+<td>10%</td>
+<td></td>
+<td>-299</td>
+<td>12%</td></tr>
+
+<tr><td class="l rank">6</td><td>275</td><td class="l">ミスタージャグラー</td>
+<td class="pos">+80</td>
+<td>40%</td>
+<td>9%</td>
+<td></td>
+<td>-166</td>
+<td>12%</td></tr>
+
+<tr><td class="l rank">7</td><td>277</td><td class="l">ミスタージャグラー</td>
+<td class="pos">+77</td>
+<td>38%</td>
+<td>8%</td>
+<td></td>
+<td>+769</td>
+<td>12%</td></tr>
+
+<tr><td class="l rank">8</td><td>374</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+66</td>
+<td>41%</td>
+<td>15%</td>
+<td></td>
+<td>+957</td>
+<td>21%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>台東区</h2>
+
+
+<div class="store">
+<h3>1. エスパス日拓上野本館 <span class="big">勝ち台率 予測 12.9%</span>
+<span class="muted">（直近7日 11.6%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>3192</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+284</td>
+<td>48%</td>
+<td>10%</td>
+<td>角</td>
+<td>+580</td>
+<td>7%</td></tr>
+
+<tr><td class="l rank">2</td><td>3191</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+191</td>
+<td>48%</td>
+<td>11%</td>
+<td>角</td>
+<td>+1181</td>
+<td>7%</td></tr>
+
+<tr><td class="l rank">3</td><td>3027</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+170</td>
+<td>43%</td>
+<td>14%</td>
+<td></td>
+<td>-77</td>
+<td>19%</td></tr>
+
+<tr><td class="l rank">4</td><td>3147</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+166</td>
+<td>41%</td>
+<td>12%</td>
+<td></td>
+<td>+3942</td>
+<td>17%</td></tr>
+
+<tr><td class="l rank">5</td><td>3050</td><td class="l">モンキーターンV</td>
+<td class="pos">+166</td>
+<td>41%</td>
+<td>12%</td>
+<td></td>
+<td>-123</td>
+<td>16%</td></tr>
+
+<tr><td class="l rank">6</td><td>3046</td><td class="l">モンキーターンV</td>
+<td class="pos">+158</td>
+<td>41%</td>
+<td>13%</td>
+<td></td>
+<td>-764</td>
+<td>16%</td></tr>
+
+<tr><td class="l rank">7</td><td>3148</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+155</td>
+<td>42%</td>
+<td>12%</td>
+<td></td>
+<td>-694</td>
+<td>17%</td></tr>
+
+<tr><td class="l rank">8</td><td>3048</td><td class="l">モンキーターンV</td>
+<td class="pos">+154</td>
+<td>41%</td>
+<td>12%</td>
+<td></td>
+<td>+93</td>
+<td>16%</td></tr>
+
+</table></div>
+</div>
+
+<div class="store">
+<h3>2. エスパス日拓上野新館 <span class="big">勝ち台率 予測 12.3%</span>
+<span class="muted">（直近7日 12.3%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>3039</td><td class="l">コードギアス反逆のルルーシュ3 C.C.&amp;Kallen ver.</td>
+<td class="pos">+202</td>
+<td>53%</td>
+<td>9%</td>
+<td>角</td>
+<td>+635</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">2</td><td>3021</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+195</td>
+<td>51%</td>
+<td>15%</td>
+<td>角</td>
+<td>-1234</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">3</td><td>2208</td><td class="l">モンスターハンターライズ</td>
+<td class="pos">+192</td>
+<td>34%</td>
+<td>9%</td>
+<td>角</td>
+<td>-1307</td>
+<td>4%</td></tr>
+
+<tr><td class="l rank">4</td><td>3022</td><td class="l">ディスクアップ ULTRAREMIX</td>
+<td class="pos">+172</td>
+<td>52%</td>
+<td>13%</td>
+<td>角</td>
+<td>+780</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">5</td><td>3054</td><td class="l">ソードアート・オンライン</td>
+<td class="pos">+117</td>
+<td>39%</td>
+<td>12%</td>
+<td></td>
+<td>-680</td>
+<td>11%</td></tr>
+
+<tr><td class="l rank">6</td><td>2083</td><td class="l">とある魔術の禁書目録</td>
+<td class="pos">+114</td>
+<td>41%</td>
+<td>14%</td>
+<td>角</td>
+<td>+565</td>
+<td>29%</td></tr>
+
+<tr><td class="l rank">7</td><td>3053</td><td class="l">ソードアート・オンライン</td>
+<td class="pos">+113</td>
+<td>39%</td>
+<td>12%</td>
+<td></td>
+<td>-118</td>
+<td>11%</td></tr>
+
+<tr><td class="l rank">8</td><td>3089</td><td class="l">HEY！エリートサラリーマン鏡</td>
+<td class="pos">+111</td>
+<td>45%</td>
+<td>14%</td>
+<td>角</td>
+<td>-507</td>
+<td>5%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>新宿区</h2>
+
+
+<div class="store">
+<h3>1. マルハン新宿東宝ビル店 <span class="big">勝ち台率 予測 18.8%</span>
+<span class="muted">（直近7日 18.6%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>727</td><td class="l">東京喰種</td>
+<td class="pos">+873</td>
+<td>55%</td>
+<td>36%</td>
+<td></td>
+<td>-386</td>
+<td>30%</td></tr>
+
+<tr><td class="l rank">2</td><td>747</td><td class="l">東京喰種</td>
+<td class="pos">+836</td>
+<td>54%</td>
+<td>35%</td>
+<td></td>
+<td>+1386</td>
+<td>30%</td></tr>
+
+<tr><td class="l rank">3</td><td>737</td><td class="l">東京喰種</td>
+<td class="pos">+821</td>
+<td>53%</td>
+<td>35%</td>
+<td></td>
+<td>+2243</td>
+<td>30%</td></tr>
+
+<tr><td class="l rank">4</td><td>697</td><td class="l">Re:ゼロから始める異世界生活 season2</td>
+<td class="pos">+766</td>
+<td>44%</td>
+<td>34%</td>
+<td>角</td>
+<td>+3371</td>
+<td>43%</td></tr>
+
+<tr><td class="l rank">5</td><td>797</td><td class="l">革命機ヴァルヴレイヴ2</td>
+<td class="pos">+622</td>
+<td>44%</td>
+<td>26%</td>
+<td></td>
+<td>-29</td>
+<td>23%</td></tr>
+
+<tr><td class="l rank">6</td><td>987</td><td class="l">革命機ヴァルヴレイヴ2</td>
+<td class="pos">+620</td>
+<td>43%</td>
+<td>26%</td>
+<td></td>
+<td>+329</td>
+<td>23%</td></tr>
+
+<tr><td class="l rank">7</td><td>967</td><td class="l">革命機ヴァルヴレイヴ2</td>
+<td class="pos">+618</td>
+<td>44%</td>
+<td>25%</td>
+<td></td>
+<td>-500</td>
+<td>23%</td></tr>
+
+<tr><td class="l rank">8</td><td>977</td><td class="l">革命機ヴァルヴレイヴ2</td>
+<td class="pos">+613</td>
+<td>43%</td>
+<td>26%</td>
+<td></td>
+<td>+1143</td>
+<td>23%</td></tr>
+
+</table></div>
+</div>
+
+<div class="store">
+<h3>2. エスパス日拓新宿歌舞伎町店 <span class="big">勝ち台率 予測 16.4%</span>
+<span class="muted">（直近7日 16.6%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>1447</td><td class="l">スターハナハナ‐30</td>
+<td class="pos">+465</td>
+<td>57%</td>
+<td>14%</td>
+<td></td>
+<td>+497</td>
+<td>18%</td></tr>
+
+<tr><td class="l rank">2</td><td>1043</td><td class="l">ミスタージャグラー</td>
+<td class="pos">+418</td>
+<td>53%</td>
+<td>16%</td>
+<td></td>
+<td>+1867</td>
+<td>26%</td></tr>
+
+<tr><td class="l rank">3</td><td>717</td><td class="l">モンキーターンV</td>
+<td class="pos">+417</td>
+<td>44%</td>
+<td>20%</td>
+<td></td>
+<td>+397</td>
+<td>23%</td></tr>
+
+<tr><td class="l rank">4</td><td>727</td><td class="l">モンキーターンV</td>
+<td class="pos">+414</td>
+<td>43%</td>
+<td>21%</td>
+<td></td>
+<td>+225</td>
+<td>23%</td></tr>
+
+<tr><td class="l rank">5</td><td>1042</td><td class="l">ミスタージャグラー</td>
+<td class="pos">+414</td>
+<td>52%</td>
+<td>15%</td>
+<td></td>
+<td>+350</td>
+<td>26%</td></tr>
+
+<tr><td class="l rank">6</td><td>667</td><td class="l">ゴッドイーター リザレクション</td>
+<td class="pos">+409</td>
+<td>39%</td>
+<td>19%</td>
+<td></td>
+<td>-146</td>
+<td>19%</td></tr>
+
+<tr><td class="l rank">7</td><td>1047</td><td class="l">ハッピージャグラーVIII</td>
+<td class="pos">+406</td>
+<td>55%</td>
+<td>15%</td>
+<td></td>
+<td>+1069</td>
+<td>24%</td></tr>
+
+<tr><td class="l rank">8</td><td>660</td><td class="l">ゴッドイーター リザレクション</td>
+<td class="pos">+402</td>
+<td>38%</td>
+<td>19%</td>
+<td></td>
+<td>-590</td>
+<td>19%</td></tr>
+
+</table></div>
+</div>
+
+<div class="store">
+<h3>3. エスパス日拓西武新宿駅前店 <span class="big">勝ち台率 予測 11.8%</span>
+<span class="muted">（直近7日 10.3%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>4077</td><td class="l">バイオハザード RE:2</td>
+<td class="pos">+319</td>
+<td>45%</td>
+<td>14%</td>
+<td>角</td>
+<td>+1740</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">2</td><td>3018</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+288</td>
+<td>40%</td>
+<td>14%</td>
+<td></td>
+<td>-253</td>
+<td>13%</td></tr>
+
+<tr><td class="l rank">3</td><td>3090</td><td class="l">仮面ライダー電王</td>
+<td class="pos">+286</td>
+<td>41%</td>
+<td>14%</td>
+<td>角</td>
+<td>-587</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">4</td><td>3017</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+286</td>
+<td>41%</td>
+<td>15%</td>
+<td></td>
+<td>+2616</td>
+<td>13%</td></tr>
+
+<tr><td class="l rank">5</td><td>3016</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+271</td>
+<td>40%</td>
+<td>15%</td>
+<td></td>
+<td>-1017</td>
+<td>13%</td></tr>
+
+<tr><td class="l rank">6</td><td>3015</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+263</td>
+<td>41%</td>
+<td>15%</td>
+<td></td>
+<td>+328</td>
+<td>13%</td></tr>
+
+<tr><td class="l rank">7</td><td>3167</td><td class="l">東京喰種</td>
+<td class="pos">+258</td>
+<td>40%</td>
+<td>27%</td>
+<td></td>
+<td>-1011</td>
+<td>14%</td></tr>
+
+<tr><td class="l rank">8</td><td>3008</td><td class="l">モンキーターンV</td>
+<td class="pos">+256</td>
+<td>40%</td>
+<td>13%</td>
+<td></td>
+<td>-609</td>
+<td>14%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>秋葉原</h2>
+
+
+<div class="store">
+<h3>1. アイランド秋葉原店 <span class="big">勝ち台率 予測 24.6%</span>
+<span class="muted">（直近7日 24.0%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>1270</td><td class="l">ToLOVEるダークネス</td>
+<td class="pos">+1269</td>
+<td>47%</td>
+<td>30%</td>
+<td></td>
+<td>-2184</td>
+<td>28%</td></tr>
+
+<tr><td class="l rank">2</td><td>1251</td><td class="l">ToLOVEるダークネス</td>
+<td class="pos">+764</td>
+<td>49%</td>
+<td>28%</td>
+<td></td>
+<td>-2150</td>
+<td>28%</td></tr>
+
+<tr><td class="l rank">3</td><td>733</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td class="pos">+729</td>
+<td>46%</td>
+<td>29%</td>
+<td></td>
+<td>-2462</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">4</td><td>736</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td class="pos">+721</td>
+<td>46%</td>
+<td>28%</td>
+<td></td>
+<td>-2442</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">5</td><td>1128</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+720</td>
+<td>47%</td>
+<td>28%</td>
+<td></td>
+<td>-1894</td>
+<td>26%</td></tr>
+
+<tr><td class="l rank">6</td><td>602</td><td class="l">バンドリ！</td>
+<td class="pos">+701</td>
+<td>44%</td>
+<td>25%</td>
+<td></td>
+<td>-1438</td>
+<td>26%</td></tr>
+
+<tr><td class="l rank">7</td><td>1181</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+692</td>
+<td>45%</td>
+<td>33%</td>
+<td></td>
+<td>-1586</td>
+<td>43%</td></tr>
+
+<tr><td class="l rank">8</td><td>1201</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+661</td>
+<td>42%</td>
+<td>34%</td>
+<td></td>
+<td>+4602</td>
+<td>43%</td></tr>
+
+</table></div>
+</div>
+
+<div class="store">
+<h3>2. エスパス秋葉原店 <span class="big">勝ち台率 予測 18.1%</span>
+<span class="muted">（直近7日 18.9%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>4098</td><td class="l">少女☆歌劇 レヴュースタァライト ‐The SLOT‐</td>
+<td class="pos">+420</td>
+<td>35%</td>
+<td>10%</td>
+<td></td>
+<td>+749</td>
+<td>26%</td></tr>
+
+<tr><td class="l rank">2</td><td>3159</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+392</td>
+<td>43%</td>
+<td>28%</td>
+<td></td>
+<td>-1686</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">3</td><td>3160</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+371</td>
+<td>43%</td>
+<td>27%</td>
+<td></td>
+<td>-1988</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">4</td><td>3162</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+368</td>
+<td>43%</td>
+<td>28%</td>
+<td></td>
+<td>-1759</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">5</td><td>2057</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+359</td>
+<td>44%</td>
+<td>23%</td>
+<td></td>
+<td>-1403</td>
+<td>20%</td></tr>
+
+<tr><td class="l rank">6</td><td>3151</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+358</td>
+<td>43%</td>
+<td>26%</td>
+<td></td>
+<td>-2416</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">7</td><td>3087</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+351</td>
+<td>43%</td>
+<td>28%</td>
+<td></td>
+<td>-1515</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">8</td><td>4020</td><td class="l">ストライクウィッチーズ2</td>
+<td class="pos">+344</td>
+<td>38%</td>
+<td>23%</td>
+<td>角</td>
+<td>+1689</td>
+<td>29%</td></tr>
+
+</table></div>
+</div>
+
+<div class="store">
+<h3>3. ビッグアップル秋葉原 <span class="big">勝ち台率 予測 17.5%</span>
+<span class="muted">（直近7日 13.4%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>2197</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+378</td>
+<td>38%</td>
+<td>34%</td>
+<td></td>
+<td>-1190</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">2</td><td>2192</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+377</td>
+<td>39%</td>
+<td>33%</td>
+<td></td>
+<td>-3948</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">3</td><td>2174</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td class="pos">+284</td>
+<td>47%</td>
+<td>28%</td>
+<td></td>
+<td>-2147</td>
+<td>27%</td></tr>
+
+<tr><td class="l rank">4</td><td>3056</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+255</td>
+<td>40%</td>
+<td>18%</td>
+<td></td>
+<td>-63</td>
+<td>13%</td></tr>
+
+<tr><td class="l rank">5</td><td>2198</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+250</td>
+<td>38%</td>
+<td>33%</td>
+<td></td>
+<td>-94</td>
+<td>21%</td></tr>
+
+<tr><td class="l rank">6</td><td>2157</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td class="pos">+248</td>
+<td>43%</td>
+<td>29%</td>
+<td></td>
+<td>-1964</td>
+<td>27%</td></tr>
+
+<tr><td class="l rank">7</td><td>2147</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td class="pos">+245</td>
+<td>43%</td>
+<td>28%</td>
+<td></td>
+<td>-1869</td>
+<td>27%</td></tr>
+
+<tr><td class="l rank">8</td><td>3053</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td class="pos">+239</td>
+<td>39%</td>
+<td>18%</td>
+<td></td>
+<td>-1424</td>
+<td>13%</td></tr>
+
+</table></div>
+</div>
+
+
+<h2>葛飾区</h2>
+
+
+<div class="store">
+<h3>1. エスパス1300新小岩北口駅前店 <span class="big">勝ち台率 予測 18.1%</span>
+<span class="muted">（直近7日 14.1%）</span></h3>
+<div class="tablewrap"><table>
+<tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th></tr>
+
+<tr><td class="l rank">1</td><td>2203</td><td class="l">ソードアート・オンラインII</td>
+<td class="pos">+1235</td>
+<td>47%</td>
+<td>34%</td>
+<td></td>
+<td>-2683</td>
+<td>30%</td></tr>
+
+<tr><td class="l rank">2</td><td>2287</td><td class="l">東京喰種</td>
+<td class="pos">+642</td>
+<td>51%</td>
+<td>33%</td>
+<td></td>
+<td>-1503</td>
+<td>18%</td></tr>
+
+<tr><td class="l rank">3</td><td>2137</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+511</td>
+<td>48%</td>
+<td>29%</td>
+<td></td>
+<td>+97</td>
+<td>16%</td></tr>
+
+<tr><td class="l rank">4</td><td>2257</td><td class="l">かぐや様は告らせたい</td>
+<td class="pos">+505</td>
+<td>43%</td>
+<td>33%</td>
+<td></td>
+<td>-1465</td>
+<td>10%</td></tr>
+
+<tr><td class="l rank">5</td><td>2275</td><td class="l">東京喰種</td>
+<td class="pos">+498</td>
+<td>49%</td>
+<td>33%</td>
+<td></td>
+<td>-1802</td>
+<td>18%</td></tr>
+
+<tr><td class="l rank">6</td><td>2281</td><td class="l">東京喰種</td>
+<td class="pos">+493</td>
+<td>48%</td>
+<td>32%</td>
+<td></td>
+<td>-1778</td>
+<td>18%</td></tr>
+
+<tr><td class="l rank">7</td><td>2289</td><td class="l">東京喰種</td>
+<td class="pos">+487</td>
+<td>49%</td>
+<td>32%</td>
+<td></td>
+<td>-1433</td>
+<td>18%</td></tr>
+
+<tr><td class="l rank">8</td><td>2134</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td class="pos">+483</td>
+<td>47%</td>
+<td>30%</td>
+<td></td>
+<td>-874</td>
+<td>16%</td></tr>
+
+</table></div>
+</div>
+
+
+
+<p class="muted" style="margin-top:20px">※ 予測差枚・勝ち確率は着席前情報のみで算出（当日のG/BB/RBは不使用）。台単体の的中率は低く、上位集団で2〜3倍を狙う使い方が正しい。店選び自体は現状ほぼ静的で、実運用ではエリア内の座れた店で上位台に座るのが現実解。</p>
+
+</div>
+</div>
+
+<script>
+const _GATE_HASH = "c409670d50bcd707ae11e3cedd60b1d8de721873fa46b011f4799487b1c7be2a";
+async function _sha256(msg){
+  const enc = new TextEncoder().encode(msg);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function _gateCheck(){
+  const pw = document.getElementById('_gatepw').value;
+  const h = await _sha256(pw);
+  if(h === _GATE_HASH){
+    localStorage.setItem('_slot_gate_ok', _GATE_HASH);
+    document.getElementById('_gate').style.display='none';
+    document.getElementById('_content').style.display='block';
+  } else {
+    document.getElementById('_gateerr').style.display='block';
+  }
+}
+(function(){
+  if(!_GATE_HASH || localStorage.getItem('_slot_gate_ok') === _GATE_HASH){
+    document.getElementById('_gate').style.display='none';
+    document.getElementById('_content').style.display='block';
+  }
+})();
+document.getElementById('_gatepw')?.addEventListener('keydown', e=>{ if(e.key==='Enter') _gateCheck(); });
+</script>
+
+</body></html>
