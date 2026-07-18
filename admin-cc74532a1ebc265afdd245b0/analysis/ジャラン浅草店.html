@@ -1,0 +1,167 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ジャラン浅草店｜外部公開版</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+:root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f1f5f9;--line:#e5e9ef;--ink:#0f172a;--sub:#64748b;
+--accent:#4f46e5;--blue:#4f46e5;--green:#15a34a;--red:#dc2626;--orange:#ea580c;--chip:#eef2ff;
+--shadow:0 1px 3px rgba(15,23,42,.06);--shadow2:0 8px 24px rgba(79,70,229,.10);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(6px);
+border-bottom:1px solid var(--line);box-shadow:var(--shadow);
+display:flex;align-items:center;gap:12px;padding:11px 20px;flex-wrap:wrap}
+header.top .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
+header.top nav{display:flex;gap:4px;flex-wrap:wrap}
+header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
+header.top nav a.on{background:var(--chip);color:var(--accent)}
+header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
+header.top .fresh{margin-left:auto;font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
+.crumb{color:var(--sub);font-size:12.5px;margin-bottom:14px}
+h1{font-size:23px;margin:0 0 4px;letter-spacing:.01em}
+h2{font-size:18px;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:14.5px;margin:16px 0 8px;color:#334155}
+.sub{color:var(--sub);font-size:13px;margin-bottom:18px}
+.grid{display:grid;gap:14px}.cards{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:16px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px 19px;text-decoration:none;color:var(--ink);display:block;box-shadow:var(--shadow)}
+a.card{transition:transform .15s, box-shadow .15s, border-color .15s}
+a.card:hover{border-color:var(--accent);box-shadow:var(--shadow2);transform:translateY(-2px)}
+.card h3{margin:0 0 6px;font-size:16px;color:var(--ink)}.card p{margin:0;color:var(--sub);font-size:13px}
+.kpi .n{font-size:24px;font-weight:800;color:var(--ink)}.kpi .l{font-size:12px;color:var(--sub);margin-top:3px}.kpi .d{font-size:12px;margin-top:2px}
+.pos{color:var(--green)}.neg{color:var(--red)}.muted{color:var(--sub);font-size:12px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:right;white-space:nowrap}
+th{color:var(--sub);position:sticky;top:0;background:var(--panel2);cursor:pointer;user-select:none;font-weight:700}
+td.l,th.l{text-align:left}tbody tr:last-child td{border-bottom:none}tr:hover td{background:#f8fafc}
+.note{background:#eef2ff;border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:12.5px;color:#3730a3;margin:12px 0}
+.rank{color:var(--accent);font-weight:700}
+.panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:14px;padding:15px 17px;margin:14px 0;box-shadow:var(--shadow)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chip{padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#334155;font-size:12px}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+select,input{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
+.store{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0;box-shadow:var(--shadow)}
+.store h3{margin:0 0 4px;font-size:18px;color:var(--ink)}.big{color:var(--orange);font-weight:700}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+@media(max-width:640px){.wrap{padding:16px 13px 60px}h1{font-size:20px}header.top .fresh{width:100%;margin:4px 0 0}}
+/* ---- gate ---- */
+#_gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+#_gatebox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:320px;width:90%;box-shadow:var(--shadow2);text-align:center}
+#_gatebox .t{font-weight:800;font-size:16px;margin-bottom:4px}
+#_gatebox .s{color:var(--sub);font-size:13px;margin-bottom:16px}
+#_gatebox input{width:100%;padding:10px 12px;margin-bottom:10px;text-align:left}
+#_gatebox button{width:100%;padding:10px;border:0;border-radius:9px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+#_gateerr{color:var(--red);font-size:12px;margin-top:8px;display:none}
+#_content{display:none}
+</style>
+<script>
+function fmtPct(v){return v==null?'-':Math.round(v*100)+'%';}
+function fmtNum(v){return v==null?'-':(v>0?'+':'')+Math.round(v);}
+function cls(v){return v==null?'':(v>0?'pos':'neg');}
+function sortRows(rows,key,dir){rows.sort((a,b)=>((b[key]??-1e18)-(a[key]??-1e18))*(dir||1));return rows;}
+const CPOS='#16a34a',CNEG='#dc2626',CLINE='#4f46e5',CGRID='#e6e9ef',CNULL='#cbd5e1';
+const PLT={paper_bgcolor:'#ffffff',plot_bgcolor:'#ffffff',font:{color:'#334155'},margin:{l:56,r:14,t:10,b:40},
+ xaxis:{gridcolor:CGRID,zeroline:false},yaxis:{gridcolor:CGRID,zeroline:false}};
+function ax(o){return Object.assign({gridcolor:CGRID,zeroline:false,automargin:true,titlefont:{size:12},tickfont:{size:11}},o||{});}
+function axDate(title){return ax({title:title,type:'category',tickmode:'linear',dtick:1,tickangle:-60,tickfont:{size:9}});}
+function axCat(title){return ax({title:title,type:'category'});}
+</script>
+</head><body>
+<div id="_gate"><div id="_gatebox">
+<div class="t">🔒 パスワードが必要です</div>
+<div class="s">チーム内限定ページです</div>
+<input id="_gatepw" type="password" placeholder="パスワード" autocomplete="off">
+<button onclick="_gateCheck()">開く</button>
+<div id="_gateerr">パスワードが違います</div>
+</div></div>
+
+<div id="_content">
+<header class="top"><span class="brand">🎰 スロット分析 <span class="muted">外部公開版</span></span>
+<nav>
+<a href="../index.html">トップ</a>
+
+<a href="../aim_today.html">狙いナビ(7/19(日))</a>
+<a href="../aim_tomorrow.html">狙いナビ(7/20(月))</a>
+<a href="../all_today.html">全予想(7/19(日))</a>
+
+<a href="../analysis/dynamic.html">店舗分析（実績）</a>
+
+<a href="../../archive.html">過去ログ</a>
+
+</nav>
+<span class="fresh">データ最新 <b>2026-07-18</b> <span class="muted" style="font-size:11px">（HTML更新 2026-07-19 04:44:10）</span></header>
+<div class="wrap">
+<div class="crumb"><a href="../index.html">トップ</a> ／ <a href="index.html">店舗分析</a> ／ ジャラン浅草店</div>
+
+<h1>ジャラン浅草店</h1>
+
+<div class="sub">台数 308 ／ 収録 2026-07-16〜2026-07-17 ／ 直近30日 勝ち台率 8% ／ 平均差枚
+<span class="pos">+23</span></div>
+
+<h2>日別実績（直近90日）</h2><div id="daily" style="width:100%;height:340px"></div>
+<div class="two">
+<div><h3>曜日の傾向（平均差枚）</h3><div id="wk" style="width:100%;height:240px"></div></div>
+<div><h3>日別サマリ</h3>
+<div class="tablewrap" style="max-height:270px"><table><thead><tr><th class="l">日付</th><th>曜</th><th>合計</th><th>平均</th><th>勝率</th><th>台数</th></tr></thead><tbody id="dtb"></tbody></table></div></div>
+</div>
+
+<h2>機種ランキング（直近30日・平均差枚順・実績のみ）</h2>
+<div class="muted" style="margin-bottom:6px">7/20(月)以降の予測は<a href="../aim_tomorrow.html">狙いナビML（7/20(月)）</a>をご覧ください。台ごとの詳細な実績は<a href="dynamic.html">分析（動的版）</a>でご確認いただけます。</div>
+<div class="tablewrap"><table id="mtbl"><thead><tr><th class="l">機種</th><th>台日数</th><th>平均差枚</th><th>勝ち台率</th></tr></thead><tbody id="mtb"></tbody></table></div>
+
+
+</div>
+</div>
+
+<script>
+const _GATE_HASH = "c409670d50bcd707ae11e3cedd60b1d8de721873fa46b011f4799487b1c7be2a";
+async function _sha256(msg){
+  const enc = new TextEncoder().encode(msg);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function _gateCheck(){
+  const pw = document.getElementById('_gatepw').value;
+  const h = await _sha256(pw);
+  if(h === _GATE_HASH){
+    localStorage.setItem('_slot_gate_ok', _GATE_HASH);
+    document.getElementById('_gate').style.display='none';
+    document.getElementById('_content').style.display='block';
+  } else {
+    document.getElementById('_gateerr').style.display='block';
+  }
+}
+(function(){
+  if(!_GATE_HASH || localStorage.getItem('_slot_gate_ok') === _GATE_HASH){
+    document.getElementById('_gate').style.display='none';
+    document.getElementById('_content').style.display='block';
+  }
+})();
+document.getElementById('_gatepw')?.addEventListener('keydown', e=>{ if(e.key==='Enter') _gateCheck(); });
+</script>
+<script>
+const DAILY={"dates": ["2026-07-16", "2026-07-17"], "tot": [-10005, 23659], "win": [8.1, 8.1]};
+Plotly.newPlot('daily',[{type:'bar',x:DAILY.dates,y:DAILY.tot,name:'合計差枚',marker:{color:DAILY.tot.map(v=>v<0?CNEG:CPOS)}},
+ {type:'scatter',x:DAILY.dates,y:DAILY.win,name:'勝ち台率%',yaxis:'y2',line:{color:CLINE}}],
+ {...PLT,xaxis:axDate('日付'),yaxis:ax({title:'合計差枚'}),
+  yaxis2:Object.assign(ax({title:'勝率%'}),{overlaying:'y',side:'right',range:[0,60],gridcolor:'transparent'}),
+  legend:{orientation:'h'}},{responsive:true,displayModeBar:false,staticPlot:true});
+const WKP=[null, null, null, -34.0, 79.0, null, null],WKL=["\u6708", "\u706b", "\u6c34", "\u6728", "\u91d1", "\u571f", "\u65e5"];
+Plotly.newPlot('wk',[{type:'bar',x:WKL,y:WKP,marker:{color:WKP.map(v=>v==null?CNULL:(v<0?CNEG:CPOS))}}],
+ {...PLT,xaxis:axCat('曜日'),yaxis:ax({title:'平均差枚'}),margin:{l:56,r:10,t:6,b:36}},{responsive:true,displayModeBar:false,staticPlot:true});
+const DR=[{"avg": 79.0, "date": "2026-07-17", "dow": "\u91d1", "n": 298, "tot": 23659.0, "win": 0.081}, {"avg": -34.0, "date": "2026-07-16", "dow": "\u6728", "n": 295, "tot": -10005.0, "win": 0.081}];
+document.getElementById('dtb').innerHTML=DR.map(r=>'<tr>'
+ +'<td class="l">'+r.date+'</td><td>'+r.dow+'</td><td class="'+cls(r.tot)+'">'+fmtNum(r.tot)+'</td><td class="'+cls(r.avg)+'">'+fmtNum(r.avg)+'</td><td>'+fmtPct(r.win)+'</td><td>'+r.n+'</td></tr>').join('');
+const MR=[{"avg": 2314.0, "model": "\u6771\u4eac\u30ea\u30d9\u30f3\u30b8\u30e3\u30fc\u30ba", "n": 2, "win": 0.5}, {"avg": 1386.0, "model": "\u30a2\u30e9\u30b8\u30f3A\u30af\u30e9\u30b7\u30c3\u30af", "n": 2, "win": 0.0}, {"avg": 1384.0, "model": "\u6226\u56fd\u30b3\u30ec\u30af\u30b7\u30e7\u30f36", "n": 8, "win": 0.375}, {"avg": 1339.0, "model": "\u30af\u30ec\u30a2\u306e\u79d8\u5b9d\u4f1d \uff5e\u306f\u3058\u307e\u308a\u306e\u6249\u3068\u592a\u967d\u306e\u77f3\uff5e \u30dc\u30fc\u30ca\u30b9\u30c8\u30ea\u30ac\u30fcver.", "n": 2, "win": 0.5}, {"avg": 1268.0, "model": "SHAKE BONUS TRIGGER", "n": 4, "win": 0.25}, {"avg": 1092.0, "model": "\u30e9\u30d6\u5b223\uff5eW\u3054\u6307\u540d\u306f\u3044\u304b\u304c\u3067\u3059\u304b?\uff5e", "n": 2, "win": 0.0}, {"avg": 1086.0, "model": "HEY\uff01\u30a8\u30ea\u30fc\u30c8\u30b5\u30e9\u30ea\u30fc\u30de\u30f3\u93e1", "n": 2, "win": 0.0}, {"avg": 969.0, "model": "\u304b\u3089\u304f\u308a\u30b5\u30fc\u30ab\u30b92", "n": 16, "win": 0.312}, {"avg": 893.0, "model": "\u65b0\u30cf\u30ca\u30d3", "n": 4, "win": 0.25}, {"avg": 864.0, "model": "\u5c11\u5973\u2606\u6b4c\u5287 \u30ec\u30f4\u30e5\u30fc\u30b9\u30bf\u30a1\u30e9\u30a4\u30c8 \u2010The SLOT\u2010", "n": 2, "win": 0.0}, {"avg": 842.0, "model": "\u9ebb\u96c0\u683c\u95d8\u5036\u697d\u90e8 \u899a\u9192", "n": 2, "win": 0.0}, {"avg": 833.0, "model": "\u30c7\u30a3\u30b9\u30af\u30a2\u30c3\u30d72", "n": 4, "win": 0.0}, {"avg": 818.0, "model": "\u30c7\u30a3\u30b9\u30af\u30a2\u30c3\u30d7 ULTRAREMIX", "n": 4, "win": 0.25}, {"avg": 816.0, "model": "\u65b0\u9b3c\u6b66\u80053", "n": 2, "win": 0.5}, {"avg": 770.0, "model": "\u30e8\u30eb\u30e0\u30f3\u30ac\u30f3\u30c9", "n": 2, "win": 0.0}, {"avg": 654.0, "model": "\u982d\u6587\u5b57D", "n": 2, "win": 0.5}, {"avg": 624.0, "model": "BIRDIE WING \u2010Golf Girls\u0027 Story\u2010", "n": 3, "win": 0.333}, {"avg": 603.0, "model": "\u30c7\u30d3\u30eb \u30e1\u30a4 \u30af\u30e9\u30a45 \u30b9\u30bf\u30a4\u30ea\u30c3\u30b7\u30e5\u30c8\u30e9\u30a4\u30d6", "n": 1, "win": 0.0}, {"avg": 594.0, "model": "\u62bc\u5fcd!\u756a\u9577ZERO", "n": 4, "win": 0.0}, {"avg": 568.0, "model": "\u6226\u56fd\u4e59\u59735 \u696d\u706b\u3092\u7a7f\u3064\u5bbf\u7114\u306e\u53cc\u5203", "n": 12, "win": 0.25}, {"avg": 554.0, "model": "\u304b\u3089\u304f\u308a\u30b5\u30fc\u30ab\u30b9", "n": 4, "win": 0.25}, {"avg": 510.0, "model": "\u30d0\u30b8\u30ea\u30b9\u30af\uff5e\u7532\u8cc0\u5fcd\u6cd5\u5e16\uff5e\u7d462 \u5929\u81b3 BLACK EDITION", "n": 2, "win": 0.5}, {"avg": 427.0, "model": "\u7532\u9244\u57ce\u306e\u30ab\u30d0\u30cd\u30ea", "n": 4, "win": 0.25}, {"avg": 421.0, "model": "\u6226\u56fd\u4e59\u59734 \u6226\u4e71\u306b\u9583\u304f\u70af\u773c\u306e\u8ecd\u5e2b", "n": 3, "win": 0.333}, {"avg": 402.0, "model": "\u30b7\u30e3\u30fc\u30de\u30f3\u30ad\u30f3\u30b0", "n": 2, "win": 0.5}, {"avg": 394.0, "model": "\u30cb\u30e5\u30fc\u30b2\u30c3\u30bf\u30fc\u30de\u30a6\u30b9", "n": 2, "win": 0.0}, {"avg": 391.0, "model": "\u30b3\u30fc\u30c9\u30ae\u30a2\u30b9\u53cd\u9006\u306e\u30eb\u30eb\u30fc\u30b7\u30e53 C.C.\u0026Kallen ver.", "n": 2, "win": 0.0}, {"avg": 342.0, "model": "\u3053\u306e\u7d20\u6674\u3089\u3057\u3044\u4e16\u754c\u306b\u795d\u798f\u3092\uff01", "n": 4, "win": 0.0}, {"avg": 336.0, "model": "A\u2010SLOT+ \u7570\u4e16\u754c\u304b\u308b\u3066\u3063\u3068", "n": 2, "win": 0.0}, {"avg": 304.0, "model": "\u30b4\u30b8\u30e9\u5bfe\u30a8\u30f4\u30a1\u30f3\u30b2\u30ea\u30aa\u30f3", "n": 2, "win": 0.0}, {"avg": 275.0, "model": "\u3072\u3050\u3089\u3057\u306e\u306a\u304f\u9803\u306b\u796d2", "n": 4, "win": 0.0}, {"avg": 272.0, "model": "\u7532\u9244\u57ce\u306e\u30ab\u30d0\u30cd\u30ea \u6d77\u9580(\u3046\u306a\u3068)\u6c7a\u6226", "n": 24, "win": 0.125}, {"avg": 216.0, "model": "\u9244\u62f36", "n": 2, "win": 0.0}, {"avg": 174.0, "model": "\u30d5\u30a1\u30df\u30b9\u30bf\u56de\u80f4\u7248!!", "n": 4, "win": 0.0}, {"avg": 139.0, "model": "\u30b4\u30fc\u30b4\u30fc\u30b8\u30e3\u30b0\u30e9\u30fc3", "n": 28, "win": 0.036}, {"avg": 138.0, "model": "\u30d0\u30a4\u30aa\u30cf\u30b6\u30fc\u30c9 RE:3", "n": 6, "win": 0.0}, {"avg": 134.0, "model": "\u30a6\u30eb\u30c8\u30e9\u30df\u30e9\u30af\u30eb\u30b8\u30e3\u30b0\u30e9\u30fc", "n": 8, "win": 0.0}, {"avg": 116.0, "model": "\u30af\u30e9\u30f3\u30ad\u30fc\u30af\u30ec\u30b9\u30c8", "n": 4, "win": 0.0}, {"avg": 104.0, "model": "\u30cf\u30c3\u30d4\u30fc\u30b8\u30e3\u30b0\u30e9\u30fcVIII", "n": 8, "win": 0.0}, {"avg": 94.0, "model": "\u30b9\u30de\u30b9\u30ed\u5317\u6597\u306e\u62f3", "n": 16, "win": 0.0}, {"avg": 80.0, "model": "\u30a2\u30ba\u30fc\u30eb\u30ec\u30fc\u30f3 THE ANIMATION", "n": 2, "win": 0.0}, {"avg": 76.0, "model": "GALFY", "n": 2, "win": 0.0}, {"avg": 75.0, "model": "\u5317\u6597\u306e\u62f3 \u8ee2\u751f\u306e\u7ae02", "n": 24, "win": 0.083}, {"avg": 70.0, "model": "\u30e2\u30f3\u30ad\u30fc\u30bf\u30fc\u30f3V", "n": 18, "win": 0.111}, {"avg": 65.0, "model": "\u30df\u30b9\u30bf\u30fc\u30b8\u30e3\u30b0\u30e9\u30fc", "n": 6, "win": 0.0}, {"avg": 44.0, "model": "\u30cd\u30aa\u30a2\u30a4\u30e0\u30b8\u30e3\u30b0\u30e9\u30fcEX", "n": 42, "win": 0.024}, {"avg": 15.0, "model": "\u30de\u30a4\u30b8\u30e3\u30b0\u30e9\u30fcV", "n": 42, "win": 0.024}, {"avg": -31.0, "model": "\u708e\u708e\u30ce\u6d88\u9632\u968a", "n": 4, "win": 0.0}, {"avg": -66.0, "model": "\u30df\u30ea\u30aa\u30f3\u30b4\u30c3\u30c9\u2010\u795e\u3005\u306e\u8ecc\u8de1\u2010", "n": 18, "win": 0.111}, {"avg": -93.0, "model": "\u65b0\u9b3c\u6b66\u80052", "n": 3, "win": 0.0}, {"avg": -107.0, "model": "\u6226\u56fd\u2020\u604b\u59eb", "n": 2, "win": 0.0}, {"avg": -149.0, "model": "\u30b9\u30de\u30b9\u30ed\u708e\u708e\u30ce\u6d88\u9632\u968a2", "n": 8, "win": 0.0}, {"avg": -158.0, "model": "\u30b9\u30de\u30b9\u30ed \u30b5\u30f3\u30c0\u30fcV", "n": 6, "win": 0.0}, {"avg": -168.0, "model": "\u5316\u7269\u8a9e", "n": 8, "win": 0.0}, {"avg": -190.0, "model": "\u30d5\u30a1\u30f3\u30ad\u30fc\u30b8\u30e3\u30b0\u30e9\u30fc2", "n": 20, "win": 0.0}, {"avg": -192.0, "model": "\u6c96\u30c9\u30ad!DUO \u30a2\u30f3\u30b3\u30fc\u30eb", "n": 4, "win": 0.25}, {"avg": -198.0, "model": "\u4e03\u3064\u306e\u9b54\u5263\u304c\u652f\u914d\u3059\u308b", "n": 2, "win": 0.0}, {"avg": -212.0, "model": "\u30f1\u30f4\u30a1\u30f3\u30b2\u30ea\u30f2\u30f3 \uff5e\u7d04\u675f\u306e\u6249\uff5e", "n": 2, "win": 0.0}, {"avg": -214.0, "model": "\u3046\u307f\u306d\u3053\u306e\u306a\u304f\u9803\u306b2", "n": 4, "win": 0.0}, {"avg": -228.0, "model": "\u6c96\u30c9\u30ad!BLACK", "n": 18, "win": 0.167}, {"avg": -248.0, "model": "\u6771\u4eac\u55b0\u7a2e", "n": 18, "win": 0.167}, {"avg": -267.0, "model": "\u30c1\u30d0\u30ea\u30e82", "n": 6, "win": 0.0}, {"avg": -278.0, "model": "\u4ea4\u97ff\u8a69\u7bc7\u30a8\u30a6\u30ec\u30ab\u30bb\u30d6\u30f3 HI-EVOLUTION ZERO TYPE\u2010ART", "n": 4, "win": 0.0}, {"avg": -295.0, "model": "\u653b\u6bbb\u6a5f\u52d5\u968a", "n": 10, "win": 0.0}, {"avg": -306.0, "model": "\u30b8\u30e3\u30b0\u30e9\u30fc\u30ac\u30fc\u30eb\u30ba", "n": 10, "win": 0.0}, {"avg": -367.0, "model": "\u30ed\u30fc\u30c6\u30a3\u30b9", "n": 2, "win": 0.0}, {"avg": -374.0, "model": "\u30e2\u30f3\u30b9\u30bf\u30fc\u30cf\u30f3\u30bf\u30fc\u30e9\u30a4\u30ba", "n": 4, "win": 0.25}, {"avg": -400.0, "model": "\u9280\u6cb3\u82f1\u96c4\u4f1d\u8aac Die Neue These", "n": 1, "win": 0.0}, {"avg": -408.0, "model": "\u30d0\u30fc\u30b5\u30b9\u30ea\u30f4\u30a1\u30a4\u30ba", "n": 4, "win": 0.0}, {"avg": -438.0, "model": "\u30de\u30ae\u30a2\u30ec\u30b3\u30fc\u30c9 \u9b54\u6cd5\u5c11\u5973\u307e\u3069\u304b\u2606\u30de\u30ae\u30ab\u5916\u4f1d", "n": 4, "win": 0.0}, {"avg": -440.0, "model": "\u30b9\u30de\u30b9\u30ed \u30cf\u30ca\u30d3", "n": 6, "win": 0.0}, {"avg": -443.0, "model": "\u4e0d\u4e8c\u5b50BT", "n": 2, "win": 0.0}, {"avg": -443.0, "model": "\u304b\u3050\u3084\u69d8\u306f\u544a\u3089\u305b\u305f\u3044", "n": 3, "win": 0.0}, {"avg": -450.0, "model": "\u6c96\u30c9\u30ad!\u30b4\u30fc\u30b8\u30e3\u30b9 30\u03a6", "n": 20, "win": 0.15}, {"avg": -454.0, "model": "\u30b1\u30ed\u30c3\u30c85", "n": 2, "win": 0.0}, {"avg": -464.0, "model": "\u30b9\u30fc\u30d1\u30fc\u30ea\u30aa\u30a8\u30fc\u30b92", "n": 3, "win": 0.0}, {"avg": -475.0, "model": "\u30c1\u30d0\u30ea\u30e82\u30d7\u30e9\u30b9", "n": 2, "win": 0.0}, {"avg": -541.0, "model": "\u5409\u5b97", "n": 2, "win": 0.0}, {"avg": -554.0, "model": "\u30c9\u30c3\u30c1", "n": 2, "win": 0.0}, {"avg": -558.0, "model": "\u30a2\u30af\u30c0\u30de\u30c9\u30e9\u30a4\u30d6", "n": 2, "win": 0.0}, {"avg": -612.0, "model": "\u30b9\u30fc\u30d1\u30fc\u30d3\u30f3\u30b4\u30cd\u30aa", "n": 2, "win": 0.0}, {"avg": -674.0, "model": "\u9769\u547d\u6a5f\u30f4\u30a1\u30eb\u30f4\u30ec\u30a4\u30f4", "n": 1, "win": 0.0}, {"avg": -729.0, "model": "\u30a2\u30ec\u30c3\u30af\u30b9 \u30d6\u30e9\u30a4\u30c8", "n": 4, "win": 0.0}, {"avg": -762.0, "model": "\u30bd\u30fc\u30c9\u30a2\u30fc\u30c8\u30fb\u30aa\u30f3\u30e9\u30a4\u30f3II", "n": 10, "win": 0.1}, {"avg": -771.0, "model": "\u9769\u547d\u6a5f\u30f4\u30a1\u30eb\u30f4\u30ec\u30a4\u30f42", "n": 7, "win": 0.0}, {"avg": -935.0, "model": "\u30b9\u30fc\u30d1\u30fc\u30d6\u30e9\u30c3\u30af\u30b8\u30e3\u30c3\u30af", "n": 1, "win": 0.0}, {"avg": -1198.0, "model": "\u30d0\u30a4\u30aa\u30cf\u30b6\u30fc\u30c9 RE:2", "n": 2, "win": 0.0}, {"avg": -1272.0, "model": "\u30d3\u30c3\u30b0\u30c9\u30ea\u30fc\u30e0 THE GOLDEN PUSHER", "n": 2, "win": 0.0}, {"avg": -1344.0, "model": "ULTRAMAN \u6700\u7d42\u6c7a\u6226", "n": 2, "win": 0.0}, {"avg": -1498.0, "model": "\u3044\u3056\uff01\u756a\u9577", "n": 3, "win": 0.0}, {"avg": -1558.0, "model": "\u30cb\u30e5\u30fc\u30d1\u30eb\u30b5\u30fcSP4 with \u592a\u9f13\u306e\u9054\u4eba", "n": 2, "win": 0.0}, {"avg": -1924.0, "model": "\u771f\u6253 \u5409\u5b97", "n": 4, "win": 0.0}];let mdir=-1,mkey='avg';
+function mrender(){const tb=document.getElementById('mtb');tb.innerHTML='';sortRows(MR,mkey,mdir);
+ MR.forEach(r=>{tb.innerHTML+='<tr><td class="l">'+r.model+'</td><td>'+r.n+'</td><td class="'+cls(r.avg)+'">'+fmtNum(r.avg)+'</td><td>'+fmtPct(r.win)+'</td></tr>';});}
+document.querySelectorAll('#mtbl th').forEach((th,i)=>{const ks=['model','n','avg','win'];th.addEventListener('click',()=>{if(mkey===ks[i])mdir*=-1;else{mkey=ks[i];mdir=-1;}mrender();});});
+mrender();
+</script>
+</body></html>
