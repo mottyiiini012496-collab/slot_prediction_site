@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ビッグアップル秋葉原｜本日の予測レポート</title>
+<style>
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;
+       background:#f5f7fb;color:#0f172a;max-width:640px;margin:0 auto;padding:24px 18px 60px}
+  .crumb{font-size:12.5px;color:#64748b;margin-bottom:10px}
+  .crumb a{color:#4f46e5;text-decoration:none}
+  .crumb a:hover{text-decoration:underline}
+  h1{font-size:19px;margin:4px 0 2px}
+  .datelabel{font-size:12.5px;color:#94a3b8;margin-bottom:14px}
+  .note{background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;padding:12px 14px;
+        font-size:13px;line-height:1.7;color:#312e81;margin:14px 0}
+  .cnt{font-size:11px;color:#94a3b8;white-space:nowrap}
+  .searchwrap{position:sticky;top:0;background:#f5f7fb;padding:8px 0;z-index:5;margin-bottom:4px}
+  .searchbox{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;
+        border:1px solid #cbd5e1;font-size:15px;background:#fff;color:#0f172a}
+  .searchbox:focus{outline:2px solid #4f46e5;border-color:#4f46e5}
+  .hitcount{color:#94a3b8;font-size:12px;margin:4px 2px 0}
+  .tablewrap{overflow-x:auto;border-radius:12px;border:1px solid #e5e9ef;background:#fff;
+        box-shadow:0 1px 2px rgba(15,23,42,.04);margin:10px 0 18px}
+  table{width:100%;min-width:280px;border-collapse:collapse;background:#fff;font-size:14px;table-layout:fixed}
+  th,td{padding:9px 8px;text-align:right;border-bottom:1px solid #eef2f7}
+  th{background:#f8fafc;color:#475569;font-weight:600;font-size:12px}
+  td.l,th.l{text-align:left;white-space:normal;word-break:break-word}
+  th.rankcol,td.rank{width:28px;color:#94a3b8;font-variant-numeric:tabular-nums;text-align:left}
+  th.machinecol,td.machine{width:64px;font-variant-numeric:tabular-nums}
+  th.scorecol,td.score{width:56px}
+  .score .badge{display:inline-block;min-width:30px;padding:2px 6px;border-radius:6px;
+        font-weight:700;font-size:12.5px;color:#065f46;background:#d1fae5}
+  .score .badge.mid{color:#92400e;background:#fef3c7}
+  .score .badge.low{color:#475569;background:#f1f5f9}
+  tr:first-child .score .badge{background:#059669;color:#fff}
+  tr.is-hidden{display:none}
+  .empty{color:#94a3b8;font-size:13px;padding:10px 2px}
+  .pager{display:flex;justify-content:space-between;gap:10px;margin:18px 0}
+  .pager a{flex:1;background:#fff;border:1px solid #e5e9ef;border-radius:10px;padding:10px 12px;
+        text-decoration:none;color:#334155;font-size:12.5px;line-height:1.4}
+  .pager a:hover{border-color:#4f46e5}
+  .pager .lbl{color:#94a3b8;font-size:11px;display:block;margin-bottom:2px}
+  .pager .next{text-align:right}
+  .foot{color:#94a3b8;font-size:12px;margin-top:26px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="crumb"><a href="../index.html">トップ</a> ／ 7/25(土)</div>
+<h1>ビッグアップル秋葉原</h1>
+<div class="datelabel">48機種・117台</div>
+
+<div class="note">
+独自の基準による座席予測ランキングです。算出方法・データソースは非公開です。
+スコアは<b>この店の中だけで意味を持つ相対評価</b>（1〜100）で、他店とのスコア比較はできません。
+マイナス評価の台は掲載していません。1点張りではなく、上位の複数台・複数機種に座る使い方を前提にしています。
+</div>
+
+
+<div class="searchwrap">
+<input type="text" id="filterBox" class="searchbox" placeholder="機種名で絞り込み" autocomplete="off">
+<div class="hitcount" id="hitCount"></div>
+</div>
+
+
+<div class="tablewrap"><table>
+<tr><th class="rankcol">#</th><th class="machinecol">台番号</th><th class="scorecol">スコア</th><th class="l">機種</th></tr>
+
+<tr data-model="ソードアート・オンラインii">
+<td class="rank">1</td>
+<td class="machine">2200</td>
+<td class="score"><span class="badge">100</span></td>
+<td class="l">ソードアート・オンラインII</td>
+</tr>
+
+<tr data-model="toloveるダークネス trance ver.8.7">
+<td class="rank">2</td>
+<td class="machine">3052</td>
+<td class="score"><span class="badge mid">40</span></td>
+<td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+</tr>
+
+<tr data-model="からくりサーカス2">
+<td class="rank">3</td>
+<td class="machine">2114</td>
+<td class="score"><span class="badge low">36</span></td>
+<td class="l">からくりサーカス2</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">4</td>
+<td class="machine">2055</td>
+<td class="score"><span class="badge low">30</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="ソードアート・オンライン">
+<td class="rank">5</td>
+<td class="machine">3063</td>
+<td class="score"><span class="badge low">30</span></td>
+<td class="l">ソードアート・オンライン</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">6</td>
+<td class="machine">2157</td>
+<td class="score"><span class="badge low">29</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="うみねこのなく頃に2">
+<td class="rank">7</td>
+<td class="machine">3009</td>
+<td class="score"><span class="badge low">27</span></td>
+<td class="l">うみねこのなく頃に2</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">8</td>
+<td class="machine">2170</td>
+<td class="score"><span class="badge low">25</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="うみねこのなく頃に2">
+<td class="rank">9</td>
+<td class="machine">3005</td>
+<td class="score"><span class="badge low">25</span></td>
+<td class="l">うみねこのなく頃に2</td>
+</tr>
+
+<tr data-model="うみねこのなく頃に2">
+<td class="rank">10</td>
+<td class="machine">3003</td>
+<td class="score"><span class="badge low">25</span></td>
+<td class="l">うみねこのなく頃に2</td>
+</tr>
+
+<tr data-model="アズールレーン the animation">
+<td class="rank">11</td>
+<td class="machine">2202</td>
+<td class="score"><span class="badge low">24</span></td>
+<td class="l">アズールレーン THE ANIMATION</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">12</td>
+<td class="machine">2065</td>
+<td class="score"><span class="badge low">23</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="ソードアート・オンライン">
+<td class="rank">13</td>
+<td class="machine">3062</td>
+<td class="score"><span class="badge low">23</span></td>
+<td class="l">ソードアート・オンライン</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">14</td>
+<td class="machine">2173</td>
+<td class="score"><span class="badge low">23</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="スマスロ炎炎ノ消防隊2">
+<td class="rank">15</td>
+<td class="machine">2247</td>
+<td class="score"><span class="badge low">22</span></td>
+<td class="l">スマスロ炎炎ノ消防隊2</td>
+</tr>
+
+<tr data-model="スマスロ炎炎ノ消防隊2">
+<td class="rank">16</td>
+<td class="machine">2248</td>
+<td class="score"><span class="badge low">22</span></td>
+<td class="l">スマスロ炎炎ノ消防隊2</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">17</td>
+<td class="machine">2038</td>
+<td class="score"><span class="badge low">22</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">18</td>
+<td class="machine">2036</td>
+<td class="score"><span class="badge low">21</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="バンドリ！">
+<td class="rank">19</td>
+<td class="machine">3032</td>
+<td class="score"><span class="badge low">21</span></td>
+<td class="l">バンドリ！</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">20</td>
+<td class="machine">2035</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">21</td>
+<td class="machine">2051</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="戦国†恋姫">
+<td class="rank">22</td>
+<td class="machine">3105</td>
+<td class="score"><span class="badge low">19</span></td>
+<td class="l">戦国†恋姫</td>
+</tr>
+
+<tr data-model="バンドリ！">
+<td class="rank">23</td>
+<td class="machine">3013</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">バンドリ！</td>
+</tr>
+
+<tr data-model="戦国†恋姫">
+<td class="rank">24</td>
+<td class="machine">3101</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">戦国†恋姫</td>
+</tr>
+
+<tr data-model="ソードアート・オンライン">
+<td class="rank">25</td>
+<td class="machine">3061</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">ソードアート・オンライン</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">26</td>
+<td class="machine">2006</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="ディスクアップ ultraremix">
+<td class="rank">27</td>
+<td class="machine">3203</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">ディスクアップ ULTRAREMIX</td>
+</tr>
+
+<tr data-model="戦国†恋姫">
+<td class="rank">28</td>
+<td class="machine">3099</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">戦国†恋姫</td>
+</tr>
+
+<tr data-model="アズールレーン the animation">
+<td class="rank">29</td>
+<td class="machine">2203</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">アズールレーン THE ANIMATION</td>
+</tr>
+
+<tr data-model="スマスロ炎炎ノ消防隊2">
+<td class="rank">30</td>
+<td class="machine">2249</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">スマスロ炎炎ノ消防隊2</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">31</td>
+<td class="machine">2005</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="ビッグドリーム the golden pusher">
+<td class="rank">32</td>
+<td class="machine">2231</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">ビッグドリーム THE GOLDEN PUSHER</td>
+</tr>
+
+<tr data-model="虚構推理">
+<td class="rank">33</td>
+<td class="machine">3046</td>
+<td class="score"><span class="badge low">18</span></td>
+<td class="l">虚構推理</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">34</td>
+<td class="machine">2085</td>
+<td class="score"><span class="badge low">17</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="バンドリ！">
+<td class="rank">35</td>
+<td class="machine">3018</td>
+<td class="score"><span class="badge low">17</span></td>
+<td class="l">バンドリ！</td>
+</tr>
+
+<tr data-model="少女☆歌劇 レヴュースタァライト ‐the slot‐">
+<td class="rank">36</td>
+<td class="machine">3024</td>
+<td class="score"><span class="badge low">17</span></td>
+<td class="l">少女☆歌劇 レヴュースタァライト ‐The SLOT‐</td>
+</tr>
+
+<tr data-model="ディスクアップ ultraremix">
+<td class="rank">37</td>
+<td class="machine">3200</td>
+<td class="score"><span class="badge low">17</span></td>
+<td class="l">ディスクアップ ULTRAREMIX</td>
+</tr>
+
+<tr data-model="ツインエンジェルparty">
+<td class="rank">38</td>
+<td class="machine">3127</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="l">ツインエンジェルPARTY</td>
+</tr>
+
+<tr data-model="プリズムナナ">
+<td class="rank">39</td>
+<td class="machine">3069</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="l">プリズムナナ</td>
+</tr>
+
+<tr data-model="ディスクアップ ultraremix">
+<td class="rank">40</td>
+<td class="machine">3202</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="l">ディスクアップ ULTRAREMIX</td>
+</tr>
+
+<tr data-model="ツインエンジェルparty">
+<td class="rank">41</td>
+<td class="machine">3126</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="l">ツインエンジェルPARTY</td>
+</tr>
+
+<tr data-model="プリズムナナ">
+<td class="rank">42</td>
+<td class="machine">3068</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="l">プリズムナナ</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">43</td>
+<td class="machine">2003</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="ツインエンジェルparty">
+<td class="rank">44</td>
+<td class="machine">3128</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="l">ツインエンジェルPARTY</td>
+</tr>
+
+<tr data-model="虚構推理">
+<td class="rank">45</td>
+<td class="machine">3044</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="l">虚構推理</td>
+</tr>
+
+<tr data-model="プリズムナナ">
+<td class="rank">46</td>
+<td class="machine">3070</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="l">プリズムナナ</td>
+</tr>
+
+<tr data-model="痛いのは嫌なので防御力に極振りしたいと思います。">
+<td class="rank">47</td>
+<td class="machine">3074</td>
+<td class="score"><span class="badge low">14</span></td>
+<td class="l">痛いのは嫌なので防御力に極振りしたいと思います。</td>
+</tr>
+
+<tr data-model="アズールレーン the animation">
+<td class="rank">48</td>
+<td class="machine">2204</td>
+<td class="score"><span class="badge low">14</span></td>
+<td class="l">アズールレーン THE ANIMATION</td>
+</tr>
+
+<tr data-model="少女☆歌劇 レヴュースタァライト ‐the slot‐">
+<td class="rank">49</td>
+<td class="machine">3021</td>
+<td class="score"><span class="badge low">13</span></td>
+<td class="l">少女☆歌劇 レヴュースタァライト ‐The SLOT‐</td>
+</tr>
+
+<tr data-model="少女☆歌劇 レヴュースタァライト ‐the slot‐">
+<td class="rank">50</td>
+<td class="machine">3025</td>
+<td class="score"><span class="badge low">13</span></td>
+<td class="l">少女☆歌劇 レヴュースタァライト ‐The SLOT‐</td>
+</tr>
+
+<tr data-model="虚構推理">
+<td class="rank">51</td>
+<td class="machine">3045</td>
+<td class="score"><span class="badge low">13</span></td>
+<td class="l">虚構推理</td>
+</tr>
+
+<tr data-model="toloveるダークネス trance ver.8.7">
+<td class="rank">52</td>
+<td class="machine">3054</td>
+<td class="score"><span class="badge low">12</span></td>
+<td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+</tr>
+
+<tr data-model="toloveるダークネス trance ver.8.7">
+<td class="rank">53</td>
+<td class="machine">3053</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
+</tr>
+
+<tr data-model="化物語">
+<td class="rank">54</td>
+<td class="machine">2098</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">化物語</td>
+</tr>
+
+<tr data-model="痛いのは嫌なので防御力に極振りしたいと思います。">
+<td class="rank">55</td>
+<td class="machine">3075</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">痛いのは嫌なので防御力に極振りしたいと思います。</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">56</td>
+<td class="machine">2078</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">57</td>
+<td class="machine">2136</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="a‐slot+ この素晴らしい世界に祝福を！">
+<td class="rank">58</td>
+<td class="machine">3135</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="l">A‐SLOT+ この素晴らしい世界に祝福を！</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">59</td>
+<td class="machine">2087</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">60</td>
+<td class="machine">2133</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">61</td>
+<td class="machine">2135</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="スーパーリオエース2">
+<td class="rank">62</td>
+<td class="machine">2211</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="l">スーパーリオエース2</td>
+</tr>
+
+<tr data-model="痛いのは嫌なので防御力に極振りしたいと思います。">
+<td class="rank">63</td>
+<td class="machine">3076</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="l">痛いのは嫌なので防御力に極振りしたいと思います。</td>
+</tr>
+
+<tr data-model="化物語">
+<td class="rank">64</td>
+<td class="machine">2099</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="l">化物語</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">65</td>
+<td class="machine">2220</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="化物語">
+<td class="rank">66</td>
+<td class="machine">2097</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="l">化物語</td>
+</tr>
+
+<tr data-model="真打 吉宗">
+<td class="rank">67</td>
+<td class="machine">3093</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="l">真打 吉宗</td>
+</tr>
+
+<tr data-model="a‐slot+ この素晴らしい世界に祝福を！">
+<td class="rank">68</td>
+<td class="machine">3136</td>
+<td class="score"><span class="badge low">8</span></td>
+<td class="l">A‐SLOT+ この素晴らしい世界に祝福を！</td>
+</tr>
+
+<tr data-model="ソードアート・オンラインii">
+<td class="rank">69</td>
+<td class="machine">2195</td>
+<td class="score"><span class="badge low">8</span></td>
+<td class="l">ソードアート・オンラインII</td>
+</tr>
+
+<tr data-model="ひぐらしのなく頃に 業">
+<td class="rank">70</td>
+<td class="machine">3225</td>
+<td class="score"><span class="badge low">8</span></td>
+<td class="l">ひぐらしのなく頃に 業</td>
+</tr>
+
+<tr data-model="galfy">
+<td class="rank">71</td>
+<td class="machine">3137</td>
+<td class="score"><span class="badge low">7</span></td>
+<td class="l">GALFY</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">72</td>
+<td class="machine">2218</td>
+<td class="score"><span class="badge low">7</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="ガールズ&amp;パンツァー 最終章">
+<td class="rank">73</td>
+<td class="machine">3059</td>
+<td class="score"><span class="badge low">7</span></td>
+<td class="l">ガールズ&amp;パンツァー 最終章</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">74</td>
+<td class="machine">3167</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="ゴッドイーター リザレクション">
+<td class="rank">75</td>
+<td class="machine">2143</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ゴッドイーター リザレクション</td>
+</tr>
+
+<tr data-model="ひぐらしのなく頃に 業">
+<td class="rank">76</td>
+<td class="machine">3222</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ひぐらしのなく頃に 業</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">77</td>
+<td class="machine">3166</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="ひぐらしのなく頃に 業">
+<td class="rank">78</td>
+<td class="machine">3223</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ひぐらしのなく頃に 業</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">79</td>
+<td class="machine">3171</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="ガールズ&amp;パンツァー 最終章">
+<td class="rank">80</td>
+<td class="machine">3060</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">ガールズ&amp;パンツァー 最終章</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">81</td>
+<td class="machine">3175</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">82</td>
+<td class="machine">3176</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="ガールズ&amp;パンツァー 最終章">
+<td class="rank">83</td>
+<td class="machine">3058</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">ガールズ&amp;パンツァー 最終章</td>
+</tr>
+
+<tr data-model="ケロット5">
+<td class="rank">84</td>
+<td class="machine">3145</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">ケロット5</td>
+</tr>
+
+<tr data-model="a‐slot+ この素晴らしい世界に祝福を！">
+<td class="rank">85</td>
+<td class="machine">3134</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">A‐SLOT+ この素晴らしい世界に祝福を！</td>
+</tr>
+
+<tr data-model="アレックス ブライト">
+<td class="rank">86</td>
+<td class="machine">3195</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">アレックス ブライト</td>
+</tr>
+
+<tr data-model="ゴッドイーター リザレクション">
+<td class="rank">87</td>
+<td class="machine">2142</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">ゴッドイーター リザレクション</td>
+</tr>
+
+<tr data-model="翔べ！ハーレムエース">
+<td class="rank">88</td>
+<td class="machine">3151</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">翔べ！ハーレムエース</td>
+</tr>
+
+<tr data-model="ゴッドイーター リザレクション">
+<td class="rank">89</td>
+<td class="machine">2144</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">ゴッドイーター リザレクション</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">90</td>
+<td class="machine">2219</td>
+<td class="score"><span class="badge low">5</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="l南国育ち special">
+<td class="rank">91</td>
+<td class="machine">3205</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">L南国育ち SPECIAL</td>
+</tr>
+
+<tr data-model="鉄拳6">
+<td class="rank">92</td>
+<td class="machine">2140</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">鉄拳6</td>
+</tr>
+
+<tr data-model="スマスロ サンダーv">
+<td class="rank">93</td>
+<td class="machine">3190</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">スマスロ サンダーV</td>
+</tr>
+
+<tr data-model="とある科学の超電磁砲2">
+<td class="rank">94</td>
+<td class="machine">3039</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">とある科学の超電磁砲2</td>
+</tr>
+
+<tr data-model="アレックス ブライト">
+<td class="rank">95</td>
+<td class="machine">3194</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">アレックス ブライト</td>
+</tr>
+
+<tr data-model="shake bonus trigger">
+<td class="rank">96</td>
+<td class="machine">3216</td>
+<td class="score"><span class="badge low">4</span></td>
+<td class="l">SHAKE BONUS TRIGGER</td>
+</tr>
+
+<tr data-model="劇場版 魔法少女まどか☆マギカ[前編]始まりの物語/[後編]永遠の物語">
+<td class="rank">97</td>
+<td class="machine">3130</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">劇場版 魔法少女まどか☆マギカ[前編]始まりの物語/[後編]永遠の物語</td>
+</tr>
+
+<tr data-model="バイオハザード re:3">
+<td class="rank">98</td>
+<td class="machine">3081</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">バイオハザード RE:3</td>
+</tr>
+
+<tr data-model="スマスロ ハナビ">
+<td class="rank">99</td>
+<td class="machine">3183</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">スマスロ ハナビ</td>
+</tr>
+
+<tr data-model="shake bonus trigger">
+<td class="rank">100</td>
+<td class="machine">3217</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">SHAKE BONUS TRIGGER</td>
+</tr>
+
+<tr data-model="アレックス ブライト">
+<td class="rank">101</td>
+<td class="machine">3196</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">アレックス ブライト</td>
+</tr>
+
+<tr data-model="翔べ！ハーレムエース">
+<td class="rank">102</td>
+<td class="machine">3152</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">翔べ！ハーレムエース</td>
+</tr>
+
+<tr data-model="不二子bt">
+<td class="rank">103</td>
+<td class="machine">3153</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">不二子BT</td>
+</tr>
+
+<tr data-model="スマスロ サンダーv">
+<td class="rank">104</td>
+<td class="machine">3189</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">スマスロ サンダーV</td>
+</tr>
+
+<tr data-model="スマスロ サンダーv">
+<td class="rank">105</td>
+<td class="machine">3188</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="l">スマスロ サンダーV</td>
+</tr>
+
+<tr data-model="スマスロ ハナビ">
+<td class="rank">106</td>
+<td class="machine">3184</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">スマスロ ハナビ</td>
+</tr>
+
+<tr data-model="とある科学の超電磁砲2">
+<td class="rank">107</td>
+<td class="machine">3037</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">とある科学の超電磁砲2</td>
+</tr>
+
+<tr data-model="攻殻機動隊">
+<td class="rank">108</td>
+<td class="machine">2126</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">攻殻機動隊</td>
+</tr>
+
+<tr data-model="スマスロ ハナビ">
+<td class="rank">109</td>
+<td class="machine">3182</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">スマスロ ハナビ</td>
+</tr>
+
+<tr data-model="shake bonus trigger">
+<td class="rank">110</td>
+<td class="machine">3219</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">SHAKE BONUS TRIGGER</td>
+</tr>
+
+<tr data-model="ソードアート・オンラインii">
+<td class="rank">111</td>
+<td class="machine">2185</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="l">ソードアート・オンラインII</td>
+</tr>
+
+<tr data-model="ケロット5">
+<td class="rank">112</td>
+<td class="machine">3146</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">ケロット5</td>
+</tr>
+
+<tr data-model="マジカルハロウィン8">
+<td class="rank">113</td>
+<td class="machine">3110</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">マジカルハロウィン8</td>
+</tr>
+
+<tr data-model="ウルトラミラクルジャグラー">
+<td class="rank">114</td>
+<td class="machine">3160</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">ウルトラミラクルジャグラー</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">115</td>
+<td class="machine">3168</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="とある科学の超電磁砲2">
+<td class="rank">116</td>
+<td class="machine">3040</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">とある科学の超電磁砲2</td>
+</tr>
+
+<tr data-model="l南国育ち special">
+<td class="rank">117</td>
+<td class="machine">3206</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="l">L南国育ち SPECIAL</td>
+</tr>
+
+</table></div>
+
+<div class="pager">
+<a class="prev" href="ジャラン浅草店.html"><span class="lbl">← 前の店</span>ジャラン浅草店</a>
+<a class="next" href="マルハンメガシティ2000_蒲田1.html"><span class="lbl">次の店 →</span>マルハンメガシティ2000 蒲田1</a>
+</div>
+
+<div class="foot"><a href="../index.html">← 店一覧に戻る</a><br>このページのURLは日ごとに変わります。共有・再配布はご遠慮ください。</div>
+
+<script>
+(function(){
+  var box = document.getElementById('filterBox');
+  if (!box) return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-model]'));
+  var hitCountEl = document.getElementById('hitCount');
+  box.addEventListener('input', function(){
+    var q = box.value.trim().toLowerCase();
+    var visible = 0;
+    rows.forEach(function(row){
+      var show = !q || (row.getAttribute('data-model') || '').indexOf(q) !== -1;
+      row.classList.toggle('is-hidden', !show);
+      if (show) visible++;
+    });
+    hitCountEl.textContent = q ? (visible + '台が該当') : '';
+  });
+})();
+</script>
+</body>
+</html>
