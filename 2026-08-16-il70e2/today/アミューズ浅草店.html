@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>アミューズ浅草店｜本日の予測レポート</title>
+<style>
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;
+       background:#f5f7fb;color:#0f172a;max-width:640px;margin:0 auto;padding:24px 18px 60px}
+  .crumb{font-size:12.5px;color:#64748b;margin-bottom:10px}
+  .crumb a{color:#4f46e5;text-decoration:none}
+  .crumb a:hover{text-decoration:underline}
+  h1{font-size:19px;margin:4px 0 2px}
+  .datelabel{font-size:12.5px;color:#94a3b8;margin-bottom:14px}
+  .note{background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;padding:12px 14px;
+        font-size:13px;line-height:1.7;color:#312e81;margin:14px 0}
+  .cnt{font-size:11px;color:#94a3b8;white-space:nowrap}
+  .searchwrap{position:sticky;top:0;background:#f5f7fb;padding:8px 0;z-index:5;margin-bottom:4px}
+  .searchbox{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;
+        border:1px solid #cbd5e1;font-size:15px;background:#fff;color:#0f172a}
+  .searchbox:focus{outline:2px solid #4f46e5;border-color:#4f46e5}
+  .hitcount{color:#94a3b8;font-size:12px;margin:4px 2px 0}
+  .tablewrap{overflow-x:auto;border-radius:12px;border:1px solid #e5e9ef;background:#fff;
+        box-shadow:0 1px 2px rgba(15,23,42,.04);margin:10px 0 18px}
+  table{width:100%;min-width:280px;border-collapse:collapse;background:#fff;font-size:14px;table-layout:fixed}
+  th,td{padding:9px 8px;text-align:right;border-bottom:1px solid #eef2f7}
+  th{background:#f8fafc;color:#475569;font-weight:600;font-size:12px}
+  td.l,th.l{text-align:left;white-space:normal;word-break:break-word}
+  th.rankcol,td.rank{width:28px;color:#94a3b8;font-variant-numeric:tabular-nums;text-align:left}
+  th.machinecol,td.machine{width:64px;font-variant-numeric:tabular-nums}
+  th.scorecol,td.score{width:56px}
+  .score .badge{display:inline-block;min-width:30px;padding:2px 6px;border-radius:6px;
+        font-weight:700;font-size:12.5px;color:#065f46;background:#d1fae5}
+  .score .badge.mid{color:#92400e;background:#fef3c7}
+  .score .badge.low{color:#475569;background:#f1f5f9}
+  tr:first-child .score .badge{background:#059669;color:#fff}
+  th.infcol,td.influence{width:52px;text-align:center;font-size:11.5px;color:#475569;white-space:nowrap}
+  .inf-tag{display:inline-block;padding:1px 5px;border-radius:5px;background:#f1f5f9;color:#475569}
+  tr.is-hidden{display:none}
+  .empty{color:#94a3b8;font-size:13px;padding:10px 2px}
+  .pager{display:flex;justify-content:space-between;gap:10px;margin:18px 0}
+  .pager a{flex:1;background:#fff;border:1px solid #e5e9ef;border-radius:10px;padding:10px 12px;
+        text-decoration:none;color:#334155;font-size:12.5px;line-height:1.4}
+  .pager a:hover{border-color:#4f46e5}
+  .pager .lbl{color:#94a3b8;font-size:11px;display:block;margin-bottom:2px}
+  .pager .next{text-align:right}
+  .foot{color:#94a3b8;font-size:12px;margin-top:26px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="crumb"><a href="../index.html">トップ</a> ／ 8/16(日)</div>
+<h1>アミューズ浅草店</h1>
+<div class="datelabel">28機種・69台</div>
+
+<div class="note">
+独自の基準による座席予測ランキングです。算出方法・データソースは非公開です。
+スコアは<b>この店の中だけで意味を持つ相対評価</b>（1〜100）で、他店とのスコア比較はできません。
+マイナス評価の台は掲載していません。1点張りではなく、上位の複数台・複数機種に座る使い方を前提にしています。<br>
+「傾向」列は、そのスコアが<b>機種そのものの勢い</b>によるものか、<b>その台番号（座席）固有の実績</b>によるものかの目安です（機種◎／機種○／半々／台番○／台番◎の5段階）。機種寄りのスコアは「その機種が今狙われている」意味合いが強く、台番寄りのスコアは「その台自体の実績・位置」の意味合いが強い、というくらいの参考情報です。
+</div>
+
+
+<div class="searchwrap">
+<input type="text" id="filterBox" class="searchbox" placeholder="機種名で絞り込み" autocomplete="off">
+<div class="hitcount" id="hitCount"></div>
+</div>
+
+
+<div class="tablewrap"><table>
+<tr><th class="rankcol">#</th><th class="machinecol">台番号</th><th class="scorecol">スコア</th><th class="infcol">傾向</th><th class="l">機種</th></tr>
+
+<tr data-model="とんでもスキルで異世界放浪メシ">
+<td class="rank">1</td>
+<td class="machine">3161</td>
+<td class="score"><span class="badge">100</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">とんでもスキルで異世界放浪メシ</td>
+</tr>
+
+<tr data-model="北斗の拳 転生の章2">
+<td class="rank">2</td>
+<td class="machine">3166</td>
+<td class="score"><span class="badge">74</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">北斗の拳 転生の章2</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">3</td>
+<td class="machine">2076</td>
+<td class="score"><span class="badge">72</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">4</td>
+<td class="machine">2106</td>
+<td class="score"><span class="badge">72</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="北斗の拳 転生の章2">
+<td class="rank">5</td>
+<td class="machine">3172</td>
+<td class="score"><span class="badge mid">68</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">北斗の拳 転生の章2</td>
+</tr>
+
+<tr data-model="モンキーターンv">
+<td class="rank">6</td>
+<td class="machine">2086</td>
+<td class="score"><span class="badge mid">64</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">モンキーターンV</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">7</td>
+<td class="machine">2019</td>
+<td class="score"><span class="badge mid">64</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="北斗の拳 転生の章2">
+<td class="rank">8</td>
+<td class="machine">3174</td>
+<td class="score"><span class="badge mid">60</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">北斗の拳 転生の章2</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">9</td>
+<td class="machine">2064</td>
+<td class="score"><span class="badge mid">55</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">10</td>
+<td class="machine">2226</td>
+<td class="score"><span class="badge mid">55</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">11</td>
+<td class="machine">2216</td>
+<td class="score"><span class="badge mid">54</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="マイジャグラーv">
+<td class="rank">12</td>
+<td class="machine">2196</td>
+<td class="score"><span class="badge mid">54</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マイジャグラーV</td>
+</tr>
+
+<tr data-model="l南国育ち special">
+<td class="rank">13</td>
+<td class="machine">2046</td>
+<td class="score"><span class="badge mid">54</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">L南国育ち SPECIAL</td>
+</tr>
+
+<tr data-model="東京喰種">
+<td class="rank">14</td>
+<td class="machine">2062</td>
+<td class="score"><span class="badge mid">51</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">東京喰種</td>
+</tr>
+
+<tr data-model="ネオアイムジャグラーex">
+<td class="rank">15</td>
+<td class="machine">2286</td>
+<td class="score"><span class="badge mid">48</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ネオアイムジャグラーEX</td>
+</tr>
+
+<tr data-model="スマスロ炎炎ノ消防隊">
+<td class="rank">16</td>
+<td class="machine">2056</td>
+<td class="score"><span class="badge mid">46</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スマスロ炎炎ノ消防隊</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">17</td>
+<td class="machine">3111</td>
+<td class="score"><span class="badge mid">46</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="ネオアイムジャグラーex">
+<td class="rank">18</td>
+<td class="machine">2246</td>
+<td class="score"><span class="badge mid">44</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ネオアイムジャグラーEX</td>
+</tr>
+
+<tr data-model="ディスクアップ2">
+<td class="rank">19</td>
+<td class="machine">2340</td>
+<td class="score"><span class="badge mid">44</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ディスクアップ2</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">20</td>
+<td class="machine">2156</td>
+<td class="score"><span class="badge mid">43</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="ディスクアップ2">
+<td class="rank">21</td>
+<td class="machine">2339</td>
+<td class="score"><span class="badge mid">40</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ディスクアップ2</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">22</td>
+<td class="machine">2316</td>
+<td class="score"><span class="badge mid">40</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="ゴーゴージャグラー3">
+<td class="rank">23</td>
+<td class="machine">2306</td>
+<td class="score"><span class="badge low">39</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ゴーゴージャグラー3</td>
+</tr>
+
+<tr data-model="新ハナビ">
+<td class="rank">24</td>
+<td class="machine">2337</td>
+<td class="score"><span class="badge low">39</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">新ハナビ</td>
+</tr>
+
+<tr data-model="新ハナビ">
+<td class="rank">25</td>
+<td class="machine">2338</td>
+<td class="score"><span class="badge low">37</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">新ハナビ</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ">
+<td class="rank">26</td>
+<td class="machine">2035</td>
+<td class="score"><span class="badge low">36</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">甲鉄城のカバネリ</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ">
+<td class="rank">27</td>
+<td class="machine">2033</td>
+<td class="score"><span class="badge low">36</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">甲鉄城のカバネリ</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ">
+<td class="rank">28</td>
+<td class="machine">2032</td>
+<td class="score"><span class="badge low">36</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">甲鉄城のカバネリ</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">29</td>
+<td class="machine">2315</td>
+<td class="score"><span class="badge low">35</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">30</td>
+<td class="machine">2165</td>
+<td class="score"><span class="badge low">35</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="戦国乙女5 業火を穿つ宿焔の双刃">
+<td class="rank">31</td>
+<td class="machine">2153</td>
+<td class="score"><span class="badge low">34</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
+</tr>
+
+<tr data-model="ネオアイムジャグラーex">
+<td class="rank">32</td>
+<td class="machine">2279</td>
+<td class="score"><span class="badge low">33</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ネオアイムジャグラーEX</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">33</td>
+<td class="machine">3152</td>
+<td class="score"><span class="badge low">33</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">34</td>
+<td class="machine">3151</td>
+<td class="score"><span class="badge low">32</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="ゴーゴージャグラー3">
+<td class="rank">35</td>
+<td class="machine">2320</td>
+<td class="score"><span class="badge low">32</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ゴーゴージャグラー3</td>
+</tr>
+
+<tr data-model="ミスタージャグラー">
+<td class="rank">36</td>
+<td class="machine">2313</td>
+<td class="score"><span class="badge low">30</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ミスタージャグラー</td>
+</tr>
+
+<tr data-model="ゴーゴージャグラー3">
+<td class="rank">37</td>
+<td class="machine">2308</td>
+<td class="score"><span class="badge low">28</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ゴーゴージャグラー3</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">38</td>
+<td class="machine">3112</td>
+<td class="score"><span class="badge low">27</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="ジャグラーガールズ">
+<td class="rank">39</td>
+<td class="machine">2270</td>
+<td class="score"><span class="badge low">27</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ジャグラーガールズ</td>
+</tr>
+
+<tr data-model="ジャグラーガールズ">
+<td class="rank">40</td>
+<td class="machine">2266</td>
+<td class="score"><span class="badge low">26</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ジャグラーガールズ</td>
+</tr>
+
+<tr data-model="ジャグラーガールズ">
+<td class="rank">41</td>
+<td class="machine">2269</td>
+<td class="score"><span class="badge low">24</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ジャグラーガールズ</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">42</td>
+<td class="machine">3096</td>
+<td class="score"><span class="badge low">24</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">43</td>
+<td class="machine">3186</td>
+<td class="score"><span class="badge low">24</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="革命機ヴァルヴレイヴ2">
+<td class="rank">44</td>
+<td class="machine">3106</td>
+<td class="score"><span class="badge low">24</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">革命機ヴァルヴレイヴ2</td>
+</tr>
+
+<tr data-model="マギアレコード 魔法少女まどか☆マギカ外伝">
+<td class="rank">45</td>
+<td class="machine">3153</td>
+<td class="score"><span class="badge low">22</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+</tr>
+
+<tr data-model="ウルトラミラクルジャグラー">
+<td class="rank">46</td>
+<td class="machine">2296</td>
+<td class="score"><span class="badge low">21</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">ウルトラミラクルジャグラー</td>
+</tr>
+
+<tr data-model="スマスロ北斗の拳">
+<td class="rank">47</td>
+<td class="machine">3179</td>
+<td class="score"><span class="badge low">21</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スマスロ北斗の拳</td>
+</tr>
+
+<tr data-model="甲鉄城のカバネリ 海門(うなと)決戦">
+<td class="rank">48</td>
+<td class="machine">3091</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
+</tr>
+
+<tr data-model="スマスロ北斗の拳">
+<td class="rank">49</td>
+<td class="machine">3180</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スマスロ北斗の拳</td>
+</tr>
+
+<tr data-model="l南国育ち special">
+<td class="rank">50</td>
+<td class="machine">2048</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">L南国育ち SPECIAL</td>
+</tr>
+
+<tr data-model="スマスロ炎炎ノ消防隊">
+<td class="rank">51</td>
+<td class="machine">2057</td>
+<td class="score"><span class="badge low">20</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">スマスロ炎炎ノ消防隊</td>
+</tr>
+
+<tr data-model="ウルトラミラクルジャグラー">
+<td class="rank">52</td>
+<td class="machine">2293</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ウルトラミラクルジャグラー</td>
+</tr>
+
+<tr data-model="スーパーリオエース2">
+<td class="rank">53</td>
+<td class="machine">3155</td>
+<td class="score"><span class="badge low">16</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スーパーリオエース2</td>
+</tr>
+
+<tr data-model="ウルトラミラクルジャグラー">
+<td class="rank">54</td>
+<td class="machine">2291</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ウルトラミラクルジャグラー</td>
+</tr>
+
+<tr data-model="交響詩篇エウレカセブン hi-evolution zero type‐art">
+<td class="rank">55</td>
+<td class="machine">2052</td>
+<td class="score"><span class="badge low">15</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">交響詩篇エウレカセブン HI-EVOLUTION ZERO TYPE‐ART</td>
+</tr>
+
+<tr data-model="l南国育ち special">
+<td class="rank">56</td>
+<td class="machine">2047</td>
+<td class="score"><span class="badge low">13</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">L南国育ち SPECIAL</td>
+</tr>
+
+<tr data-model="スマスロ北斗の拳">
+<td class="rank">57</td>
+<td class="machine">3181</td>
+<td class="score"><span class="badge low">11</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スマスロ北斗の拳</td>
+</tr>
+
+<tr data-model="からくりサーカス2">
+<td class="rank">58</td>
+<td class="machine">2131</td>
+<td class="score"><span class="badge low">10</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">からくりサーカス2</td>
+</tr>
+
+<tr data-model="攻殻機動隊">
+<td class="rank">59</td>
+<td class="machine">3148</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">攻殻機動隊</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">60</td>
+<td class="machine">3118</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">61</td>
+<td class="machine">3117</td>
+<td class="score"><span class="badge low">9</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="戦国コレクション6">
+<td class="rank">62</td>
+<td class="machine">3119</td>
+<td class="score"><span class="badge low">7</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">戦国コレクション6</td>
+</tr>
+
+<tr data-model="からくりサーカス2">
+<td class="rank">63</td>
+<td class="machine">2132</td>
+<td class="score"><span class="badge low">7</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">からくりサーカス2</td>
+</tr>
+
+<tr data-model="ダンジョンに出会いを求めるのは間違っているだろうか2">
+<td class="rank">64</td>
+<td class="machine">2055</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">ダンジョンに出会いを求めるのは間違っているだろうか2</td>
+</tr>
+
+<tr data-model="からくりサーカス2">
+<td class="rank">65</td>
+<td class="machine">2130</td>
+<td class="score"><span class="badge low">6</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">からくりサーカス2</td>
+</tr>
+
+<tr data-model="スマスロ ハナビ">
+<td class="rank">66</td>
+<td class="machine">2329</td>
+<td class="score"><span class="badge low">3</span></td>
+<td class="influence"><span class="inf-tag" title="やや機種要因寄り">機種○</span></td>
+<td class="l">スマスロ ハナビ</td>
+</tr>
+
+<tr data-model="攻殻機動隊">
+<td class="rank">67</td>
+<td class="machine">3146</td>
+<td class="score"><span class="badge low">2</span></td>
+<td class="influence"><span class="inf-tag" title="やや台番要因寄り">台番○</span></td>
+<td class="l">攻殻機動隊</td>
+</tr>
+
+<tr data-model="スーパーリオエース2">
+<td class="rank">68</td>
+<td class="machine">3154</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">スーパーリオエース2</td>
+</tr>
+
+<tr data-model="やじきた道中記参る！">
+<td class="rank">69</td>
+<td class="machine">3143</td>
+<td class="score"><span class="badge low">1</span></td>
+<td class="influence"><span class="inf-tag" title="バランス型">半々</span></td>
+<td class="l">やじきた道中記参る！</td>
+</tr>
+
+</table></div>
+
+<div class="pager">
+<a class="prev" href="アイランド秋葉原店.html"><span class="lbl">← 前の店</span>アイランド秋葉原店</a>
+<a class="next" href="エスパス1300新小岩北口駅前店.html"><span class="lbl">次の店 →</span>エスパス1300新小岩北口駅前店</a>
+</div>
+
+<div class="foot"><a href="../index.html">← 店一覧に戻る</a><br>このページのURLは日ごとに変わります。共有・再配布はご遠慮ください。</div>
+
+<script>
+(function(){
+  var box = document.getElementById('filterBox');
+  if (!box) return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tr[data-model]'));
+  var hitCountEl = document.getElementById('hitCount');
+  box.addEventListener('input', function(){
+    var q = box.value.trim().toLowerCase();
+    var visible = 0;
+    rows.forEach(function(row){
+      var show = !q || (row.getAttribute('data-model') || '').indexOf(q) !== -1;
+      row.classList.toggle('is-hidden', !show);
+      if (show) visible++;
+    });
+    hitCountEl.textContent = q ? (visible + '台が該当') : '';
+  });
+})();
+</script>
+</body>
+</html>
