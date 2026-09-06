@@ -18,7 +18,7 @@ header.top nav{display:flex;gap:4px;flex-wrap:wrap}
 header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
 header.top nav a.on{background:var(--chip);color:var(--accent)}
 header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
-header.top .fresh{margin-left:auto;font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
+header.top .fresh{font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
 .wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
 .crumb{color:var(--sub);font-size:12.5px;margin-bottom:14px}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:.01em}
@@ -50,6 +50,61 @@ select,input{background:#fff;color:var(--ink);border:1px solid var(--line);borde
 .store h3{margin:0 0 4px;font-size:18px;color:var(--ink)}.big{color:var(--orange);font-weight:700}
 @media(max-width:760px){.two{grid-template-columns:1fr}}
 @media(max-width:640px){.wrap{padding:16px 13px 60px}h1{font-size:20px}header.top .fresh{width:100%;margin:4px 0 0}}
+
+/* ---- スマホ向け: 台の一覧テーブルをカードに畳む（2026-09-06） ----
+   狙いナビ・全予想に「連続 / 全台系 / スコア理由 / 今日の癖」の4列を足した
+   結果、列が13本になり、スマホでは横スクロールしないと何も読めなくなった。
+   table.mrows を付けたテーブルだけ、640px以下で「1台＝1カード」に組み替える。
+   各セルの data-l が小さい見出しとして頭に付くので、列見出しが無くても読める。
+   空のセル（角でない・癖なし等）は td:empty で消えるため、カードが締まる。 */
+
+/* 画面が狭いとき（既定）。PC表示に固定している場合は適用しない。 */
+@media(max-width:640px){
+
+body:not(.view-table) .tablewrap{overflow:visible;border:0;background:transparent;box-shadow:none;border-radius:0}
+body:not(.view-table) table.mrows{min-width:0;display:block}
+body:not(.view-table) .mrows thead{display:none}
+body:not(.view-table) .mrows tbody{display:block}
+body:not(.view-table) .mrows tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 11px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+body:not(.view-table) .mrows td{display:inline-flex;align-items:baseline;gap:3px;border:0;padding:0;text-align:left;font-size:13.5px;white-space:nowrap}
+body:not(.view-table) .mrows td:empty{display:none}
+body:not(.view-table) .mrows td[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--sub);font-weight:700}
+body:not(.view-table) .mrows td.rank{font-size:11.5px;color:var(--sub);font-weight:700}
+body:not(.view-table) .mrows td.mach{font-size:17px;font-weight:800;letter-spacing:.01em}
+body:not(.view-table) .mrows td.st{flex-basis:100%;order:-2;font-size:11.5px;color:var(--sub);font-weight:700;white-space:normal}
+body:not(.view-table) .mrows td.mdl{flex-basis:100%;order:-1;font-size:14px;font-weight:700;white-space:normal;line-height:1.35;margin-bottom:1px}
+body:not(.view-table) .mrows td.sig{flex-basis:100%;white-space:normal;font-size:11.5px;font-weight:700;color:var(--orange);margin-top:2px}
+body:not(.view-table) .mrows td.why{font-size:11.5px}
+body:not(.view-table) .mrows td.zc{font-size:11.5px}
+body:not(.view-table) .controls{gap:7px}
+body:not(.view-table) .controls select{font-size:15px;padding:8px 10px}
+body:not(.view-table) .controls input{font-size:15px;padding:8px 10px}
+body:not(.view-table) .chip{padding:7px 13px;font-size:13px}
+
+}
+/* 画面幅に関係なく、手動でカード表示を選んだとき。 */
+
+body.view-card .tablewrap{overflow:visible;border:0;background:transparent;box-shadow:none;border-radius:0}
+body.view-card table.mrows{min-width:0;display:block}
+body.view-card .mrows thead{display:none}
+body.view-card .mrows tbody{display:block}
+body.view-card .mrows tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 11px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+body.view-card .mrows td{display:inline-flex;align-items:baseline;gap:3px;border:0;padding:0;text-align:left;font-size:13.5px;white-space:nowrap}
+body.view-card .mrows td:empty{display:none}
+body.view-card .mrows td[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--sub);font-weight:700}
+body.view-card .mrows td.rank{font-size:11.5px;color:var(--sub);font-weight:700}
+body.view-card .mrows td.mach{font-size:17px;font-weight:800;letter-spacing:.01em}
+body.view-card .mrows td.st{flex-basis:100%;order:-2;font-size:11.5px;color:var(--sub);font-weight:700;white-space:normal}
+body.view-card .mrows td.mdl{flex-basis:100%;order:-1;font-size:14px;font-weight:700;white-space:normal;line-height:1.35;margin-bottom:1px}
+body.view-card .mrows td.sig{flex-basis:100%;white-space:normal;font-size:11.5px;font-weight:700;color:var(--orange);margin-top:2px}
+body.view-card .mrows td.why{font-size:11.5px}
+body.view-card .mrows td.zc{font-size:11.5px}
+body.view-card .controls{gap:7px}
+body.view-card .controls select{font-size:15px;padding:8px 10px}
+body.view-card .controls input{font-size:15px;padding:8px 10px}
+body.view-card .chip{padding:7px 13px;font-size:13px}
+
+
 /* ---- gate ---- */
 #_gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
 #_gatebox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:320px;width:90%;box-shadow:var(--shadow2);text-align:center}
@@ -73,6 +128,18 @@ function axDate(title){return ax({title:title,type:'category',tickmode:'linear',
 function axCat(title){return ax({title:title,type:'category'});}
 </script>
 </head><body>
+<script>
+// 表示モード（自動 / スマホ（カード） / PC（表））。2026-09-06、masaharuさんの
+// 「スマホ用とPC用で切り替えられるとよい」への対応。既定は自動（画面幅で判断）。
+// body のクラスでCSSを切り替えるだけなので、選択は即時に反映される。
+// 描画のちらつきを避けるため、bodyの直後で先にクラスを当てる。
+(function(){
+  try{
+    var m = localStorage.getItem('pub_viewmode') || 'auto';
+    if(m === 'card' || m === 'table'){ document.body.className = 'view-' + m; }
+  }catch(e){}
+})();
+</script>
 <div id="_gate"><div id="_gatebox">
 <div class="t">🔒 パスワードが必要です</div>
 <div class="s">チーム内限定ページです</div>
@@ -95,7 +162,24 @@ function axCat(title){return ax({title:title,type:'category'});}
 <a href="../archive.html">過去ログ</a>
 
 </nav>
-<span class="fresh">データ最新 <b>2026-09-05</b> <span class="muted" style="font-size:11px">（HTML更新 2026-09-06 16:09:42）</span></header>
+<select id="_viewmode" title="表示の切り替え" style="margin-left:auto;font-size:12px;padding:4px 8px">
+<option value="auto">表示: 自動</option><option value="card">表示: スマホ（カード）</option><option value="table">表示: PC（表）</option>
+</select>
+<span class="fresh" style="margin-left:10px">データ最新 <b>2026-09-05</b> <span class="muted" style="font-size:11px">（HTML更新 2026-09-06 17:51:57）</span></header>
+<script>
+(function(){
+  var sel = document.getElementById('_viewmode');
+  if(!sel) return;
+  var m = 'auto';
+  try{ m = localStorage.getItem('pub_viewmode') || 'auto'; }catch(e){}
+  sel.value = m;
+  sel.addEventListener('change', function(){
+    var v = sel.value;
+    document.body.className = (v === 'auto') ? '' : ('view-' + v);
+    try{ localStorage.setItem('pub_viewmode', v); }catch(e){}
+  });
+})();
+</script>
 <div class="wrap">
 
 <div class="note" style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:0">
@@ -129,7 +213,7 @@ X等で機種を絞ったら「機種」で選択。人気店を避けたい時�
 </div>
 <div class="muted" id="count"></div>
 
-<div class="tablewrap"><table id="tbl"><thead><tr>
+<div class="tablewrap"><table id="tbl" class="mrows"><thead><tr>
 <th class="l">#</th><th class="l">店</th><th>台番</th><th class="l">機種</th>
 <th data-k="pred_diff">期待差枚</th><th data-k="pred_plus">プラス率</th><th data-k="pred_win">大勝ち率</th>
 <th>角</th><th data-k="u_mean7">直近7日</th><th data-k="im_bigratio_r7">島勝率</th>
@@ -188,13 +272,13 @@ function render(){
   const tb=$('tb'); tb.innerHTML='';
   rows.slice(0,CAP).forEach((r,i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="l rank">${i+1}</td><td class="l">${r.store}</td><td>${r.machine}</td><td class="l">${r.model||''}</td>`+
-      `<td class="${r.pred_diff>0?'pos':''}">${fmtNum(r.pred_diff)}</td><td>${fmtPct(r.pred_plus)}</td><td>${fmtPct(r.pred_win)}</td>`+
-      `<td>${r.is_corner==1?'角':''}</td><td>${fmtNum(r.u_mean7)}</td><td>${fmtPct(r.im_bigratio_r7)}</td>`+
+    tr.innerHTML=`<td class="l rank">${i+1}</td><td class="l st">${r.store}</td><td class="mach">${r.machine}</td><td class="l mdl">${r.model||''}</td>`+
+      `<td data-l="期待" class="${r.pred_diff>0?'pos':''}">${fmtNum(r.pred_diff)}</td><td data-l="P">${fmtPct(r.pred_plus)}</td><td data-l="大">${fmtPct(r.pred_win)}</td>`+
+      `<td>${r.is_corner==1?'角':''}</td><td data-l="7日">${fmtNum(r.u_mean7)}</td><td data-l="島">${fmtPct(r.im_bigratio_r7)}</td>`+
       `<td class="stk ${r.streak_dir||''}">${r.streak_txt||''}</td>`+
-      `<td class="zc">${r.zentai_rank?(r.zentai_rank+'位 '+(r.zentai_prob*100).toFixed(1)+'%'):''}</td>`+
+      `<td class="zc">${r.zentai_rank?('全台系'+r.zentai_rank+'位 '+(r.zentai_prob*100).toFixed(1)+'%'):''}</td>`+
       `<td class="why">${r.score_influence_short||''}</td>`+
-      `<td class="l why">${r.today_signal||''}</td>`;
+      `<td class="l why sig">${r.today_signal||''}</td>`;
     tb.appendChild(tr);
   });
 }

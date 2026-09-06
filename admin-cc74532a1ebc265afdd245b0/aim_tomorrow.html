@@ -18,7 +18,7 @@ header.top nav{display:flex;gap:4px;flex-wrap:wrap}
 header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
 header.top nav a.on{background:var(--chip);color:var(--accent)}
 header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
-header.top .fresh{margin-left:auto;font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
+header.top .fresh{font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
 .wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
 .crumb{color:var(--sub);font-size:12.5px;margin-bottom:14px}
 h1{font-size:23px;margin:0 0 4px;letter-spacing:.01em}
@@ -50,6 +50,61 @@ select,input{background:#fff;color:var(--ink);border:1px solid var(--line);borde
 .store h3{margin:0 0 4px;font-size:18px;color:var(--ink)}.big{color:var(--orange);font-weight:700}
 @media(max-width:760px){.two{grid-template-columns:1fr}}
 @media(max-width:640px){.wrap{padding:16px 13px 60px}h1{font-size:20px}header.top .fresh{width:100%;margin:4px 0 0}}
+
+/* ---- スマホ向け: 台の一覧テーブルをカードに畳む（2026-09-06） ----
+   狙いナビ・全予想に「連続 / 全台系 / スコア理由 / 今日の癖」の4列を足した
+   結果、列が13本になり、スマホでは横スクロールしないと何も読めなくなった。
+   table.mrows を付けたテーブルだけ、640px以下で「1台＝1カード」に組み替える。
+   各セルの data-l が小さい見出しとして頭に付くので、列見出しが無くても読める。
+   空のセル（角でない・癖なし等）は td:empty で消えるため、カードが締まる。 */
+
+/* 画面が狭いとき（既定）。PC表示に固定している場合は適用しない。 */
+@media(max-width:640px){
+
+body:not(.view-table) .tablewrap{overflow:visible;border:0;background:transparent;box-shadow:none;border-radius:0}
+body:not(.view-table) table.mrows{min-width:0;display:block}
+body:not(.view-table) .mrows thead{display:none}
+body:not(.view-table) .mrows tbody{display:block}
+body:not(.view-table) .mrows tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 11px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+body:not(.view-table) .mrows td{display:inline-flex;align-items:baseline;gap:3px;border:0;padding:0;text-align:left;font-size:13.5px;white-space:nowrap}
+body:not(.view-table) .mrows td:empty{display:none}
+body:not(.view-table) .mrows td[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--sub);font-weight:700}
+body:not(.view-table) .mrows td.rank{font-size:11.5px;color:var(--sub);font-weight:700}
+body:not(.view-table) .mrows td.mach{font-size:17px;font-weight:800;letter-spacing:.01em}
+body:not(.view-table) .mrows td.st{flex-basis:100%;order:-2;font-size:11.5px;color:var(--sub);font-weight:700;white-space:normal}
+body:not(.view-table) .mrows td.mdl{flex-basis:100%;order:-1;font-size:14px;font-weight:700;white-space:normal;line-height:1.35;margin-bottom:1px}
+body:not(.view-table) .mrows td.sig{flex-basis:100%;white-space:normal;font-size:11.5px;font-weight:700;color:var(--orange);margin-top:2px}
+body:not(.view-table) .mrows td.why{font-size:11.5px}
+body:not(.view-table) .mrows td.zc{font-size:11.5px}
+body:not(.view-table) .controls{gap:7px}
+body:not(.view-table) .controls select{font-size:15px;padding:8px 10px}
+body:not(.view-table) .controls input{font-size:15px;padding:8px 10px}
+body:not(.view-table) .chip{padding:7px 13px;font-size:13px}
+
+}
+/* 画面幅に関係なく、手動でカード表示を選んだとき。 */
+
+body.view-card .tablewrap{overflow:visible;border:0;background:transparent;box-shadow:none;border-radius:0}
+body.view-card table.mrows{min-width:0;display:block}
+body.view-card .mrows thead{display:none}
+body.view-card .mrows tbody{display:block}
+body.view-card .mrows tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 11px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+body.view-card .mrows td{display:inline-flex;align-items:baseline;gap:3px;border:0;padding:0;text-align:left;font-size:13.5px;white-space:nowrap}
+body.view-card .mrows td:empty{display:none}
+body.view-card .mrows td[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--sub);font-weight:700}
+body.view-card .mrows td.rank{font-size:11.5px;color:var(--sub);font-weight:700}
+body.view-card .mrows td.mach{font-size:17px;font-weight:800;letter-spacing:.01em}
+body.view-card .mrows td.st{flex-basis:100%;order:-2;font-size:11.5px;color:var(--sub);font-weight:700;white-space:normal}
+body.view-card .mrows td.mdl{flex-basis:100%;order:-1;font-size:14px;font-weight:700;white-space:normal;line-height:1.35;margin-bottom:1px}
+body.view-card .mrows td.sig{flex-basis:100%;white-space:normal;font-size:11.5px;font-weight:700;color:var(--orange);margin-top:2px}
+body.view-card .mrows td.why{font-size:11.5px}
+body.view-card .mrows td.zc{font-size:11.5px}
+body.view-card .controls{gap:7px}
+body.view-card .controls select{font-size:15px;padding:8px 10px}
+body.view-card .controls input{font-size:15px;padding:8px 10px}
+body.view-card .chip{padding:7px 13px;font-size:13px}
+
+
 /* ---- gate ---- */
 #_gate{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
 #_gatebox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:320px;width:90%;box-shadow:var(--shadow2);text-align:center}
@@ -73,6 +128,18 @@ function axDate(title){return ax({title:title,type:'category',tickmode:'linear',
 function axCat(title){return ax({title:title,type:'category'});}
 </script>
 </head><body>
+<script>
+// 表示モード（自動 / スマホ（カード） / PC（表））。2026-09-06、masaharuさんの
+// 「スマホ用とPC用で切り替えられるとよい」への対応。既定は自動（画面幅で判断）。
+// body のクラスでCSSを切り替えるだけなので、選択は即時に反映される。
+// 描画のちらつきを避けるため、bodyの直後で先にクラスを当てる。
+(function(){
+  try{
+    var m = localStorage.getItem('pub_viewmode') || 'auto';
+    if(m === 'card' || m === 'table'){ document.body.className = 'view-' + m; }
+  }catch(e){}
+})();
+</script>
 <div id="_gate"><div id="_gatebox">
 <div class="t">🔒 パスワードが必要です</div>
 <div class="s">チーム内限定ページです</div>
@@ -95,7 +162,24 @@ function axCat(title){return ax({title:title,type:'category'});}
 <a href="../archive.html">過去ログ</a>
 
 </nav>
-<span class="fresh">データ最新 <b>2026-09-05</b> <span class="muted" style="font-size:11px">（HTML更新 2026-09-06 16:09:42）</span></header>
+<select id="_viewmode" title="表示の切り替え" style="margin-left:auto;font-size:12px;padding:4px 8px">
+<option value="auto">表示: 自動</option><option value="card">表示: スマホ（カード）</option><option value="table">表示: PC（表）</option>
+</select>
+<span class="fresh" style="margin-left:10px">データ最新 <b>2026-09-05</b> <span class="muted" style="font-size:11px">（HTML更新 2026-09-06 17:51:57）</span></header>
+<script>
+(function(){
+  var sel = document.getElementById('_viewmode');
+  if(!sel) return;
+  var m = 'auto';
+  try{ m = localStorage.getItem('pub_viewmode') || 'auto'; }catch(e){}
+  sel.value = m;
+  sel.addEventListener('change', function(){
+    var v = sel.value;
+    document.body.className = (v === 'auto') ? '' : ('view-' + v);
+    try{ localStorage.setItem('pub_viewmode', v); }catch(e){}
+  });
+})();
+</script>
 <div class="wrap">
 
 <div class="note" style="display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:0">
@@ -140,104 +224,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>656</td><td class="l">ガメラ2</td>
-<td class="pos">+204</td>
-<td>56%</td>
-<td>9%</td>
+<tr><td class="l rank">1</td><td class="mach">656</td><td class="l mdl">ガメラ2</td>
+<td data-l="期待" class="pos">+204</td>
+<td data-l="P">56%</td>
+<td data-l="大">9%</td>
 <td>角</td>
-<td>-264</td>
-<td>0%</td>
+<td data-l="7日">-264</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>952</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+202</td>
-<td>42%</td>
-<td>15%</td>
+<tr><td class="l rank">2</td><td class="mach">952</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+202</td>
+<td data-l="P">42%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+621</td>
-<td>14%</td>
+<td data-l="7日">+621</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>957</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+197</td>
-<td>41%</td>
-<td>15%</td>
+<tr><td class="l rank">3</td><td class="mach">957</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+197</td>
+<td data-l="P">41%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+436</td>
-<td>14%</td>
+<td data-l="7日">+436</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>974</td><td class="l">GI優駿倶楽部黄金</td>
-<td class="pos">+194</td>
-<td>40%</td>
-<td>8%</td>
+<tr><td class="l rank">4</td><td class="mach">974</td><td class="l mdl">GI優駿倶楽部黄金</td>
+<td data-l="期待" class="pos">+194</td>
+<td data-l="P">40%</td>
+<td data-l="大">8%</td>
 <td>角</td>
-<td>-360</td>
-<td>14%</td>
+<td data-l="7日">-360</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>927</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+172</td>
-<td>41%</td>
-<td>15%</td>
+<tr><td class="l rank">5</td><td class="mach">927</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+172</td>
+<td data-l="P">41%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+636</td>
-<td>14%</td>
+<td data-l="7日">+636</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>708</td><td class="l">バイオハザード7 レジデント イービル</td>
-<td class="pos">+162</td>
-<td>55%</td>
-<td>7%</td>
+<tr><td class="l rank">6</td><td class="mach">708</td><td class="l mdl">バイオハザード7 レジデント イービル</td>
+<td data-l="期待" class="pos">+162</td>
+<td data-l="P">55%</td>
+<td data-l="大">7%</td>
 <td>角</td>
-<td>+667</td>
-<td>0%</td>
+<td data-l="7日">+667</td>
+<td data-l="島">0%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>997</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+143</td>
-<td>36%</td>
-<td>12%</td>
+<tr><td class="l rank">7</td><td class="mach">997</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+143</td>
+<td data-l="P">36%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-583</td>
-<td>7%</td>
+<td data-l="7日">-583</td>
+<td data-l="島">7%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>967</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+142</td>
-<td>39%</td>
-<td>15%</td>
+<tr><td class="l rank">8</td><td class="mach">967</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+142</td>
+<td data-l="P">39%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-229</td>
-<td>12%</td>
+<td data-l="7日">-229</td>
+<td data-l="島">12%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -264,104 +348,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>203</td><td class="l">東京喰種 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
-<td class="pos">+331</td>
-<td>43%</td>
-<td>27%</td>
+<tr><td class="l rank">1</td><td class="mach">203</td><td class="l mdl">東京喰種 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+331</td>
+<td data-l="P">43%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>-2100</td>
-<td>18%</td>
+<td data-l="7日">-2100</td>
+<td data-l="島">18%</td>
 <td class="stk neg">-11日</td>
-<td class="zc">4位 5.0%</td>
+<td class="zc">全台系4位 5.0%</td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>161</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+279</td>
-<td>35%</td>
-<td>15%</td>
+<tr><td class="l rank">2</td><td class="mach">161</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+279</td>
+<td data-l="P">35%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-709</td>
-<td>7%</td>
+<td data-l="7日">-709</td>
+<td data-l="島">7%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>207</td><td class="l">東京喰種 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
-<td class="pos">+272</td>
-<td>41%</td>
-<td>24%</td>
+<tr><td class="l rank">3</td><td class="mach">207</td><td class="l mdl">東京喰種 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+272</td>
+<td data-l="P">41%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>+566</td>
-<td>18%</td>
+<td data-l="7日">+566</td>
+<td data-l="島">18%</td>
 <td class="stk "></td>
-<td class="zc">4位 5.0%</td>
+<td class="zc">全台系4位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>225</td><td class="l">いざ！番長</td>
-<td class="pos">+268</td>
-<td>33%</td>
-<td>15%</td>
+<tr><td class="l rank">4</td><td class="mach">225</td><td class="l mdl">いざ！番長</td>
+<td data-l="期待" class="pos">+268</td>
+<td data-l="P">33%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-555</td>
-<td>11%</td>
+<td data-l="7日">-555</td>
+<td data-l="島">11%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>166</td><td class="l">モンキーターンV</td>
-<td class="pos">+265</td>
-<td>37%</td>
-<td>16%</td>
+<tr><td class="l rank">5</td><td class="mach">166</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+265</td>
+<td data-l="P">37%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>-918</td>
-<td>11%</td>
+<td data-l="7日">-918</td>
+<td data-l="島">11%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>218</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+265</td>
-<td>33%</td>
-<td>14%</td>
+<tr><td class="l rank">6</td><td class="mach">218</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+265</td>
+<td data-l="P">33%</td>
+<td data-l="大">14%</td>
 <td>角</td>
-<td>-1023</td>
-<td>14%</td>
+<td data-l="7日">-1023</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>172</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+240</td>
-<td>37%</td>
-<td>16%</td>
+<tr><td class="l rank">7</td><td class="mach">172</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+240</td>
+<td data-l="P">37%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>+826</td>
-<td>24%</td>
+<td data-l="7日">+826</td>
+<td data-l="島">24%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>224</td><td class="l">いざ！番長</td>
-<td class="pos">+236</td>
-<td>35%</td>
-<td>15%</td>
+<tr><td class="l rank">8</td><td class="mach">224</td><td class="l mdl">いざ！番長</td>
+<td data-l="期待" class="pos">+236</td>
+<td data-l="P">35%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-48</td>
-<td>11%</td>
+<td data-l="7日">-48</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -388,104 +472,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>327</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+187</td>
-<td>36%</td>
-<td>14%</td>
+<tr><td class="l rank">1</td><td class="mach">327</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+187</td>
+<td data-l="P">36%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+2299</td>
-<td>9%</td>
+<td data-l="7日">+2299</td>
+<td data-l="島">9%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>257</td><td class="l">真・一騎当千</td>
-<td class="pos">+185</td>
-<td>46%</td>
-<td>16%</td>
+<tr><td class="l rank">2</td><td class="mach">257</td><td class="l mdl">真・一騎当千</td>
+<td data-l="期待" class="pos">+185</td>
+<td data-l="P">46%</td>
+<td data-l="大">16%</td>
 <td>角</td>
-<td>+761</td>
-<td>29%</td>
+<td data-l="7日">+761</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>457</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+165</td>
-<td>39%</td>
-<td>14%</td>
+<tr><td class="l rank">3</td><td class="mach">457</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+165</td>
+<td data-l="P">39%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+684</td>
-<td>15%</td>
+<td data-l="7日">+684</td>
+<td data-l="島">15%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>359</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+162</td>
-<td>42%</td>
-<td>17%</td>
+<tr><td class="l rank">4</td><td class="mach">359</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+162</td>
+<td data-l="P">42%</td>
+<td data-l="大">17%</td>
 <td></td>
-<td>-830</td>
-<td>19%</td>
+<td data-l="7日">-830</td>
+<td data-l="島">19%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>365</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+162</td>
-<td>42%</td>
-<td>15%</td>
+<tr><td class="l rank">5</td><td class="mach">365</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+162</td>
+<td data-l="P">42%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-956</td>
-<td>19%</td>
+<td data-l="7日">-956</td>
+<td data-l="島">19%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>328</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+158</td>
-<td>36%</td>
-<td>11%</td>
+<tr><td class="l rank">6</td><td class="mach">328</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+158</td>
+<td data-l="P">36%</td>
+<td data-l="大">11%</td>
 <td></td>
-<td>-213</td>
-<td>9%</td>
+<td data-l="7日">-213</td>
+<td data-l="島">9%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>373</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+155</td>
-<td>41%</td>
-<td>14%</td>
+<tr><td class="l rank">7</td><td class="mach">373</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+155</td>
+<td data-l="P">41%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-687</td>
-<td>21%</td>
+<td data-l="7日">-687</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>367</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+155</td>
-<td>43%</td>
-<td>17%</td>
+<tr><td class="l rank">8</td><td class="mach">367</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+155</td>
+<td data-l="P">43%</td>
+<td data-l="大">17%</td>
 <td></td>
-<td>-1008</td>
-<td>19%</td>
+<td data-l="7日">-1008</td>
+<td data-l="島">19%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -512,104 +596,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2163</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+351</td>
-<td>42%</td>
-<td>23%</td>
+<tr><td class="l rank">1</td><td class="mach">2163</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+351</td>
+<td data-l="P">42%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>-1608</td>
-<td>25%</td>
+<td data-l="7日">-1608</td>
+<td data-l="島">25%</td>
 <td class="stk neg">-10日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2157</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+306</td>
-<td>40%</td>
-<td>22%</td>
+<tr><td class="l rank">2</td><td class="mach">2157</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+306</td>
+<td data-l="P">40%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+749</td>
-<td>25%</td>
+<td data-l="7日">+749</td>
+<td data-l="島">25%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2160</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+295</td>
-<td>41%</td>
-<td>21%</td>
+<tr><td class="l rank">3</td><td class="mach">2160</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+295</td>
+<td data-l="P">41%</td>
+<td data-l="大">21%</td>
 <td></td>
-<td>+758</td>
-<td>25%</td>
+<td data-l="7日">+758</td>
+<td data-l="島">25%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2017</td><td class="l">東京喰種</td>
-<td class="pos">+245</td>
-<td>37%</td>
-<td>18%</td>
+<tr><td class="l rank">4</td><td class="mach">2017</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+245</td>
+<td data-l="P">37%</td>
+<td data-l="大">18%</td>
 <td></td>
-<td>+993</td>
-<td>17%</td>
+<td data-l="7日">+993</td>
+<td data-l="島">17%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>3167</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+228</td>
-<td>35%</td>
-<td>14%</td>
+<tr><td class="l rank">5</td><td class="mach">3167</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+228</td>
+<td data-l="P">35%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-385</td>
-<td>13%</td>
+<td data-l="7日">-385</td>
+<td data-l="島">13%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>3174</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+188</td>
-<td>35%</td>
-<td>14%</td>
+<tr><td class="l rank">6</td><td class="mach">3174</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+188</td>
+<td data-l="P">35%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-743</td>
-<td>13%</td>
+<td data-l="7日">-743</td>
+<td data-l="島">13%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3168</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+187</td>
-<td>35%</td>
-<td>13%</td>
+<tr><td class="l rank">7</td><td class="mach">3168</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+187</td>
+<td data-l="P">35%</td>
+<td data-l="大">13%</td>
 <td></td>
-<td>-963</td>
-<td>13%</td>
+<td data-l="7日">-963</td>
+<td data-l="島">13%</td>
 <td class="stk neg">-12日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>3112</td><td class="l">革命機ヴァルヴレイヴ2 <span class="zentai" title="今日の全台系候補4位・推定4.3%">全台系候補4位</span></td>
-<td class="pos">+179</td>
-<td>34%</td>
-<td>14%</td>
+<tr><td class="l rank">8</td><td class="mach">3112</td><td class="l mdl">革命機ヴァルヴレイヴ2 <span class="zentai" title="今日の全台系候補4位・推定4.3%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+179</td>
+<td data-l="P">34%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+4311</td>
-<td>23%</td>
+<td data-l="7日">+4311</td>
+<td data-l="島">23%</td>
 <td class="stk pos">+2日</td>
-<td class="zc">4位 4.3%</td>
+<td class="zc">全台系4位 4.3%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -632,104 +716,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>3052</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+270</td>
-<td>41%</td>
-<td>12%</td>
+<tr><td class="l rank">1</td><td class="mach">3052</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+270</td>
+<td data-l="P">41%</td>
+<td data-l="大">12%</td>
 <td>角</td>
-<td>-505</td>
-<td>14%</td>
+<td data-l="7日">-505</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>3055</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+243</td>
-<td>40%</td>
-<td>12%</td>
+<tr><td class="l rank">2</td><td class="mach">3055</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+243</td>
+<td data-l="P">40%</td>
+<td data-l="大">12%</td>
 <td>角</td>
-<td>+595</td>
-<td>14%</td>
+<td data-l="7日">+595</td>
+<td data-l="島">14%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>3053</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+241</td>
-<td>40%</td>
-<td>12%</td>
+<tr><td class="l rank">3</td><td class="mach">3053</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+241</td>
+<td data-l="P">40%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>+1038</td>
-<td>14%</td>
+<td data-l="7日">+1038</td>
+<td data-l="島">14%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>3029</td><td class="l">ディスクアップ2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+215</td>
-<td>48%</td>
-<td>7%</td>
+<tr><td class="l rank">4</td><td class="mach">3029</td><td class="l mdl">ディスクアップ2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+215</td>
+<td data-l="P">48%</td>
+<td data-l="大">7%</td>
 <td>角</td>
-<td>+535</td>
-<td>21%</td>
+<td data-l="7日">+535</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>2161</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+202</td>
-<td>37%</td>
-<td>14%</td>
+<tr><td class="l rank">5</td><td class="mach">2161</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+202</td>
+<td data-l="P">37%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+308</td>
-<td>10%</td>
+<td data-l="7日">+308</td>
+<td data-l="島">10%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>2067</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+200</td>
-<td>39%</td>
-<td>14%</td>
+<tr><td class="l rank">6</td><td class="mach">2067</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+200</td>
+<td data-l="P">39%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-888</td>
-<td>21%</td>
+<td data-l="7日">-888</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3032</td><td class="l">ディスクアップ2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+198</td>
-<td>47%</td>
-<td>8%</td>
+<tr><td class="l rank">7</td><td class="mach">3032</td><td class="l mdl">ディスクアップ2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+198</td>
+<td data-l="P">47%</td>
+<td data-l="大">8%</td>
 <td>角</td>
-<td>+1210</td>
-<td>21%</td>
+<td data-l="7日">+1210</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>2162</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+184</td>
-<td>37%</td>
-<td>13%</td>
+<tr><td class="l rank">8</td><td class="mach">2162</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+184</td>
+<td data-l="P">37%</td>
+<td data-l="大">13%</td>
 <td></td>
-<td>+8</td>
-<td>10%</td>
+<td data-l="7日">+8</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -752,104 +836,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>3027</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+398</td>
-<td>41%</td>
-<td>15%</td>
+<tr><td class="l rank">1</td><td class="mach">3027</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+398</td>
+<td data-l="P">41%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-219</td>
-<td>14%</td>
+<td data-l="7日">-219</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>3026</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+354</td>
-<td>41%</td>
-<td>16%</td>
+<tr><td class="l rank">2</td><td class="mach">3026</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+354</td>
+<td data-l="P">41%</td>
+<td data-l="大">16%</td>
 <td>角</td>
-<td>-364</td>
-<td>14%</td>
+<td data-l="7日">-364</td>
+<td data-l="島">14%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>3028</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+347</td>
-<td>41%</td>
-<td>15%</td>
+<tr><td class="l rank">3</td><td class="mach">3028</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+347</td>
+<td data-l="P">41%</td>
+<td data-l="大">15%</td>
 <td>角</td>
-<td>+366</td>
-<td>14%</td>
+<td data-l="7日">+366</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>3011</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+299</td>
-<td>42%</td>
-<td>9%</td>
+<tr><td class="l rank">4</td><td class="mach">3011</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+299</td>
+<td data-l="P">42%</td>
+<td data-l="大">9%</td>
 <td>角</td>
-<td>-63</td>
-<td>0%</td>
+<td data-l="7日">-63</td>
+<td data-l="島">0%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>3147</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+299</td>
-<td>40%</td>
-<td>15%</td>
+<tr><td class="l rank">5</td><td class="mach">3147</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+299</td>
+<td data-l="P">40%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-122</td>
-<td>20%</td>
+<td data-l="7日">-122</td>
+<td data-l="島">20%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>3047</td><td class="l">モンキーターンV</td>
-<td class="pos">+296</td>
-<td>39%</td>
-<td>15%</td>
+<tr><td class="l rank">6</td><td class="mach">3047</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+296</td>
+<td data-l="P">39%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+510</td>
-<td>18%</td>
+<td data-l="7日">+510</td>
+<td data-l="島">18%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3048</td><td class="l">モンキーターンV</td>
-<td class="pos">+272</td>
-<td>40%</td>
-<td>14%</td>
+<tr><td class="l rank">7</td><td class="mach">3048</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+272</td>
+<td data-l="P">40%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-822</td>
-<td>18%</td>
+<td data-l="7日">-822</td>
+<td data-l="島">18%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>3119</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+269</td>
-<td>38%</td>
-<td>14%</td>
+<tr><td class="l rank">8</td><td class="mach">3119</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+269</td>
+<td data-l="P">38%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+681</td>
-<td>16%</td>
+<td data-l="7日">+681</td>
+<td data-l="島">16%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -872,104 +956,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>417</td><td class="l">ディスクアップ2</td>
-<td class="pos">+146</td>
-<td>50%</td>
-<td>5%</td>
+<tr><td class="l rank">1</td><td class="mach">417</td><td class="l mdl">ディスクアップ2</td>
+<td data-l="期待" class="pos">+146</td>
+<td data-l="P">50%</td>
+<td data-l="大">5%</td>
 <td>角</td>
-<td>+23</td>
-<td>0%</td>
+<td data-l="7日">+23</td>
+<td data-l="島">0%</td>
 <td class="stk pos">+4日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>477</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+137</td>
-<td>35%</td>
-<td>13%</td>
+<tr><td class="l rank">2</td><td class="mach">477</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+137</td>
+<td data-l="P">35%</td>
+<td data-l="大">13%</td>
 <td></td>
-<td>-1091</td>
-<td>10%</td>
+<td data-l="7日">-1091</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>475</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+127</td>
-<td>35%</td>
-<td>12%</td>
+<tr><td class="l rank">3</td><td class="mach">475</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+127</td>
+<td data-l="P">35%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-244</td>
-<td>10%</td>
+<td data-l="7日">-244</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>474</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+115</td>
-<td>35%</td>
-<td>12%</td>
+<tr><td class="l rank">4</td><td class="mach">474</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+115</td>
+<td data-l="P">35%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-533</td>
-<td>10%</td>
+<td data-l="7日">-533</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-8日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>415</td><td class="l">ひぐらしのなく頃に祭2</td>
-<td class="pos">+89</td>
-<td>41%</td>
-<td>2%</td>
+<tr><td class="l rank">5</td><td class="mach">415</td><td class="l mdl">ひぐらしのなく頃に祭2</td>
+<td data-l="期待" class="pos">+89</td>
+<td data-l="P">41%</td>
+<td data-l="大">2%</td>
 <td>角</td>
-<td>+222</td>
-<td>0%</td>
+<td data-l="7日">+222</td>
+<td data-l="島">0%</td>
 <td class="stk pos">+3日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>437</td><td class="l">スマスロ北斗の拳</td>
-<td class="pos">+81</td>
-<td>40%</td>
-<td>8%</td>
+<tr><td class="l rank">6</td><td class="mach">437</td><td class="l mdl">スマスロ北斗の拳</td>
+<td data-l="期待" class="pos">+81</td>
+<td data-l="P">40%</td>
+<td data-l="大">8%</td>
 <td></td>
-<td>-157</td>
-<td>7%</td>
+<td data-l="7日">-157</td>
+<td data-l="島">7%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>396</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+81</td>
-<td>41%</td>
-<td>12%</td>
+<tr><td class="l rank">7</td><td class="mach">396</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+81</td>
+<td data-l="P">41%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-209</td>
-<td>10%</td>
+<td data-l="7日">-209</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>364</td><td class="l">スマスロ サンダーV</td>
-<td class="pos">+70</td>
-<td>43%</td>
-<td>8%</td>
+<tr><td class="l rank">8</td><td class="mach">364</td><td class="l mdl">スマスロ サンダーV</td>
+<td data-l="期待" class="pos">+70</td>
+<td data-l="P">43%</td>
+<td data-l="大">8%</td>
 <td>角</td>
-<td>+61</td>
-<td>14%</td>
+<td data-l="7日">+61</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -996,104 +1080,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2026</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+1150</td>
-<td>45%</td>
-<td>41%</td>
+<tr><td class="l rank">1</td><td class="mach">2026</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+1150</td>
+<td data-l="P">45%</td>
+<td data-l="大">41%</td>
 <td></td>
-<td>+3257</td>
-<td>25%</td>
+<td data-l="7日">+3257</td>
+<td data-l="島">25%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2099</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
-<td class="pos">+1008</td>
-<td>43%</td>
-<td>25%</td>
+<tr><td class="l rank">2</td><td class="mach">2099</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+1008</td>
+<td data-l="P">43%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>+3957</td>
-<td>34%</td>
+<td data-l="7日">+3957</td>
+<td data-l="島">34%</td>
 <td class="stk neg">-2日</td>
-<td class="zc">4位 5.0%</td>
+<td class="zc">全台系4位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2086</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
-<td class="pos">+912</td>
-<td>42%</td>
-<td>24%</td>
+<tr><td class="l rank">3</td><td class="mach">2086</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+912</td>
+<td data-l="P">42%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>+3157</td>
-<td>34%</td>
+<td data-l="7日">+3157</td>
+<td data-l="島">34%</td>
 <td class="stk neg">-2日</td>
-<td class="zc">4位 5.0%</td>
+<td class="zc">全台系4位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2100</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
-<td class="pos">+899</td>
-<td>42%</td>
-<td>22%</td>
+<tr><td class="l rank">4</td><td class="mach">2100</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補4位・推定5.0%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+899</td>
+<td data-l="P">42%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+500</td>
-<td>34%</td>
+<td data-l="7日">+500</td>
+<td data-l="島">34%</td>
 <td class="stk neg">-4日</td>
-<td class="zc">4位 5.0%</td>
+<td class="zc">全台系4位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why">7日: 凹み台↑</td></tr>
+<td class="l why sig">7日: 凹み台↑</td></tr>
 
-<tr><td class="l rank">5</td><td>3245</td><td class="l">東京喰種</td>
-<td class="pos">+646</td>
-<td>42%</td>
-<td>30%</td>
+<tr><td class="l rank">5</td><td class="mach">3245</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+646</td>
+<td data-l="P">42%</td>
+<td data-l="大">30%</td>
 <td></td>
-<td>+829</td>
-<td>23%</td>
+<td data-l="7日">+829</td>
+<td data-l="島">23%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>3228</td><td class="l">東京喰種</td>
-<td class="pos">+597</td>
-<td>42%</td>
-<td>28%</td>
+<tr><td class="l rank">6</td><td class="mach">3228</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+597</td>
+<td data-l="P">42%</td>
+<td data-l="大">28%</td>
 <td></td>
-<td>+729</td>
-<td>23%</td>
+<td data-l="7日">+729</td>
+<td data-l="島">23%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3207</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+583</td>
-<td>44%</td>
-<td>27%</td>
+<tr><td class="l rank">7</td><td class="mach">3207</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+583</td>
+<td data-l="P">44%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>-29</td>
-<td>29%</td>
+<td data-l="7日">-29</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>2257</td><td class="l">スマスロ北斗の拳</td>
-<td class="pos">+572</td>
-<td>45%</td>
-<td>22%</td>
+<tr><td class="l rank">8</td><td class="mach">2257</td><td class="l mdl">スマスロ北斗の拳</td>
+<td data-l="期待" class="pos">+572</td>
+<td data-l="P">45%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+1457</td>
-<td>21%</td>
+<td data-l="7日">+1457</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1116,104 +1200,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2167</td><td class="l">東京喰種</td>
-<td class="pos">+640</td>
-<td>45%</td>
-<td>38%</td>
+<tr><td class="l rank">1</td><td class="mach">2167</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+640</td>
+<td data-l="P">45%</td>
+<td data-l="大">38%</td>
 <td></td>
-<td>+1057</td>
-<td>29%</td>
+<td data-l="7日">+1057</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2207</td><td class="l">攻殻機動隊</td>
-<td class="pos">+558</td>
-<td>40%</td>
-<td>30%</td>
+<tr><td class="l rank">2</td><td class="mach">2207</td><td class="l mdl">攻殻機動隊</td>
+<td data-l="期待" class="pos">+558</td>
+<td data-l="P">40%</td>
+<td data-l="大">30%</td>
 <td></td>
-<td>-1057</td>
-<td>29%</td>
+<td data-l="7日">-1057</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2067</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+535</td>
-<td>39%</td>
-<td>25%</td>
+<tr><td class="l rank">3</td><td class="mach">2067</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+535</td>
+<td data-l="P">39%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>-714</td>
-<td>16%</td>
+<td data-l="7日">-714</td>
+<td data-l="島">16%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2159</td><td class="l">マイジャグラーV <span class="zentai" title="今日の全台系候補2位・推定7.4%">全台系候補2位</span></td>
-<td class="pos">+505</td>
-<td>47%</td>
-<td>16%</td>
+<tr><td class="l rank">4</td><td class="mach">2159</td><td class="l mdl">マイジャグラーV <span class="zentai" title="今日の全台系候補2位・推定7.4%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+505</td>
+<td data-l="P">47%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>+1114</td>
-<td>22%</td>
+<td data-l="7日">+1114</td>
+<td data-l="島">22%</td>
 <td class="stk "></td>
-<td class="zc">2位 7.4%</td>
+<td class="zc">全台系2位 7.4%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>2017</td><td class="l">革命機ヴァルヴレイヴ2</td>
-<td class="pos">+490</td>
-<td>39%</td>
-<td>32%</td>
+<tr><td class="l rank">5</td><td class="mach">2017</td><td class="l mdl">革命機ヴァルヴレイヴ2</td>
+<td data-l="期待" class="pos">+490</td>
+<td data-l="P">39%</td>
+<td data-l="大">32%</td>
 <td></td>
-<td>+4129</td>
-<td>33%</td>
+<td data-l="7日">+4129</td>
+<td data-l="島">33%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>2012</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+475</td>
-<td>41%</td>
-<td>23%</td>
+<tr><td class="l rank">6</td><td class="mach">2012</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+475</td>
+<td data-l="P">41%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>-1086</td>
-<td>14%</td>
+<td data-l="7日">-1086</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>2176</td><td class="l">東京喰種</td>
-<td class="pos">+454</td>
-<td>44%</td>
-<td>38%</td>
+<tr><td class="l rank">7</td><td class="mach">2176</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+454</td>
+<td data-l="P">44%</td>
+<td data-l="大">38%</td>
 <td></td>
-<td>+2114</td>
-<td>29%</td>
+<td data-l="7日">+2114</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>2171</td><td class="l">東京喰種</td>
-<td class="pos">+447</td>
-<td>45%</td>
-<td>38%</td>
+<tr><td class="l rank">8</td><td class="mach">2171</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+447</td>
+<td data-l="P">45%</td>
+<td data-l="大">38%</td>
 <td></td>
-<td>+629</td>
-<td>29%</td>
+<td data-l="7日">+629</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1236,104 +1320,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>634</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+678</td>
-<td>35%</td>
-<td>13%</td>
+<tr><td class="l rank">1</td><td class="mach">634</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+678</td>
+<td data-l="P">35%</td>
+<td data-l="大">13%</td>
 <td>角</td>
-<td>-1187</td>
-<td>7%</td>
+<td data-l="7日">-1187</td>
+<td data-l="島">7%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>1001</td><td class="l">革命機ヴァルヴレイヴ2</td>
-<td class="pos">+378</td>
-<td>41%</td>
-<td>16%</td>
+<tr><td class="l rank">2</td><td class="mach">1001</td><td class="l mdl">革命機ヴァルヴレイヴ2</td>
+<td data-l="期待" class="pos">+378</td>
+<td data-l="P">41%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>-374</td>
-<td>8%</td>
+<td data-l="7日">-374</td>
+<td data-l="島">8%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>1003</td><td class="l">革命機ヴァルヴレイヴ2</td>
-<td class="pos">+303</td>
-<td>40%</td>
-<td>14%</td>
+<tr><td class="l rank">3</td><td class="mach">1003</td><td class="l mdl">革命機ヴァルヴレイヴ2</td>
+<td data-l="期待" class="pos">+303</td>
+<td data-l="P">40%</td>
+<td data-l="大">14%</td>
 <td>角</td>
-<td>+18</td>
-<td>8%</td>
+<td data-l="7日">+18</td>
+<td data-l="島">8%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>725</td><td class="l">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
-<td class="pos">+279</td>
-<td>35%</td>
-<td>11%</td>
+<tr><td class="l rank">4</td><td class="mach">725</td><td class="l mdl">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
+<td data-l="期待" class="pos">+279</td>
+<td data-l="P">35%</td>
+<td data-l="大">11%</td>
 <td></td>
-<td>-445</td>
-<td>5%</td>
+<td data-l="7日">-445</td>
+<td data-l="島">5%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>724</td><td class="l">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
-<td class="pos">+255</td>
-<td>37%</td>
-<td>14%</td>
+<tr><td class="l rank">5</td><td class="mach">724</td><td class="l mdl">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
+<td data-l="期待" class="pos">+255</td>
+<td data-l="P">37%</td>
+<td data-l="大">14%</td>
 <td>角</td>
-<td>-1070</td>
-<td>5%</td>
+<td data-l="7日">-1070</td>
+<td data-l="島">5%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>726</td><td class="l">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
-<td class="pos">+244</td>
-<td>37%</td>
-<td>13%</td>
+<tr><td class="l rank">6</td><td class="mach">726</td><td class="l mdl">聖闘士星矢 海皇覚醒 CUSTOM EDITION</td>
+<td data-l="期待" class="pos">+244</td>
+<td data-l="P">37%</td>
+<td data-l="大">13%</td>
 <td>角</td>
-<td>-718</td>
-<td>5%</td>
+<td data-l="7日">-718</td>
+<td data-l="島">5%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>805</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+184</td>
-<td>39%</td>
-<td>19%</td>
+<tr><td class="l rank">7</td><td class="mach">805</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+184</td>
+<td data-l="P">39%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>-1101</td>
-<td>12%</td>
+<td data-l="7日">-1101</td>
+<td data-l="島">12%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>625</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+161</td>
-<td>36%</td>
-<td>9%</td>
+<tr><td class="l rank">8</td><td class="mach">625</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+161</td>
+<td data-l="P">36%</td>
+<td data-l="大">9%</td>
 <td></td>
-<td>-1230</td>
-<td>5%</td>
+<td data-l="7日">-1230</td>
+<td data-l="島">5%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1360,104 +1444,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>649</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+320</td>
-<td>36%</td>
-<td>22%</td>
+<tr><td class="l rank">1</td><td class="mach">649</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+320</td>
+<td data-l="P">36%</td>
+<td data-l="大">22%</td>
 <td>角</td>
-<td>-517</td>
-<td>19%</td>
+<td data-l="7日">-517</td>
+<td data-l="島">19%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>640</td><td class="l">GI優駿倶楽部黄金</td>
-<td class="pos">+285</td>
-<td>38%</td>
-<td>5%</td>
+<tr><td class="l rank">2</td><td class="mach">640</td><td class="l mdl">GI優駿倶楽部黄金</td>
+<td data-l="期待" class="pos">+285</td>
+<td data-l="P">38%</td>
+<td data-l="大">5%</td>
 <td>角</td>
-<td>+187</td>
-<td>14%</td>
+<td data-l="7日">+187</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>651</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+190</td>
-<td>36%</td>
-<td>21%</td>
+<tr><td class="l rank">3</td><td class="mach">651</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+190</td>
+<td data-l="P">36%</td>
+<td data-l="大">21%</td>
 <td>角</td>
-<td>-808</td>
-<td>19%</td>
+<td data-l="7日">-808</td>
+<td data-l="島">19%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>627</td><td class="l">頭文字D 2nd</td>
-<td class="pos">+170</td>
-<td>36%</td>
-<td>10%</td>
+<tr><td class="l rank">4</td><td class="mach">627</td><td class="l mdl">頭文字D 2nd</td>
+<td data-l="期待" class="pos">+170</td>
+<td data-l="P">36%</td>
+<td data-l="大">10%</td>
 <td>角</td>
-<td>-401</td>
-<td>0%</td>
+<td data-l="7日">-401</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>735</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+112</td>
-<td>35%</td>
-<td>12%</td>
+<tr><td class="l rank">5</td><td class="mach">735</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+112</td>
+<td data-l="P">35%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-1437</td>
-<td>14%</td>
+<td data-l="7日">-1437</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>742</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+104</td>
-<td>35%</td>
-<td>12%</td>
+<tr><td class="l rank">6</td><td class="mach">742</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+104</td>
+<td data-l="P">35%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-1084</td>
-<td>14%</td>
+<td data-l="7日">-1084</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>747</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+95</td>
-<td>35%</td>
-<td>13%</td>
+<tr><td class="l rank">7</td><td class="mach">747</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+95</td>
+<td data-l="P">35%</td>
+<td data-l="大">13%</td>
 <td>角</td>
-<td>+1030</td>
-<td>14%</td>
+<td data-l="7日">+1030</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>817</td><td class="l">ディスクアップ ULTRAREMIX</td>
-<td class="pos">+84</td>
-<td>45%</td>
-<td>8%</td>
+<tr><td class="l rank">8</td><td class="mach">817</td><td class="l mdl">ディスクアップ ULTRAREMIX</td>
+<td data-l="期待" class="pos">+84</td>
+<td data-l="P">45%</td>
+<td data-l="大">8%</td>
 <td></td>
-<td>-421</td>
-<td>5%</td>
+<td data-l="7日">-421</td>
+<td data-l="島">5%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1484,104 +1568,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>1017</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+1045</td>
-<td>45%</td>
-<td>30%</td>
+<tr><td class="l rank">1</td><td class="mach">1017</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+1045</td>
+<td data-l="P">45%</td>
+<td data-l="大">30%</td>
 <td></td>
-<td>+1557</td>
-<td>28%</td>
+<td data-l="7日">+1557</td>
+<td data-l="島">28%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>737</td><td class="l">東京喰種</td>
-<td class="pos">+993</td>
-<td>49%</td>
-<td>35%</td>
+<tr><td class="l rank">2</td><td class="mach">737</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+993</td>
+<td data-l="P">49%</td>
+<td data-l="大">35%</td>
 <td></td>
-<td>-457</td>
-<td>29%</td>
+<td data-l="7日">-457</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>627</td><td class="l">モンキーターンV</td>
-<td class="pos">+928</td>
-<td>43%</td>
-<td>24%</td>
+<tr><td class="l rank">3</td><td class="mach">627</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+928</td>
+<td data-l="P">43%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>+729</td>
-<td>17%</td>
+<td data-l="7日">+729</td>
+<td data-l="島">17%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>727</td><td class="l">東京喰種</td>
-<td class="pos">+914</td>
-<td>49%</td>
-<td>35%</td>
+<tr><td class="l rank">4</td><td class="mach">727</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+914</td>
+<td data-l="P">49%</td>
+<td data-l="大">35%</td>
 <td></td>
-<td>+1586</td>
-<td>29%</td>
+<td data-l="7日">+1586</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>617</td><td class="l">モンキーターンV</td>
-<td class="pos">+879</td>
-<td>43%</td>
-<td>24%</td>
+<tr><td class="l rank">5</td><td class="mach">617</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+879</td>
+<td data-l="P">43%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>+729</td>
-<td>17%</td>
+<td data-l="7日">+729</td>
+<td data-l="島">17%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>797</td><td class="l">革命機ヴァルヴレイヴ2</td>
-<td class="pos">+854</td>
-<td>39%</td>
-<td>28%</td>
+<tr><td class="l rank">6</td><td class="mach">797</td><td class="l mdl">革命機ヴァルヴレイヴ2</td>
+<td data-l="期待" class="pos">+854</td>
+<td data-l="P">39%</td>
+<td data-l="大">28%</td>
 <td></td>
-<td>-1800</td>
-<td>21%</td>
+<td data-l="7日">-1800</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>897</td><td class="l">ファンキージャグラー2</td>
-<td class="pos">+852</td>
-<td>59%</td>
-<td>29%</td>
+<tr><td class="l rank">7</td><td class="mach">897</td><td class="l mdl">ファンキージャグラー2</td>
+<td data-l="期待" class="pos">+852</td>
+<td data-l="P">59%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>-557</td>
-<td>10%</td>
+<td data-l="7日">-557</td>
+<td data-l="島">10%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>687</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+842</td>
-<td>44%</td>
-<td>28%</td>
+<tr><td class="l rank">8</td><td class="mach">687</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+842</td>
+<td data-l="P">44%</td>
+<td data-l="大">28%</td>
 <td>角</td>
-<td>-300</td>
-<td>12%</td>
+<td data-l="7日">-300</td>
+<td data-l="島">12%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1604,104 +1688,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>647</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+1407</td>
-<td>47%</td>
-<td>32%</td>
+<tr><td class="l rank">1</td><td class="mach">647</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+1407</td>
+<td data-l="P">47%</td>
+<td data-l="大">32%</td>
 <td></td>
-<td>-1832</td>
-<td>18%</td>
+<td data-l="7日">-1832</td>
+<td data-l="島">18%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>1337</td><td class="l">攻殻機動隊</td>
-<td class="pos">+1270</td>
-<td>41%</td>
-<td>22%</td>
+<tr><td class="l rank">2</td><td class="mach">1337</td><td class="l mdl">攻殻機動隊</td>
+<td data-l="期待" class="pos">+1270</td>
+<td data-l="P">41%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+1183</td>
-<td>17%</td>
+<td data-l="7日">+1183</td>
+<td data-l="島">17%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>637</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+1255</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">3</td><td class="mach">637</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+1255</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>+599</td>
-<td>18%</td>
+<td data-l="7日">+599</td>
+<td data-l="島">18%</td>
 <td class="stk pos">+3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>727</td><td class="l">モンキーターンV</td>
-<td class="pos">+964</td>
-<td>45%</td>
-<td>26%</td>
+<tr><td class="l rank">4</td><td class="mach">727</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+964</td>
+<td data-l="P">45%</td>
+<td data-l="大">26%</td>
 <td></td>
-<td>-1701</td>
-<td>24%</td>
+<td data-l="7日">-1701</td>
+<td data-l="島">24%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>1387</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+959</td>
-<td>46%</td>
-<td>26%</td>
+<tr><td class="l rank">5</td><td class="mach">1387</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+959</td>
+<td data-l="P">46%</td>
+<td data-l="大">26%</td>
 <td></td>
-<td>-551</td>
-<td>11%</td>
+<td data-l="7日">-551</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>1447</td><td class="l">スターハナハナ‐30</td>
-<td class="pos">+951</td>
-<td>57%</td>
-<td>22%</td>
+<tr><td class="l rank">6</td><td class="mach">1447</td><td class="l mdl">スターハナハナ‐30</td>
+<td data-l="期待" class="pos">+951</td>
+<td data-l="P">57%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+181</td>
-<td>4%</td>
+<td data-l="7日">+181</td>
+<td data-l="島">4%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>847</td><td class="l">東京喰種</td>
-<td class="pos">+878</td>
-<td>47%</td>
-<td>34%</td>
+<tr><td class="l rank">7</td><td class="mach">847</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+878</td>
+<td data-l="P">47%</td>
+<td data-l="大">34%</td>
 <td></td>
-<td>-974</td>
-<td>26%</td>
+<td data-l="7日">-974</td>
+<td data-l="島">26%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>877</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+874</td>
-<td>46%</td>
-<td>29%</td>
+<tr><td class="l rank">8</td><td class="mach">877</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+874</td>
+<td data-l="P">46%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>+593</td>
-<td>23%</td>
+<td data-l="7日">+593</td>
+<td data-l="島">23%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1724,104 +1808,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>3017</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
-<td class="pos">+385</td>
-<td>42%</td>
-<td>19%</td>
+<tr><td class="l rank">1</td><td class="mach">3017</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+385</td>
+<td data-l="P">42%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>+411</td>
-<td>17%</td>
+<td data-l="7日">+411</td>
+<td data-l="島">17%</td>
 <td class="stk "></td>
-<td class="zc">2位 5.2%</td>
+<td class="zc">全台系2位 5.2%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>3122</td><td class="l">頭文字D 2nd</td>
-<td class="pos">+361</td>
-<td>45%</td>
-<td>11%</td>
+<tr><td class="l rank">2</td><td class="mach">3122</td><td class="l mdl">頭文字D 2nd</td>
+<td data-l="期待" class="pos">+361</td>
+<td data-l="P">45%</td>
+<td data-l="大">11%</td>
 <td></td>
-<td>+48</td>
-<td>7%</td>
+<td data-l="7日">+48</td>
+<td data-l="島">7%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>3016</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
-<td class="pos">+359</td>
-<td>41%</td>
-<td>16%</td>
+<tr><td class="l rank">3</td><td class="mach">3016</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+359</td>
+<td data-l="P">41%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>+1613</td>
-<td>17%</td>
+<td data-l="7日">+1613</td>
+<td data-l="島">17%</td>
 <td class="stk pos">+2日</td>
-<td class="zc">2位 5.2%</td>
+<td class="zc">全台系2位 5.2%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>3018</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
-<td class="pos">+340</td>
-<td>40%</td>
-<td>17%</td>
+<tr><td class="l rank">4</td><td class="mach">3018</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝 <span class="zentai" title="今日の全台系候補2位・推定5.2%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+340</td>
+<td data-l="P">40%</td>
+<td data-l="大">17%</td>
 <td></td>
-<td>-335</td>
-<td>17%</td>
+<td data-l="7日">-335</td>
+<td data-l="島">17%</td>
 <td class="stk neg">-3日</td>
-<td class="zc">2位 5.2%</td>
+<td class="zc">全台系2位 5.2%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>3132</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+329</td>
-<td>37%</td>
-<td>14%</td>
+<tr><td class="l rank">5</td><td class="mach">3132</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+329</td>
+<td data-l="P">37%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+249</td>
-<td>14%</td>
+<td data-l="7日">+249</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>3130</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+327</td>
-<td>36%</td>
-<td>14%</td>
+<tr><td class="l rank">6</td><td class="mach">3130</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+327</td>
+<td data-l="P">36%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+3247</td>
-<td>14%</td>
+<td data-l="7日">+3247</td>
+<td data-l="島">14%</td>
 <td class="stk pos">+5日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3133</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+325</td>
-<td>37%</td>
-<td>15%</td>
+<tr><td class="l rank">7</td><td class="mach">3133</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+325</td>
+<td data-l="P">37%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+149</td>
-<td>14%</td>
+<td data-l="7日">+149</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>3157</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+319</td>
-<td>44%</td>
-<td>21%</td>
+<tr><td class="l rank">8</td><td class="mach">3157</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+319</td>
+<td data-l="P">44%</td>
+<td data-l="大">21%</td>
 <td></td>
-<td>+838</td>
-<td>9%</td>
+<td data-l="7日">+838</td>
+<td data-l="島">9%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1844,104 +1928,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2147</td><td class="l">ディスクアップ2</td>
-<td class="pos">+224</td>
-<td>51%</td>
-<td>10%</td>
+<tr><td class="l rank">1</td><td class="mach">2147</td><td class="l mdl">ディスクアップ2</td>
+<td data-l="期待" class="pos">+224</td>
+<td data-l="P">51%</td>
+<td data-l="大">10%</td>
 <td>角</td>
-<td>+383</td>
-<td>0%</td>
+<td data-l="7日">+383</td>
+<td data-l="島">0%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2102</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+175</td>
-<td>42%</td>
-<td>15%</td>
+<tr><td class="l rank">2</td><td class="mach">2102</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+175</td>
+<td data-l="P">42%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-156</td>
-<td>17%</td>
+<td data-l="7日">-156</td>
+<td data-l="島">17%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2163</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+166</td>
-<td>39%</td>
-<td>19%</td>
+<tr><td class="l rank">3</td><td class="mach">2163</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+166</td>
+<td data-l="P">39%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>+449</td>
-<td>21%</td>
+<td data-l="7日">+449</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2160</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+164</td>
-<td>39%</td>
-<td>19%</td>
+<tr><td class="l rank">4</td><td class="mach">2160</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+164</td>
+<td data-l="P">39%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>+676</td>
-<td>21%</td>
+<td data-l="7日">+676</td>
+<td data-l="島">21%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>2157</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+164</td>
-<td>40%</td>
-<td>20%</td>
+<tr><td class="l rank">5</td><td class="mach">2157</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+164</td>
+<td data-l="P">40%</td>
+<td data-l="大">20%</td>
 <td></td>
-<td>+1392</td>
-<td>21%</td>
+<td data-l="7日">+1392</td>
+<td data-l="島">21%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>2108</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+159</td>
-<td>41%</td>
-<td>15%</td>
+<tr><td class="l rank">6</td><td class="mach">2108</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+159</td>
+<td data-l="P">41%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>-978</td>
-<td>17%</td>
+<td data-l="7日">-978</td>
+<td data-l="島">17%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>2104</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+157</td>
-<td>42%</td>
-<td>14%</td>
+<tr><td class="l rank">7</td><td class="mach">2104</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+157</td>
+<td data-l="P">42%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+93</td>
-<td>17%</td>
+<td data-l="7日">+93</td>
+<td data-l="島">17%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>2044</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+137</td>
-<td>36%</td>
-<td>13%</td>
+<tr><td class="l rank">8</td><td class="mach">2044</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+137</td>
+<td data-l="P">36%</td>
+<td data-l="大">13%</td>
 <td></td>
-<td>-993</td>
-<td>10%</td>
+<td data-l="7日">-993</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -1964,104 +2048,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>520</td><td class="l">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
-<td class="pos">+149</td>
-<td>35%</td>
-<td>11%</td>
+<tr><td class="l rank">1</td><td class="mach">520</td><td class="l mdl">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+149</td>
+<td data-l="P">35%</td>
+<td data-l="大">11%</td>
 <td></td>
-<td>-422</td>
-<td>11%</td>
+<td data-l="7日">-422</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-5日</td>
-<td class="zc">5位 3.4%</td>
+<td class="zc">全台系5位 3.4%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>517</td><td class="l">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
-<td class="pos">+118</td>
-<td>37%</td>
-<td>11%</td>
+<tr><td class="l rank">2</td><td class="mach">517</td><td class="l mdl">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+118</td>
+<td data-l="P">37%</td>
+<td data-l="大">11%</td>
 <td>角</td>
-<td>+435</td>
-<td>11%</td>
+<td data-l="7日">+435</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-5日</td>
-<td class="zc">5位 3.4%</td>
+<td class="zc">全台系5位 3.4%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>521</td><td class="l">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
-<td class="pos">+112</td>
-<td>37%</td>
-<td>12%</td>
+<tr><td class="l rank">3</td><td class="mach">521</td><td class="l mdl">北斗の拳 転生の章2 <span class="zentai" title="今日の全台系候補5位・推定3.4%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+112</td>
+<td data-l="P">37%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>-300</td>
-<td>11%</td>
+<td data-l="7日">-300</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-3日</td>
-<td class="zc">5位 3.4%</td>
+<td class="zc">全台系5位 3.4%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>675</td><td class="l">ディスクアップ2</td>
-<td class="pos">+108</td>
-<td>44%</td>
-<td>6%</td>
+<tr><td class="l rank">4</td><td class="mach">675</td><td class="l mdl">ディスクアップ2</td>
+<td data-l="期待" class="pos">+108</td>
+<td data-l="P">44%</td>
+<td data-l="大">6%</td>
 <td>角</td>
-<td>-686</td>
-<td>0%</td>
+<td data-l="7日">-686</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>730</td><td class="l">ダーリン・イン・ザ・フランキス</td>
-<td class="pos">+90</td>
-<td>31%</td>
-<td>8%</td>
+<tr><td class="l rank">5</td><td class="mach">730</td><td class="l mdl">ダーリン・イン・ザ・フランキス</td>
+<td data-l="期待" class="pos">+90</td>
+<td data-l="P">31%</td>
+<td data-l="大">8%</td>
 <td>角</td>
-<td>-251</td>
-<td>0%</td>
+<td data-l="7日">-251</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>770</td><td class="l">ToLOVEるダークネス</td>
-<td class="pos">+75</td>
-<td>39%</td>
-<td>10%</td>
+<tr><td class="l rank">6</td><td class="mach">770</td><td class="l mdl">ToLOVEるダークネス</td>
+<td data-l="期待" class="pos">+75</td>
+<td data-l="P">39%</td>
+<td data-l="大">10%</td>
 <td></td>
-<td>-545</td>
-<td>26%</td>
+<td data-l="7日">-545</td>
+<td data-l="島">26%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>527</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+74</td>
-<td>41%</td>
-<td>14%</td>
+<tr><td class="l rank">7</td><td class="mach">527</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+74</td>
+<td data-l="P">41%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>+269</td>
-<td>13%</td>
+<td data-l="7日">+269</td>
+<td data-l="島">13%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>513</td><td class="l">モンキーターンV <span class="zentai" title="今日の全台系候補4位・推定3.5%">全台系候補4位</span></td>
-<td class="pos">+73</td>
-<td>35%</td>
-<td>9%</td>
+<tr><td class="l rank">8</td><td class="mach">513</td><td class="l mdl">モンキーターンV <span class="zentai" title="今日の全台系候補4位・推定3.5%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+73</td>
+<td data-l="P">35%</td>
+<td data-l="大">9%</td>
 <td></td>
-<td>+591</td>
-<td>10%</td>
+<td data-l="7日">+591</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-3日</td>
-<td class="zc">4位 3.5%</td>
+<td class="zc">全台系4位 3.5%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2088,104 +2172,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>1000</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+869</td>
-<td>47%</td>
-<td>28%</td>
+<tr><td class="l rank">1</td><td class="mach">1000</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+869</td>
+<td data-l="P">47%</td>
+<td data-l="大">28%</td>
 <td>角</td>
-<td>-2281</td>
-<td>23%</td>
+<td data-l="7日">-2281</td>
+<td data-l="島">23%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>1286</td><td class="l">ToLOVEるダークネス</td>
-<td class="pos">+822</td>
-<td>44%</td>
-<td>29%</td>
+<tr><td class="l rank">2</td><td class="mach">1286</td><td class="l mdl">ToLOVEるダークネス</td>
+<td data-l="期待" class="pos">+822</td>
+<td data-l="P">44%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>-1465</td>
-<td>26%</td>
+<td data-l="7日">-1465</td>
+<td data-l="島">26%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>1001</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+818</td>
-<td>47%</td>
-<td>29%</td>
+<tr><td class="l rank">3</td><td class="mach">1001</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+818</td>
+<td data-l="P">47%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>-2071</td>
-<td>23%</td>
+<td data-l="7日">-2071</td>
+<td data-l="島">23%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>1063</td><td class="l">七つの魔剣が支配する</td>
-<td class="pos">+796</td>
-<td>39%</td>
-<td>23%</td>
+<tr><td class="l rank">4</td><td class="mach">1063</td><td class="l mdl">七つの魔剣が支配する</td>
+<td data-l="期待" class="pos">+796</td>
+<td data-l="P">39%</td>
+<td data-l="大">23%</td>
 <td>角</td>
-<td>-1485</td>
-<td>7%</td>
+<td data-l="7日">-1485</td>
+<td data-l="島">7%</td>
 <td class="stk neg">-12日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>1271</td><td class="l">ToLOVEるダークネス</td>
-<td class="pos">+764</td>
-<td>44%</td>
-<td>29%</td>
+<tr><td class="l rank">5</td><td class="mach">1271</td><td class="l mdl">ToLOVEるダークネス</td>
+<td data-l="期待" class="pos">+764</td>
+<td data-l="P">44%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>-1728</td>
-<td>26%</td>
+<td data-l="7日">-1728</td>
+<td data-l="島">26%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>806</td><td class="l">東京喰種 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+748</td>
-<td>47%</td>
-<td>33%</td>
+<tr><td class="l rank">6</td><td class="mach">806</td><td class="l mdl">東京喰種 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+748</td>
+<td data-l="P">47%</td>
+<td data-l="大">33%</td>
 <td></td>
-<td>-2538</td>
-<td>32%</td>
+<td data-l="7日">-2538</td>
+<td data-l="島">32%</td>
 <td class="stk neg">-4日</td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>1018</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+730</td>
-<td>47%</td>
-<td>28%</td>
+<tr><td class="l rank">7</td><td class="mach">1018</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+730</td>
+<td data-l="P">47%</td>
+<td data-l="大">28%</td>
 <td></td>
-<td>-1251</td>
-<td>23%</td>
+<td data-l="7日">-1251</td>
+<td data-l="島">23%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>681</td><td class="l">ソードアート・オンラインII</td>
-<td class="pos">+682</td>
-<td>45%</td>
-<td>35%</td>
+<tr><td class="l rank">8</td><td class="mach">681</td><td class="l mdl">ソードアート・オンラインII</td>
+<td data-l="期待" class="pos">+682</td>
+<td data-l="P">45%</td>
+<td data-l="大">35%</td>
 <td></td>
-<td>-2262</td>
-<td>34%</td>
+<td data-l="7日">-2262</td>
+<td data-l="島">34%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2208,104 +2292,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>4099</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+714</td>
-<td>40%</td>
-<td>22%</td>
+<tr><td class="l rank">1</td><td class="mach">4099</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+714</td>
+<td data-l="P">40%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>-1319</td>
-<td>25%</td>
+<td data-l="7日">-1319</td>
+<td data-l="島">25%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>3077</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+592</td>
-<td>45%</td>
-<td>26%</td>
+<tr><td class="l rank">2</td><td class="mach">3077</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+592</td>
+<td data-l="P">45%</td>
+<td data-l="大">26%</td>
 <td></td>
-<td>+3705</td>
-<td>33%</td>
+<td data-l="7日">+3705</td>
+<td data-l="島">33%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2151</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+351</td>
-<td>44%</td>
-<td>19%</td>
+<tr><td class="l rank">3</td><td class="mach">2151</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+351</td>
+<td data-l="P">44%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>-1277</td>
-<td>11%</td>
+<td data-l="7日">-1277</td>
+<td data-l="島">11%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2127</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+330</td>
-<td>43%</td>
-<td>22%</td>
+<tr><td class="l rank">4</td><td class="mach">2127</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+330</td>
+<td data-l="P">43%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+1367</td>
-<td>24%</td>
+<td data-l="7日">+1367</td>
+<td data-l="島">24%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>3162</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+330</td>
-<td>45%</td>
-<td>26%</td>
+<tr><td class="l rank">5</td><td class="mach">3162</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+330</td>
+<td data-l="P">45%</td>
+<td data-l="大">26%</td>
 <td></td>
-<td>-991</td>
-<td>33%</td>
+<td data-l="7日">-991</td>
+<td data-l="島">33%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>2047</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+317</td>
-<td>43%</td>
-<td>22%</td>
+<tr><td class="l rank">6</td><td class="mach">2047</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+317</td>
+<td data-l="P">43%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>+151</td>
-<td>24%</td>
+<td data-l="7日">+151</td>
+<td data-l="島">24%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3080</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+313</td>
-<td>44%</td>
-<td>26%</td>
+<tr><td class="l rank">7</td><td class="mach">3080</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+313</td>
+<td data-l="P">44%</td>
+<td data-l="大">26%</td>
 <td></td>
-<td>-1583</td>
-<td>33%</td>
+<td data-l="7日">-1583</td>
+<td data-l="島">33%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>3137</td><td class="l">バンドリ！</td>
-<td class="pos">+307</td>
-<td>40%</td>
-<td>20%</td>
+<tr><td class="l rank">8</td><td class="mach">3137</td><td class="l mdl">バンドリ！</td>
+<td data-l="期待" class="pos">+307</td>
+<td data-l="P">40%</td>
+<td data-l="大">20%</td>
 <td></td>
-<td>-601</td>
-<td>21%</td>
+<td data-l="7日">-601</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2328,104 +2412,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2174</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+664</td>
-<td>43%</td>
-<td>23%</td>
+<tr><td class="l rank">1</td><td class="mach">2174</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+664</td>
+<td data-l="P">43%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>-1634</td>
-<td>21%</td>
+<td data-l="7日">-1634</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2166</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+654</td>
-<td>43%</td>
-<td>23%</td>
+<tr><td class="l rank">2</td><td class="mach">2166</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+654</td>
+<td data-l="P">43%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>-941</td>
-<td>21%</td>
+<td data-l="7日">-941</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>2175</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+646</td>
-<td>42%</td>
-<td>23%</td>
+<tr><td class="l rank">3</td><td class="mach">2175</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+646</td>
+<td data-l="P">42%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>+13</td>
-<td>21%</td>
+<td data-l="7日">+13</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-4日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>3127</td><td class="l">ツインエンジェルPARTY</td>
-<td class="pos">+394</td>
-<td>43%</td>
-<td>5%</td>
+<tr><td class="l rank">4</td><td class="mach">3127</td><td class="l mdl">ツインエンジェルPARTY</td>
+<td data-l="期待" class="pos">+394</td>
+<td data-l="P">43%</td>
+<td data-l="大">5%</td>
 <td></td>
-<td>-303</td>
-<td>0%</td>
+<td data-l="7日">-303</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>3210</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+375</td>
-<td>42%</td>
-<td>25%</td>
+<tr><td class="l rank">5</td><td class="mach">3210</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+375</td>
+<td data-l="P">42%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>-475</td>
-<td>36%</td>
+<td data-l="7日">-475</td>
+<td data-l="島">36%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>3212</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+243</td>
-<td>44%</td>
-<td>25%</td>
+<tr><td class="l rank">6</td><td class="mach">3212</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+243</td>
+<td data-l="P">44%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>-528</td>
-<td>36%</td>
+<td data-l="7日">-528</td>
+<td data-l="島">36%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>3053</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+239</td>
-<td>42%</td>
-<td>14%</td>
+<tr><td class="l rank">7</td><td class="mach">3053</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+239</td>
+<td data-l="P">42%</td>
+<td data-l="大">14%</td>
 <td></td>
-<td>-1230</td>
-<td>13%</td>
+<td data-l="7日">-1230</td>
+<td data-l="島">13%</td>
 <td class="stk neg">-8日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>3126</td><td class="l">ツインエンジェルPARTY</td>
-<td class="pos">+213</td>
-<td>39%</td>
-<td>4%</td>
+<tr><td class="l rank">8</td><td class="mach">3126</td><td class="l mdl">ツインエンジェルPARTY</td>
+<td data-l="期待" class="pos">+213</td>
+<td data-l="P">39%</td>
+<td data-l="大">4%</td>
 <td>角</td>
-<td>-398</td>
-<td>0%</td>
+<td data-l="7日">-398</td>
+<td data-l="島">0%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2452,104 +2536,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>2287</td><td class="l">東京喰種</td>
-<td class="pos">+485</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">1</td><td class="mach">2287</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+485</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>-1032</td>
-<td>16%</td>
+<td data-l="7日">-1032</td>
+<td data-l="島">16%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>2134</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+475</td>
-<td>47%</td>
-<td>27%</td>
+<tr><td class="l rank">2</td><td class="mach">2134</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+475</td>
+<td data-l="P">47%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>-1059</td>
-<td>6%</td>
+<td data-l="7日">-1059</td>
+<td data-l="島">6%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why">7のつく日: 凹み台↑</td></tr>
+<td class="l why sig">7のつく日: 凹み台↑</td></tr>
 
-<tr><td class="l rank">3</td><td>2277</td><td class="l">東京喰種</td>
-<td class="pos">+467</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">3</td><td class="mach">2277</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+467</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>-1461</td>
-<td>16%</td>
+<td data-l="7日">-1461</td>
+<td data-l="島">16%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>2063</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7</td>
-<td class="pos">+447</td>
-<td>43%</td>
-<td>27%</td>
+<tr><td class="l rank">4</td><td class="mach">2063</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7</td>
+<td data-l="期待" class="pos">+447</td>
+<td data-l="P">43%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>+1140</td>
-<td>24%</td>
+<td data-l="7日">+1140</td>
+<td data-l="島">24%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>2207</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+445</td>
-<td>49%</td>
-<td>27%</td>
+<tr><td class="l rank">5</td><td class="mach">2207</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+445</td>
+<td data-l="P">49%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>-116</td>
-<td>20%</td>
+<td data-l="7日">-116</td>
+<td data-l="島">20%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>2133</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+443</td>
-<td>47%</td>
-<td>27%</td>
+<tr><td class="l rank">6</td><td class="mach">2133</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+443</td>
+<td data-l="P">47%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>+264</td>
-<td>6%</td>
+<td data-l="7日">+264</td>
+<td data-l="島">6%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>2271</td><td class="l">東京喰種</td>
-<td class="pos">+443</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">7</td><td class="mach">2271</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+443</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>-1977</td>
-<td>16%</td>
+<td data-l="7日">-1977</td>
+<td data-l="島">16%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why">7のつく日: 凹み台↑</td></tr>
+<td class="l why sig">7のつく日: 凹み台↑</td></tr>
 
-<tr><td class="l rank">8</td><td>2167</td><td class="l">スマスロ北斗の拳</td>
-<td class="pos">+435</td>
-<td>47%</td>
-<td>24%</td>
+<tr><td class="l rank">8</td><td class="mach">2167</td><td class="l mdl">スマスロ北斗の拳</td>
+<td data-l="期待" class="pos">+435</td>
+<td data-l="P">47%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>-1320</td>
-<td>9%</td>
+<td data-l="7日">-1320</td>
+<td data-l="島">9%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2576,104 +2660,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>94</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+877</td>
-<td>48%</td>
-<td>27%</td>
+<tr><td class="l rank">1</td><td class="mach">94</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+877</td>
+<td data-l="P">48%</td>
+<td data-l="大">27%</td>
 <td></td>
-<td>+700</td>
-<td>10%</td>
+<td data-l="7日">+700</td>
+<td data-l="島">10%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>187</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
-<td class="pos">+843</td>
-<td>49%</td>
-<td>37%</td>
+<tr><td class="l rank">2</td><td class="mach">187</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+843</td>
+<td data-l="P">49%</td>
+<td data-l="大">37%</td>
 <td></td>
-<td>-1686</td>
-<td>29%</td>
+<td data-l="7日">-1686</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
-<td class="zc">5位 5.0%</td>
+<td class="zc">全台系5位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>95</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+839</td>
-<td>49%</td>
-<td>30%</td>
+<tr><td class="l rank">3</td><td class="mach">95</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+839</td>
+<td data-l="P">49%</td>
+<td data-l="大">30%</td>
 <td>角</td>
-<td>-514</td>
-<td>10%</td>
+<td data-l="7日">-514</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>93</td><td class="l">ソードアート・オンライン</td>
-<td class="pos">+833</td>
-<td>49%</td>
-<td>28%</td>
+<tr><td class="l rank">4</td><td class="mach">93</td><td class="l mdl">ソードアート・オンライン</td>
+<td data-l="期待" class="pos">+833</td>
+<td data-l="P">49%</td>
+<td data-l="大">28%</td>
 <td>角</td>
-<td>-314</td>
-<td>10%</td>
+<td data-l="7日">-314</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>150</td><td class="l">東京喰種</td>
-<td class="pos">+796</td>
-<td>47%</td>
-<td>34%</td>
+<tr><td class="l rank">5</td><td class="mach">150</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+796</td>
+<td data-l="P">47%</td>
+<td data-l="大">34%</td>
 <td></td>
-<td>+1200</td>
-<td>21%</td>
+<td data-l="7日">+1200</td>
+<td data-l="島">21%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>166</td><td class="l">東京喰種</td>
-<td class="pos">+771</td>
-<td>47%</td>
-<td>34%</td>
+<tr><td class="l rank">6</td><td class="mach">166</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+771</td>
+<td data-l="P">47%</td>
+<td data-l="大">34%</td>
 <td></td>
-<td>+3200</td>
-<td>21%</td>
+<td data-l="7日">+3200</td>
+<td data-l="島">21%</td>
 <td class="stk pos">+3日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>185</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
-<td class="pos">+733</td>
-<td>48%</td>
-<td>36%</td>
+<tr><td class="l rank">7</td><td class="mach">185</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+733</td>
+<td data-l="P">48%</td>
+<td data-l="大">36%</td>
 <td></td>
-<td>+800</td>
-<td>29%</td>
+<td data-l="7日">+800</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
-<td class="zc">5位 5.0%</td>
+<td class="zc">全台系5位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>186</td><td class="l">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
-<td class="pos">+726</td>
-<td>48%</td>
-<td>35%</td>
+<tr><td class="l rank">8</td><td class="mach">186</td><td class="l mdl">ToLOVEるダークネス TRANCE ver.8.7 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+726</td>
+<td data-l="P">48%</td>
+<td data-l="大">35%</td>
 <td></td>
-<td>+1871</td>
-<td>29%</td>
+<td data-l="7日">+1871</td>
+<td data-l="島">29%</td>
 <td class="stk "></td>
-<td class="zc">5位 5.0%</td>
+<td class="zc">全台系5位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2696,104 +2780,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>4</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+893</td>
-<td>38%</td>
-<td>25%</td>
+<tr><td class="l rank">1</td><td class="mach">4</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+893</td>
+<td data-l="P">38%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>-1062</td>
-<td>9%</td>
+<td data-l="7日">-1062</td>
+<td data-l="島">9%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>127</td><td class="l">東京喰種</td>
-<td class="pos">+753</td>
-<td>44%</td>
-<td>29%</td>
+<tr><td class="l rank">2</td><td class="mach">127</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+753</td>
+<td data-l="P">44%</td>
+<td data-l="大">29%</td>
 <td></td>
-<td>-1064</td>
-<td>10%</td>
+<td data-l="7日">-1064</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why">7のつく日: 凹み台↑</td></tr>
+<td class="l why sig">7のつく日: 凹み台↑</td></tr>
 
-<tr><td class="l rank">3</td><td>67</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
-<td class="pos">+724</td>
-<td>50%</td>
-<td>34%</td>
+<tr><td class="l rank">3</td><td class="mach">67</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
+<td data-l="期待" class="pos">+724</td>
+<td data-l="P">50%</td>
+<td data-l="大">34%</td>
 <td></td>
-<td>-1813</td>
-<td>14%</td>
+<td data-l="7日">-1813</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
-<td class="zc">6位 5.0%</td>
+<td class="zc">全台系6位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>317</td><td class="l">頭文字D 2nd</td>
-<td class="pos">+673</td>
-<td>44%</td>
-<td>22%</td>
+<tr><td class="l rank">4</td><td class="mach">317</td><td class="l mdl">頭文字D 2nd</td>
+<td data-l="期待" class="pos">+673</td>
+<td data-l="P">44%</td>
+<td data-l="大">22%</td>
 <td>角</td>
-<td>+160</td>
-<td>14%</td>
+<td data-l="7日">+160</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>66</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
-<td class="pos">+653</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">5</td><td class="mach">66</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
+<td data-l="期待" class="pos">+653</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>-878</td>
-<td>14%</td>
+<td data-l="7日">-878</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-3日</td>
-<td class="zc">6位 5.0%</td>
+<td class="zc">全台系6位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>37</td><td class="l">モンキーターンV <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+638</td>
-<td>42%</td>
-<td>20%</td>
+<tr><td class="l rank">6</td><td class="mach">37</td><td class="l mdl">モンキーターンV <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+638</td>
+<td data-l="P">42%</td>
+<td data-l="大">20%</td>
 <td></td>
-<td>-72</td>
-<td>14%</td>
+<td data-l="7日">-72</td>
+<td data-l="島">14%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>47</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
-<td class="pos">+636</td>
-<td>45%</td>
-<td>33%</td>
+<tr><td class="l rank">7</td><td class="mach">47</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃 <span class="zentai" title="今日の全台系候補5位・推定5.0%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+636</td>
+<td data-l="P">45%</td>
+<td data-l="大">33%</td>
 <td></td>
-<td>-241</td>
-<td>31%</td>
+<td data-l="7日">-241</td>
+<td data-l="島">31%</td>
 <td class="stk neg">-4日</td>
-<td class="zc">5位 5.0%</td>
+<td class="zc">全台系5位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why">7のつく日: 凹み台↑</td></tr>
+<td class="l why sig">7のつく日: 凹み台↑</td></tr>
 
-<tr><td class="l rank">8</td><td>61</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
-<td class="pos">+634</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">8</td><td class="mach">61</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦 <span class="zentai" title="今日の全台系候補6位・推定5.0%">全台系候補6位</span></td>
+<td data-l="期待" class="pos">+634</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>-424</td>
-<td>14%</td>
+<td data-l="7日">-424</td>
+<td data-l="島">14%</td>
 <td class="stk neg">-5日</td>
-<td class="zc">6位 5.0%</td>
+<td class="zc">全台系6位 5.0%</td>
 <td class="why">半々</td>
-<td class="l why">7のつく日: 凹み台↑</td></tr>
+<td class="l why sig">7のつく日: 凹み台↑</td></tr>
 
 </table></div>
 </div>
@@ -2816,104 +2900,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>5137</td><td class="l">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+420</td>
-<td>49%</td>
-<td>16%</td>
+<tr><td class="l rank">1</td><td class="mach">5137</td><td class="l mdl">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+420</td>
+<td data-l="P">49%</td>
+<td data-l="大">16%</td>
 <td></td>
-<td>+116</td>
-<td>12%</td>
+<td data-l="7日">+116</td>
+<td data-l="島">12%</td>
 <td class="stk neg">-2日</td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>5157</td><td class="l">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+405</td>
-<td>49%</td>
-<td>17%</td>
+<tr><td class="l rank">2</td><td class="mach">5157</td><td class="l mdl">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+405</td>
+<td data-l="P">49%</td>
+<td data-l="大">17%</td>
 <td></td>
-<td>-591</td>
-<td>12%</td>
+<td data-l="7日">-591</td>
+<td data-l="島">12%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番◎</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>5158</td><td class="l">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+372</td>
-<td>48%</td>
-<td>15%</td>
+<tr><td class="l rank">3</td><td class="mach">5158</td><td class="l mdl">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+372</td>
+<td data-l="P">48%</td>
+<td data-l="大">15%</td>
 <td></td>
-<td>+654</td>
-<td>12%</td>
+<td data-l="7日">+654</td>
+<td data-l="島">12%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>5178</td><td class="l">東京喰種</td>
-<td class="pos">+367</td>
-<td>47%</td>
-<td>34%</td>
+<tr><td class="l rank">4</td><td class="mach">5178</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+367</td>
+<td data-l="P">47%</td>
+<td data-l="大">34%</td>
 <td></td>
-<td>-490</td>
-<td>31%</td>
+<td data-l="7日">-490</td>
+<td data-l="島">31%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>5227</td><td class="l">東京喰種</td>
-<td class="pos">+366</td>
-<td>47%</td>
-<td>31%</td>
+<tr><td class="l rank">5</td><td class="mach">5227</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+366</td>
+<td data-l="P">47%</td>
+<td data-l="大">31%</td>
 <td></td>
-<td>+157</td>
-<td>31%</td>
+<td data-l="7日">+157</td>
+<td data-l="島">31%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>5207</td><td class="l">東京喰種</td>
-<td class="pos">+362</td>
-<td>47%</td>
-<td>32%</td>
+<tr><td class="l rank">6</td><td class="mach">5207</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+362</td>
+<td data-l="P">47%</td>
+<td data-l="大">32%</td>
 <td></td>
-<td>-333</td>
-<td>31%</td>
+<td data-l="7日">-333</td>
+<td data-l="島">31%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>5535</td><td class="l">邪神ちゃんドロップキック</td>
-<td class="pos">+326</td>
-<td>38%</td>
-<td>25%</td>
+<tr><td class="l rank">7</td><td class="mach">5535</td><td class="l mdl">邪神ちゃんドロップキック</td>
+<td data-l="期待" class="pos">+326</td>
+<td data-l="P">38%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>-1666</td>
-<td>24%</td>
+<td data-l="7日">-1666</td>
+<td data-l="島">24%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>5580</td><td class="l">マギアレコード 魔法少女まどか☆マギカ外伝</td>
-<td class="pos">+310</td>
-<td>42%</td>
-<td>23%</td>
+<tr><td class="l rank">8</td><td class="mach">5580</td><td class="l mdl">マギアレコード 魔法少女まどか☆マギカ外伝</td>
+<td data-l="期待" class="pos">+310</td>
+<td data-l="P">42%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>-1632</td>
-<td>16%</td>
+<td data-l="7日">-1632</td>
+<td data-l="島">16%</td>
 <td class="stk neg">-7日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -2936,104 +3020,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>207</td><td class="l">戦国乙女5 業火を穿つ宿焔の双刃</td>
-<td class="pos">+833</td>
-<td>46%</td>
-<td>25%</td>
+<tr><td class="l rank">1</td><td class="mach">207</td><td class="l mdl">戦国乙女5 業火を穿つ宿焔の双刃</td>
+<td data-l="期待" class="pos">+833</td>
+<td data-l="P">46%</td>
+<td data-l="大">25%</td>
 <td></td>
-<td>+943</td>
-<td>17%</td>
+<td data-l="7日">+943</td>
+<td data-l="島">17%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>177</td><td class="l">東京喰種</td>
-<td class="pos">+609</td>
-<td>45%</td>
-<td>28%</td>
+<tr><td class="l rank">2</td><td class="mach">177</td><td class="l mdl">東京喰種</td>
+<td data-l="期待" class="pos">+609</td>
+<td data-l="P">45%</td>
+<td data-l="大">28%</td>
 <td></td>
-<td>+443</td>
-<td>27%</td>
+<td data-l="7日">+443</td>
+<td data-l="島">27%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>217</td><td class="l">キングハナハナ-30</td>
-<td class="pos">+467</td>
-<td>52%</td>
-<td>21%</td>
+<tr><td class="l rank">3</td><td class="mach">217</td><td class="l mdl">キングハナハナ-30</td>
+<td data-l="期待" class="pos">+467</td>
+<td data-l="P">52%</td>
+<td data-l="大">21%</td>
 <td></td>
-<td>-300</td>
-<td>10%</td>
+<td data-l="7日">-300</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-5日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>187</td><td class="l">北斗の拳 転生の章2</td>
-<td class="pos">+451</td>
-<td>40%</td>
-<td>22%</td>
+<tr><td class="l rank">4</td><td class="mach">187</td><td class="l mdl">北斗の拳 転生の章2</td>
+<td data-l="期待" class="pos">+451</td>
+<td data-l="P">40%</td>
+<td data-l="大">22%</td>
 <td></td>
-<td>-514</td>
-<td>10%</td>
+<td data-l="7日">-514</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-6日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>57</td><td class="l">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補2位・推定5.0%">全台系候補2位</span></td>
-<td class="pos">+451</td>
-<td>49%</td>
-<td>23%</td>
+<tr><td class="l rank">5</td><td class="mach">57</td><td class="l mdl">ニューキングハナハナV‐30 <span class="zentai" title="今日の全台系候補2位・推定5.0%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+451</td>
+<td data-l="P">49%</td>
+<td data-l="大">23%</td>
 <td></td>
-<td>+514</td>
-<td>11%</td>
+<td data-l="7日">+514</td>
+<td data-l="島">11%</td>
 <td class="stk "></td>
-<td class="zc">2位 5.0%</td>
+<td class="zc">全台系2位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>47</td><td class="l">キングハナハナ-30</td>
-<td class="pos">+448</td>
-<td>51%</td>
-<td>20%</td>
+<tr><td class="l rank">6</td><td class="mach">47</td><td class="l mdl">キングハナハナ-30</td>
+<td data-l="期待" class="pos">+448</td>
+<td data-l="P">51%</td>
+<td data-l="大">20%</td>
 <td></td>
-<td>+314</td>
-<td>10%</td>
+<td data-l="7日">+314</td>
+<td data-l="島">10%</td>
 <td class="stk neg">-2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>37</td><td class="l">キングハナハナ-30</td>
-<td class="pos">+447</td>
-<td>52%</td>
-<td>19%</td>
+<tr><td class="l rank">7</td><td class="mach">37</td><td class="l mdl">キングハナハナ-30</td>
+<td data-l="期待" class="pos">+447</td>
+<td data-l="P">52%</td>
+<td data-l="大">19%</td>
 <td></td>
-<td>-43</td>
-<td>10%</td>
+<td data-l="7日">-43</td>
+<td data-l="島">10%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>167</td><td class="l">甲鉄城のカバネリ 海門(うなと)決戦</td>
-<td class="pos">+432</td>
-<td>46%</td>
-<td>24%</td>
+<tr><td class="l rank">8</td><td class="mach">167</td><td class="l mdl">甲鉄城のカバネリ 海門(うなと)決戦</td>
+<td data-l="期待" class="pos">+432</td>
+<td data-l="P">46%</td>
+<td data-l="大">24%</td>
 <td></td>
-<td>+1486</td>
-<td>16%</td>
+<td data-l="7日">+1486</td>
+<td data-l="島">16%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
@@ -3056,104 +3140,104 @@ function axCat(title){return ax({title:title,type:'category'});}
 .stk.pos{color:#16a34a}.stk.neg{color:#dc2626}
 .zc{font-size:11px;white-space:nowrap;color:#b45309;font-weight:700}
 </style>
-<div class="tablewrap"><table>
+<div class="tablewrap"><table class="mrows">
 <tr><th class="l">#</th><th>台番</th><th class="l">機種</th><th>期待差枚</th><th>プラス率</th><th>大勝ち率</th><th>角</th><th>直近7日</th><th>島勝率</th><th>連続</th><th>全台系</th><th>スコア理由</th><th class="l">今日の癖</th></tr>
 
-<tr><td class="l rank">1</td><td>157</td><td class="l">SHAKE BONUS TRIGGER</td>
-<td class="pos">+274</td>
-<td>47%</td>
-<td>9%</td>
+<tr><td class="l rank">1</td><td class="mach">157</td><td class="l mdl">SHAKE BONUS TRIGGER</td>
+<td data-l="期待" class="pos">+274</td>
+<td data-l="P">47%</td>
+<td data-l="大">9%</td>
 <td></td>
-<td>+625</td>
-<td>5%</td>
+<td data-l="7日">+625</td>
+<td data-l="島">5%</td>
 <td class="stk pos">+2日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">2</td><td>107</td><td class="l">ミスタージャグラー <span class="zentai" title="今日の全台系候補5位・推定4.3%">全台系候補5位</span></td>
-<td class="pos">+209</td>
-<td>45%</td>
-<td>8%</td>
+<tr><td class="l rank">2</td><td class="mach">107</td><td class="l mdl">ミスタージャグラー <span class="zentai" title="今日の全台系候補5位・推定4.3%">全台系候補5位</span></td>
+<td data-l="期待" class="pos">+209</td>
+<td data-l="P">45%</td>
+<td data-l="大">8%</td>
 <td></td>
-<td>-42</td>
-<td>2%</td>
+<td data-l="7日">-42</td>
+<td data-l="島">2%</td>
 <td class="stk "></td>
-<td class="zc">5位 4.3%</td>
+<td class="zc">全台系5位 4.3%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">3</td><td>177</td><td class="l">モンキーターンV</td>
-<td class="pos">+151</td>
-<td>38%</td>
-<td>9%</td>
+<tr><td class="l rank">3</td><td class="mach">177</td><td class="l mdl">モンキーターンV</td>
+<td data-l="期待" class="pos">+151</td>
+<td data-l="P">38%</td>
+<td data-l="大">9%</td>
 <td>角</td>
-<td>-438</td>
-<td>5%</td>
+<td data-l="7日">-438</td>
+<td data-l="島">5%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">4</td><td>17</td><td class="l">ゴーゴージャグラー3 <span class="zentai" title="今日の全台系候補2位・推定5.0%">全台系候補2位</span></td>
-<td class="pos">+98</td>
-<td>49%</td>
-<td>11%</td>
+<tr><td class="l rank">4</td><td class="mach">17</td><td class="l mdl">ゴーゴージャグラー3 <span class="zentai" title="今日の全台系候補2位・推定5.0%">全台系候補2位</span></td>
+<td data-l="期待" class="pos">+98</td>
+<td data-l="P">49%</td>
+<td data-l="大">11%</td>
 <td></td>
-<td>-462</td>
-<td>3%</td>
+<td data-l="7日">-462</td>
+<td data-l="島">3%</td>
 <td class="stk neg">-2日</td>
-<td class="zc">2位 5.0%</td>
+<td class="zc">全台系2位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">5</td><td>67</td><td class="l">マイジャグラーV</td>
-<td class="pos">+95</td>
-<td>47%</td>
-<td>12%</td>
+<tr><td class="l rank">5</td><td class="mach">67</td><td class="l mdl">マイジャグラーV</td>
+<td data-l="期待" class="pos">+95</td>
+<td data-l="P">47%</td>
+<td data-l="大">12%</td>
 <td></td>
-<td>+878</td>
-<td>13%</td>
+<td data-l="7日">+878</td>
+<td data-l="島">13%</td>
 <td class="stk "></td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">6</td><td>47</td><td class="l">マイジャグラーV</td>
-<td class="pos">+87</td>
-<td>46%</td>
-<td>13%</td>
+<tr><td class="l rank">6</td><td class="mach">47</td><td class="l mdl">マイジャグラーV</td>
+<td data-l="期待" class="pos">+87</td>
+<td data-l="P">46%</td>
+<td data-l="大">13%</td>
 <td></td>
-<td>+707</td>
-<td>13%</td>
+<td data-l="7日">+707</td>
+<td data-l="島">13%</td>
 <td class="stk pos">+3日</td>
 <td class="zc"></td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">7</td><td>57</td><td class="l">ファンキージャグラー2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
-<td class="pos">+75</td>
-<td>38%</td>
-<td>5%</td>
+<tr><td class="l rank">7</td><td class="mach">57</td><td class="l mdl">ファンキージャグラー2 <span class="zentai" title="今日の全台系候補3位・推定5.0%">全台系候補3位</span></td>
+<td data-l="期待" class="pos">+75</td>
+<td data-l="P">38%</td>
+<td data-l="大">5%</td>
 <td></td>
-<td>+198</td>
-<td>1%</td>
+<td data-l="7日">+198</td>
+<td data-l="島">1%</td>
 <td class="stk "></td>
-<td class="zc">3位 5.0%</td>
+<td class="zc">全台系3位 5.0%</td>
 <td class="why">台番○</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
-<tr><td class="l rank">8</td><td>149</td><td class="l">スマスロ サンダーV <span class="zentai" title="今日の全台系候補4位・推定4.3%">全台系候補4位</span></td>
-<td class="pos">+70</td>
-<td>44%</td>
-<td>5%</td>
+<tr><td class="l rank">8</td><td class="mach">149</td><td class="l mdl">スマスロ サンダーV <span class="zentai" title="今日の全台系候補4位・推定4.3%">全台系候補4位</span></td>
+<td data-l="期待" class="pos">+70</td>
+<td data-l="P">44%</td>
+<td data-l="大">5%</td>
 <td>角</td>
-<td>-203</td>
-<td>9%</td>
+<td data-l="7日">-203</td>
+<td data-l="島">9%</td>
 <td class="stk "></td>
-<td class="zc">4位 4.3%</td>
+<td class="zc">全台系4位 4.3%</td>
 <td class="why">半々</td>
-<td class="l why"></td></tr>
+<td class="l why sig"></td></tr>
 
 </table></div>
 </div>
