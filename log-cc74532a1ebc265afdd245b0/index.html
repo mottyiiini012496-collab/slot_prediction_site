@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>全予想の過去ログ</title>
+<style>
+:root{--border:#e2e8f0;--dim:#64748b;--accent:#4f46e5;--green:#059669;--hot:#b45309}
+*{box-sizing:border-box}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;
+  background:#f5f7fb;color:#0f172a;margin:0;padding:0 0 40px;font-size:14px}
+.bar{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--border);
+  padding:10px 14px;box-shadow:0 1px 3px rgba(15,23,42,.05)}
+h1{font-size:17px;margin:0 0 2px}
+.meta{font-size:11.5px;color:var(--dim)}
+.wrap{max-width:1180px;margin:0 auto;padding:14px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.controls label{font-size:11.5px;color:var(--dim);font-weight:700}
+select,input{padding:7px 9px;border-radius:8px;border:1px solid var(--border);
+  font-size:14px;font-weight:600;background:#fff;max-width:100%}
+#fText{flex:1;min-width:150px;font-weight:400}
+.chip{display:inline-block;padding:6px 11px;border-radius:999px;border:1px solid var(--border);
+  background:#fff;font-size:12px;font-weight:700;color:var(--dim);cursor:pointer}
+.chip.on{background:var(--hot);border-color:var(--hot);color:#fff}
+.muted{color:var(--dim);font-size:12px;margin-bottom:8px}
+.tablewrap{overflow-x:auto;background:#fff;border:1px solid var(--border);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+th{background:#f8fafc;font-size:11px;color:var(--dim);position:sticky;top:0;cursor:pointer}
+th.l,td.l{text-align:left}
+td.pos{color:var(--green);font-weight:700}
+.stk{font-weight:700}.stk.pos{color:var(--green)}.stk.neg{color:#dc2626}
+.zc{font-size:11px;color:var(--hot);font-weight:700}
+.why{font-size:11px;color:#475569;white-space:nowrap}
+.note{background:#fff;border:1px solid var(--border);border-radius:10px;padding:11px 13px;
+  font-size:12px;line-height:1.7;color:#334155;margin-bottom:12px}
+.empty{padding:30px 16px;text-align:center;color:var(--dim)}
+@media(max-width:640px){
+  .wrap{padding:10px}
+  #fText{min-width:100%;order:-1}
+  table{font-size:11.5px}th,td{padding:6px 5px}
+  .hide-sm{display:none}
+}
+</style></head><body>
+<div class="bar"><h1>全予想の過去ログ</h1>
+<div class="meta" id="hdr">読み込み中…</div></div>
+<div class="wrap">
+<div class="note">過去の「全予想」をさかのぼって見るページです（管理者専用・約180日分）。
+その日に出していた予測をそのまま保存しているので、<b>後から答え合わせができます</b>。
+日付は「スナップショットを作った日」で、本日分・翌日分の2種類が入っています。</div>
+
+<div class="controls">
+<label>日付</label><select id="fDate"></select>
+<label>本日/翌日</label><select id="fTag"></select>
+<label>店</label><select id="fStore"><option value="">全店</option></select>
+<label>機種</label><select id="fModel"><option value="">全機種</option></select>
+<input id="fText" placeholder="機種名・台番で検索">
+<span class="chip on" data-k="pred_diff">期待差枚順</span>
+<span class="chip" data-k="pred_plus">プラス率順</span>
+<span class="chip" data-k="pred_win">大勝ち率順</span>
+<span class="chip" data-k="zentai">全台系優先</span>
+</div>
+<div class="muted" id="count"></div>
+<div class="tablewrap"><table><thead><tr>
+<th class="l">#</th><th class="l">店</th><th>台番</th><th class="l">機種</th>
+<th>期待差枚</th><th>プラス率</th><th>大勝ち率</th>
+<th class="hide-sm">角</th><th class="hide-sm">直近7日</th><th class="hide-sm">島勝率</th>
+<th>連続</th><th>全台系</th><th class="hide-sm">スコア理由</th><th class="l hide-sm">その日の癖</th>
+</tr></thead><tbody id="tb"></tbody></table></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtNum=v=>v==null||isNaN(v)?'':Math.round(v).toLocaleString();
+const fmtPct=v=>v==null||isNaN(v)?'':(v*100).toFixed(1)+'%';
+let DAY=null, ROWS=[], sortKey='pred_diff', CAP=500;
+
+// GitHub Pages が転送時に gzip を解いて返すことがあるので、
+// 先頭バイトを見て「まだ圧縮されているか」を判定してから解凍する。
+async function loadDay(date){
+  const res = await fetch('d/'+date+'.json.gz', {cache:'no-cache'});
+  if(!res.ok) throw new Error('取得できませんでした ('+res.status+')');
+  const buf = await res.arrayBuffer();
+  const u8 = new Uint8Array(buf);
+  if(u8[0]===0x1f && u8[1]===0x8b){
+    if(typeof DecompressionStream==='undefined')
+      throw new Error('このブラウザは gzip の解凍に対応していません');
+    const st = new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return JSON.parse(await new Response(st).text());
+  }
+  return JSON.parse(new TextDecoder().decode(buf));
+}
+
+function toRows(t){
+  const c=t.cols, keys=Object.keys(c), n=t.n, out=new Array(n);
+  for(let i=0;i<n;i++){const o={};for(const k of keys)o[k]=c[k][i];out[i]=o;}
+  return out;
+}
+
+function fillSelect(sel, values, allLabel){
+  sel.innerHTML = allLabel ? '<option value="">'+allLabel+'</option>' : '';
+  values.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});
+}
+
+async function pickDate(date){
+  $('hdr').textContent = date+' を読み込み中…';
+  try{ DAY = await loadDay(date); }
+  catch(e){ $('hdr').textContent='エラー: '+e.message; $('tb').innerHTML=''; return; }
+  const tags = Object.keys(DAY.tags);
+  const cur = $('fTag').value;
+  $('fTag').innerHTML='';
+  tags.forEach(t=>{
+    const o=document.createElement('option'); o.value=t;
+    o.textContent=(t==='today'?'本日':'翌日')+'（'+(DAY.tags[t].label||'')+'）';
+    $('fTag').appendChild(o);
+  });
+  if(tags.indexOf(cur)>=0) $('fTag').value=cur;
+  $('hdr').textContent = DAY.date+' 時点のスナップショット ／ 生成 '+(DAY.generated_at||'');
+  pickTag();
+}
+
+function pickTag(){
+  const t = DAY.tags[$('fTag').value] || Object.values(DAY.tags)[0];
+  ROWS = toRows(t);
+  const s=$('fStore').value, m=$('fModel').value;
+  fillSelect($('fStore'), [...new Set(ROWS.map(r=>r.store).filter(Boolean))].sort(), '全店');
+  fillSelect($('fModel'), [...new Set(ROWS.map(r=>r.model).filter(Boolean))].sort(), '全機種');
+  $('fStore').value=s; $('fModel').value=m;
+  render();
+}
+
+function render(){
+  const st=$('fStore').value, md=$('fModel').value, tx=$('fText').value.trim();
+  let rows=ROWS.filter(r=>(!st||r.store===st)&&(!md||r.model===md)
+    &&(!tx||(r.model||'').includes(tx)||String(r.machine).includes(tx)));
+  if(sortKey==='zentai') rows.sort((a,b)=>((b.zentai_prob||-1)-(a.zentai_prob||-1))||((b.pred_diff||-1e9)-(a.pred_diff||-1e9)));
+  else rows.sort((a,b)=>(b[sortKey]||-1e9)-(a[sortKey]||-1e9));
+  $('count').textContent = rows.length+'台該当'+(rows.length>CAP?'（上位'+CAP+'台を表示）':'');
+  const tb=$('tb');
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="14" class="empty">該当する台がありません。</td></tr>'; return; }
+  tb.innerHTML = rows.slice(0,CAP).map((r,i)=>
+    '<tr><td class="l">'+(i+1)+'</td><td class="l">'+esc(r.store)+'</td><td>'+esc(r.machine)+'</td>'+
+    '<td class="l">'+esc(r.model)+'</td>'+
+    '<td class="'+(r.pred_diff>0?'pos':'')+'">'+fmtNum(r.pred_diff)+'</td>'+
+    '<td>'+fmtPct(r.pred_plus)+'</td><td>'+fmtPct(r.pred_win)+'</td>'+
+    '<td class="hide-sm">'+(r.is_corner==1?'角':'')+'</td>'+
+    '<td class="hide-sm">'+fmtNum(r.u_mean7)+'</td><td class="hide-sm">'+fmtPct(r.im_bigratio_r7)+'</td>'+
+    '<td class="stk '+esc(r.streak_dir||'')+'">'+esc(r.streak_txt||'')+'</td>'+
+    '<td class="zc">'+(r.zentai_rank?('全台系'+r.zentai_rank+'位 '+(r.zentai_prob*100).toFixed(1)+'%'):'')+'</td>'+
+    '<td class="why hide-sm">'+esc(r.score_influence_short||'')+'</td>'+
+    '<td class="l why hide-sm">'+esc(r.today_signal||'')+'</td></tr>').join('');
+}
+
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  sortKey=c.dataset.k;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c));
+  render();
+}));
+['fStore','fModel','fText'].forEach(id=>$(id).addEventListener('input',render));
+$('fTag').addEventListener('change',pickTag);
+$('fDate').addEventListener('change',()=>pickDate($('fDate').value));
+
+(async()=>{
+  let days=[];
+  try{ days = await (await fetch('days.json',{cache:'no-cache'})).json(); }
+  catch(e){ $('hdr').textContent='日付一覧を読み込めませんでした。'; return; }
+  if(!days.length){ $('hdr').textContent='まだログがありません（次回の外部公開から蓄積されます）。'; return; }
+  fillSelect($('fDate'), days, null);
+  pickDate(days[0]);
+})();
+</script></body></html>
