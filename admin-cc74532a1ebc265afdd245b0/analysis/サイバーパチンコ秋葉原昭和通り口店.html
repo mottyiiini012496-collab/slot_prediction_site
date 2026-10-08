@@ -165,7 +165,7 @@ function axCat(title){return ax({title:title,type:'category'});}
 <select id="_viewmode" title="表示の切り替え" style="margin-left:auto;font-size:12px;padding:4px 8px">
 <option value="auto">表示: 自動</option><option value="card">表示: スマホ（カード）</option><option value="table">表示: PC（表）</option>
 </select>
-<span class="fresh" style="margin-left:10px">データ最新 <b>2026-10-07</b> <span class="muted" style="font-size:11px">（HTML更新 2026-10-08 20:12:02）</span></header>
+<span class="fresh" style="margin-left:10px">データ最新 <b>2026-10-08</b> <span class="muted" style="font-size:11px">（HTML更新 2026-10-09 08:00:49）</span></header>
 <script>
 (function(){
   var sel = document.getElementById('_viewmode');
@@ -236,7 +236,7 @@ async function _gateCheck(){
 document.getElementById('_gatepw')?.addEventListener('keydown', e=>{ if(e.key==='Enter') _gateCheck(); });
 </script>
 <script>
-const DAILY={"dates": ["2026-07-09", "2026-07-13", "2026-07-26"], "tot": [2237, -61631, 128158], "win": [8.1, 7.9, 30.1]};
+const DAILY={"dates": ["2026-07-13", "2026-07-26"], "tot": [-61631, 128158], "win": [7.9, 30.1]};
 Plotly.newPlot('daily',[{type:'bar',x:DAILY.dates,y:DAILY.tot,name:'合計差枚',marker:{color:DAILY.tot.map(v=>v<0?CNEG:CPOS)}},
  {type:'scatter',x:DAILY.dates,y:DAILY.win,name:'勝ち台率%',yaxis:'y2',line:{color:CLINE}}],
  {...PLT,xaxis:axDate('日付'),yaxis:ax({title:'合計差枚'}),
@@ -245,7 +245,7 @@ Plotly.newPlot('daily',[{type:'bar',x:DAILY.dates,y:DAILY.tot,name:'合計差枚
 const WKP=[-222.0, null, null, 8.0, null, null, 1042.0],WKL=["\u6708", "\u706b", "\u6c34", "\u6728", "\u91d1", "\u571f", "\u65e5"];
 Plotly.newPlot('wk',[{type:'bar',x:WKL,y:WKP,marker:{color:WKP.map(v=>v==null?CNULL:(v<0?CNEG:CPOS))}}],
  {...PLT,xaxis:axCat('曜日'),yaxis:ax({title:'平均差枚'}),margin:{l:56,r:10,t:6,b:36}},{responsive:true,displayModeBar:false,staticPlot:true});
-const DR=[{"avg": 1042.0, "date": "2026-07-26", "dow": "\u65e5", "n": 123, "tot": 128158.0, "win": 0.301}, {"avg": -222.0, "date": "2026-07-13", "dow": "\u6708", "n": 277, "tot": -61631.0, "win": 0.079}, {"avg": 8.0, "date": "2026-07-09", "dow": "\u6728", "n": 270, "tot": 2237.0, "win": 0.081}];
+const DR=[{"avg": 1042.0, "date": "2026-07-26", "dow": "\u65e5", "n": 123, "tot": 128158.0, "win": 0.301}, {"avg": -222.0, "date": "2026-07-13", "dow": "\u6708", "n": 277, "tot": -61631.0, "win": 0.079}];
 document.getElementById('dtb').innerHTML=DR.map(r=>'<tr>'
  +'<td class="l">'+r.date+'</td><td>'+r.dow+'</td><td class="'+cls(r.tot)+'">'+fmtNum(r.tot)+'</td><td class="'+cls(r.avg)+'">'+fmtNum(r.avg)+'</td><td>'+fmtPct(r.win)+'</td><td>'+r.n+'</td></tr>').join('');
 const MR=[];let mdir=-1,mkey='avg';
