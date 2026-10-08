@@ -1,0 +1,42 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>過去ログ</title></head>
+<body style="font-family:system-ui,sans-serif;color:#334155;padding:24px">
+<p id="msg">読み込み中…</p>
+<script>
+// d/<日付>/<ファイル>.gz を取得してブラウザ内で解凍し、そのページとして表示する。
+// GitHub Pages が転送時に gzip を解いて返すことがあるので、先頭バイトで判定してから解凍する。
+(async()=>{
+  const q=new URLSearchParams(location.search), d=q.get('d')||'', f=q.get('f')||'';
+  const msg=document.getElementById('msg');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d) || !/^[\w\-\/\.　-鿿＀-￯]+\.html$/.test(f) || f.indexOf('..')>=0){
+    msg.textContent='URLが正しくありません'; return;
+  }
+  try{
+    const res=await fetch('d/'+d+'/'+f.split('/').map(encodeURIComponent).join('/')+'.gz',{cache:'no-cache'});
+    if(!res.ok) throw new Error('取得できませんでした ('+res.status+')');
+    const buf=await res.arrayBuffer(), u8=new Uint8Array(buf);
+    let html;
+    if(u8[0]===0x1f && u8[1]===0x8b){
+      if(typeof DecompressionStream==='undefined') throw new Error('このブラウザは gzip の解凍に対応していません');
+      const st=new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'));
+      html=await new Response(st).text();
+    } else html=new TextDecoder().decode(buf);
+    const bar='<div id="archbar" style="position:relative;z-index:9999;background:#1e1b4b;color:#fff;font:700 12.5px system-ui,sans-serif;'+
+      'padding:8px 12px;display:flex;gap:10px;align-items:center">📚 過去ログ：'+d+
+      '<a href="index.html" style="color:#c7d2fe;margin-left:auto;text-decoration:none">← 過去ログ一覧</a></div>';
+    // ページ内の相対リンク（例: 店舗分析の店ページ）を、同じ日の過去ログへ読み替える
+    const base=f.indexOf('/')>=0 ? f.slice(0, f.lastIndexOf('/')) : '';
+    const fix='<scr'+'ipt>(function(){var D='+JSON.stringify(d)+',B='+JSON.stringify(base)+';'+
+      'document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");'+
+      'if(!a||a.closest("#archbar"))return;var h=a.getAttribute("href");'+
+      'if(!h||/^(#|[a-z]+:|\\/)/i.test(h))return;var parts=B?B.split("/"):[],bad=false;'+
+      'h.split("#")[0].split("?")[0].split("/").forEach(function(p){if(p===".."){if(!parts.length)bad=true;else parts.pop();}else if(p&&p!==".")parts.push(p);});'+
+      'var path=parts.join("/");if(bad||!/\\.html$/.test(path))return;e.preventDefault();'+
+      'location.href="view.html?d="+encodeURIComponent(D)+"&f="+encodeURIComponent(path);},true);})();</scr'+'ipt>';
+    html=html.replace(/<body([^>]*)>/i, m=>m+bar+fix);
+    document.open(); document.write(html); document.close();
+  }catch(e){ msg.textContent='表示できませんでした: '+e.message; }
+})();
+</script></body></html>

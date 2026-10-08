@@ -1,0 +1,52 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>レポートの過去ログ</title>
+<style>
+body{margin:0;background:#f1f5f9;color:#0f172a;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;font-size:14px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:18px;margin:6px 0 4px}
+.sub{color:#64748b;font-size:12px;margin-bottom:14px;line-height:1.6}
+.day{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.day h2{font-size:15px;margin:0 0 8px;display:flex;align-items:baseline;gap:8px}
+.day h2 .g{font-size:11px;color:#64748b;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips a{display:inline-block;padding:7px 11px;border-radius:9px;border:1px solid #e2e8f0;background:#f8fafc;
+  color:#4f46e5;font-weight:700;font-size:12.5px;text-decoration:none}
+.chips a.paid{color:#b45309;border-color:rgba(180,83,9,.3);background:rgba(180,83,9,.06)}
+details{margin-top:8px;font-size:12.5px}
+details summary{cursor:pointer;color:#64748b;font-weight:700}
+details .chips{margin-top:6px}
+details .chips a{font-weight:600;color:#334155}
+.today{border-color:#4f46e5;box-shadow:0 0 0 2px rgba(79,70,229,.15)}
+.err{color:#b91c1c}
+</style></head><body><div class="wrap">
+<h1>📚 レポートの過去ログ</h1>
+<div class="sub">その日の最終版（18時以降の生成は翌日分）を日付ごとに保存しています。
+攻略メモ・狙い店ナビ・狙いナビ・癖スキャン・着席タイブレーカー・月間積み上げ・店舗分析に加えて、
+有料配布の「予測レポート」「該当台」、全予想の過去ログにも飛べます。</div>
+<div id="list">読み込み中…</div>
+</div>
+<script>
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+(async()=>{
+  const el=document.getElementById('list');
+  let days=[];
+  try{ days=await (await fetch('days.json',{cache:'no-cache'})).json(); }
+  catch(e){ el.innerHTML='<p class="err">一覧を読み込めませんでした。</p>'; return; }
+  if(!days.length){ el.innerHTML='<p>まだ保存された日がありません。</p>'; return; }
+  el.innerHTML=days.map((d,i)=>{
+    const v=f=>'view.html?d='+encodeURIComponent(d.date)+'&f='+encodeURIComponent(f);
+    let chips=(d.files||[]).map(x=>'<a href="'+v(x.f)+'">'+esc(x.title)+'</a>').join('');
+    if(d.paid_folder){
+      chips+='<a class="paid" href="../'+esc(d.paid_folder)+'/index.html">予測レポート（有料配布版）</a>';
+      chips+='<a class="paid" href="../'+esc(d.paid_folder)+'/target_machines.html">本日の該当台（有料配布版）</a>';
+    }
+    if(d.pred_log_dir) chips+='<a href="../'+esc(d.pred_log_dir)+'/index.html">全予想（過去ログで日付を選ぶ）</a>';
+    const st=(d.stores||[]).length ? '<details><summary>店舗分析（店ごと '+d.stores.length+'店）</summary><div class="chips">'+
+      d.stores.map(x=>'<a href="'+v(x.f)+'">'+esc(x.title)+'</a>').join('')+'</div></details>' : '';
+    return '<div class="day'+(i===0?' today':'')+'"><h2>'+esc(d.date)+' '+esc(d.label?d.label.replace(/^[^（]*/,''):'')+
+      '<span class="g">生成 '+esc(d.generated_at||'')+'</span></h2><div class="chips">'+chips+'</div>'+st+'</div>';
+  }).join('');
+})();
+</script></body></html>
