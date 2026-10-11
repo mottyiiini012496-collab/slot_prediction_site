@@ -1,0 +1,149 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>店の発掘</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--border:#e2e8f0;--text:#0f172a;--dim:#64748b;--accent:#4f46e5;--hot:#b45309;--pos:#16a34a;--neg:#dc2626}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI","Hiragino Kaku Gothic ProN",sans-serif;font-size:14px}
+.nav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.nav .in{max-width:920px;margin:0 auto;padding:10px 16px}
+h1{font-size:16px;margin:0 0 2px}.meta{font-size:11px;color:var(--dim)}
+.wrap{max-width:920px;margin:0 auto;padding:12px 16px 40px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chips button{padding:6px 11px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:12px;font-weight:700;color:var(--dim);cursor:pointer}
+.chips button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.note{font-size:11.5px;color:var(--dim);line-height:1.7}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;margin-bottom:7px;cursor:pointer}
+.row .rk{font-weight:800;color:var(--hot);font-size:13px;text-align:center}
+.row .nm{font-weight:800;font-size:14px}.row .sub{font-size:11px;color:var(--dim);margin-top:2px}
+.row .sc{text-align:right}.row .sc b{font-size:18px;color:var(--accent)}.row .sc span{display:block;font-size:10px;color:var(--dim)}
+.kv{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:5px;color:#334155}
+.kv b{color:var(--text)}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;margin-left:5px;vertical-align:1px}
+.badge.reg{background:#dcfce7;color:var(--pos)}.badge.st{background:#f1f5f9;color:var(--dim)}
+.reg-tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--hot);background:rgba(180,83,9,.08);border-radius:6px;padding:1px 6px;margin:3px 4px 0 0}
+.panel{position:fixed;left:0;right:0;bottom:0;max-height:82vh;overflow:auto;background:#fff;border-top:1px solid var(--border);
+  box-shadow:0 -10px 28px rgba(15,23,42,.18);border-radius:16px 16px 0 0;padding:14px 16px 24px;z-index:50;display:none}
+.panel.show{display:block}.panel .x{position:absolute;right:14px;top:10px;font-size:20px;color:var(--dim);cursor:pointer}
+.panel h3{margin:0 0 4px;font-size:16px;padding-right:30px}
+.panel h4{margin:14px 0 6px;font-size:12.5px;color:var(--dim)}
+.btn{display:inline-block;padding:8px 14px;border-radius:9px;background:var(--accent);color:#fff;font-weight:700;font-size:12.5px;border:0;cursor:pointer;text-decoration:none;margin:8px 8px 0 0}
+.btn.sub{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+table.mt{width:100%;border-collapse:collapse;font-size:12px}table.mt td,table.mt th{padding:4px 6px;border-bottom:1px solid var(--border);text-align:right}
+table.mt th{color:var(--dim);font-size:10.5px}table.mt td.l,table.mt th.l{text-align:left}
+.bar{display:inline-block;height:8px;background:var(--pos);border-radius:2px;vertical-align:middle}
+svg{display:block;width:100%}
+input.q{flex:1;min-width:140px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px}
+</style></head><body>
+<div class="nav"><div class="in">
+<h1>⛏ 店の発掘 <span class="meta" id="meta"></span></h1>
+<div class="chips" id="prefs"></div>
+<div class="chips" id="opts"></div>
+</div></div>
+<div class="wrap">
+<div id="crawl"></div>
+<div id="list"></div>
+<div class="card note">
+<b>見方</b>：アナスロの「データ一覧」は<b>店全体がプラスの日だけ差枚が載り、マイナスの日は「–」</b>になっています。
+そのため本当の月間収支は分かりません。ここでは次の指標で比べています。<br>
+・<b>出玉指数</b>＝1日あたりの平均差枚（1台あたり）の平均。マイナス日は0として数える控えめな目安<br>
+・<b>プラス日率</b>＝営業日のうち店全体がプラスだった日の割合（直近90日）<br>
+・<b>強い日</b>＝平均差枚 +500枚/台 以上の日（直近90日の1か月あたり回数と平均）<br>
+・<b>規則性</b>＝直近1年で「◯のつく日・曜日・ゾロ目日・月末・毎月◯日」ごとに出玉指数がはっきり高いもの（z≥2、毎月◯日はz≥2.8）<br>
+・<b>スコア</b>＝出玉指数35%・強い日25%・規則性25%・最近の勢い15%（全店の中での順位を点数化）。データが少ない店・止まっている店は対象外
+</div>
+</div>
+<div class="panel" id="panel"></div>
+<script>
+const D = {"generated_at": "2026-10-12 08:18", "halls": [], "summary": {"total": 0, "fetched": 0, "scored": 0, "prefs": []}, "crawl": {"total": 0, "due": 0, "last_run": "2026-10-11T22:23:12", "last_result": "ホール一覧0件・店0件を取得しました"}, "local": false};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sg=v=>v==null?'-':(v>0?'+':'')+Number(v).toLocaleString();
+let pref='all', onlyNew=true, sortKey='score', q='';
+const prefs=['all'].concat(D.summary.prefs||[]);
+document.getElementById('meta').textContent='更新 '+D.generated_at+'・取得 '+D.summary.fetched+'/'+D.summary.total+'店・採点 '+D.summary.scored+'店';
+function chips(){
+  document.getElementById('prefs').innerHTML=prefs.map(p=>`<button data-p="${esc(p)}" class="${p===pref?'on':''}">${p==='all'?'全部':esc(p)}</button>`).join('');
+  const sorts=[['score','スコア順'],['ev90','出玉指数'],['strong','強い日'],['reg_z','規則性'],['trend','勢い']];
+  document.getElementById('opts').innerHTML=sorts.map(([k,l])=>`<button data-s="${k}" class="${k===sortKey?'on':''}">${l}</button>`).join('')+
+    `<button data-n="1" class="${onlyNew?'on':''}">未登録のみ</button><input class="q" id="q" placeholder="店名・市区で絞り込み" value="${esc(q)}">`;
+  document.querySelectorAll('#prefs button').forEach(b=>b.onclick=()=>{pref=b.dataset.p;chips();list();});
+  document.querySelectorAll('#opts button[data-s]').forEach(b=>b.onclick=()=>{sortKey=b.dataset.s;chips();list();});
+  document.querySelector('#opts button[data-n]').onclick=()=>{onlyNew=!onlyNew;chips();list();};
+  const qi=document.getElementById('q'); qi.oninput=()=>{q=qi.value;list();};
+}
+function sval(h){
+  if(sortKey==='strong') return (h.strong_per_month||0)*(h.strong_avg||0);
+  return h[sortKey];
+}
+function crawl(){
+  const c=D.crawl||{}; let h='<div class="card note">';
+  h+=`収集の状況：登録候補 ${c.total||0}店のうち、取り直し待ち ${c.due||0}店`+(c.last_run?`／前回 ${esc(c.last_run.replace('T',' '))}：${esc(c.last_result||'')}`:'')+'<br>';
+  h+='週1回（日曜の自動更新の後）に、古い順に最大150店ずつ取り直します。';
+  if(D.local) h+='<br><button class="btn" id="run">今すぐ収集（最大150店・約1時間）</button><span id="runmsg"></span>';
+  else h+='<br>登録・今すぐ収集は、家のPCのアプリ（http://localhost:5000/discovery）から行えます。';
+  document.getElementById('crawl').innerHTML=h+'</div>';
+  if(D.local) document.getElementById('run').onclick=async()=>{
+    const r=await fetch('/discovery/run',{method:'POST'}); const j=await r.json();
+    document.getElementById('runmsg').textContent=' '+(j.message||'');
+  };
+}
+let SHOWN=[];
+function list(){
+  let hs=D.halls.filter(h=>(pref==='all'||h.pref===pref)&&(!onlyNew||!h.registered));
+  if(q){const k=q.toLowerCase(); hs=hs.filter(h=>(h.name+h.city).toLowerCase().includes(k));}
+  hs.sort((a,b)=>{const va=sval(a),vb=sval(b);return (vb==null)-(va==null)||((vb||0)-(va||0));});
+  SHOWN=hs;
+  const scored=hs.filter(h=>h.score!=null), rest=hs.length-scored.length;
+  let h=scored.slice(0,200).map((x,i)=>{
+    const regs=(x.regs||[]).slice(0,2).map(r=>`<span class="reg-tag">${esc(r.label)} ${sg(r.ev)}枚</span>`).join('');
+    return `<div class="row" data-i="${i}"><div class="rk">${i+1}</div><div><div class="nm">${esc(x.name)}${x.registered?'<span class="badge reg">登録済み</span>':''}</div>`+
+      `<div class="sub">${esc(x.pref)} ${esc(x.city)}・${x.machines||'?'}台・最新 ${esc(x.latest||'')}</div>`+
+      `<div class="kv"><span>出玉指数 <b>${sg(x.ev90)}</b></span><span>プラス日 <b>${x.plus_rate??'-'}%</b></span>`+
+      `<span>強い日 <b>${x.strong_per_month}</b>回/月${x.strong_avg?'（平均'+sg(x.strong_avg)+'）':''}</span><span>勢い <b>${sg(x.trend)}</b></span></div>${regs}</div>`+
+      `<div class="sc"><b>${x.score}</b><span>スコア</span></div></div>`;
+  }).join('');
+  if(!scored.length) h='<div class="card note">まだ採点できる店がありません。収集が進むと表示されます。</div>';
+  if(rest) h+=`<div class="note" style="margin:6px 2px 12px">ほかに未取得・データ不足の店が ${rest}店あります。</div>`;
+  document.getElementById('list').innerHTML=h;
+  document.querySelectorAll('.row').forEach(r=>r.onclick=()=>detail(scored[Number(r.dataset.i)]));
+}
+function spark(series){
+  if(!series||!series.length) return '';
+  const W=600,H=90,n=series.length,bw=W/n; const mx=Math.max(500,...series.map(s=>s[1]||0));
+  let g='';
+  series.forEach((s,i)=>{const x=i*bw; if(s[1]==null){g+=`<rect x="${x}" y="${H-3}" width="${Math.max(bw-1,1)}" height="3" fill="#cbd5e1"/>`;}
+    else{const h=Math.max(2,(s[1]/mx)*(H-14)); g+=`<rect x="${x}" y="${H-h}" width="${Math.max(bw-1,1)}" height="${h}" fill="${s[1]>=500?'#b45309':'#16a34a'}"><title>${s[0]} ${sg(s[1])}枚/台</title></rect>`;}});
+  const y5=H-(500/mx)*(H-14);
+  g+=`<line x1="0" x2="${W}" y1="${y5}" y2="${y5}" stroke="#b45309" stroke-dasharray="4 4" stroke-width="1"/><text x="4" y="${y5-3}" font-size="10" fill="#b45309">+500</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="height:90px">${g}</svg><div class="note">${esc(series[0][0])} 〜 ${esc(series[n-1][0])}（緑=プラス日・茶=強い日・灰=マイナス日）</div>`;
+}
+function detail(x){
+  if(!x) return;
+  const mx=Math.max(1,...(x.months||[]).map(m=>m.plus_total||0));
+  let h=`<span class="x" id="px">&times;</span><h3>${esc(x.name)}${x.registered?'<span class="badge reg">登録済み</span>':''}</h3>`+
+    `<div class="note">${esc(x.pref)} ${esc(x.city)}・${x.machines||'?'}台・スコア <b>${x.score}</b>・最新データ ${esc(x.latest)}</div>`;
+  h+='<h4>直近120日の平均差枚（1台あたり）</h4>'+spark(x.series);
+  h+='<h4>規則性（直近1年）</h4>';
+  h+=(x.regs&&x.regs.length)?'<table class="mt"><tr><th class="l">切り口</th><th>出玉指数</th><th>プラス日</th><th>強い日</th><th>z</th></tr>'+
+    x.regs.map(r=>`<tr><td class="l">${esc(r.label)}</td><td>${sg(r.ev)}</td><td>${r.plus}/${r.n}日</td><td>${r.strong}日</td><td>${r.z}</td></tr>`).join('')+'</table>'
+    :'<div class="note">はっきりした規則性は見つかりませんでした。</div>';
+  h+='<h4>月ごと（プラス日の総差枚の合計）</h4><table class="mt"><tr><th class="l">月</th><th class="l"></th><th>プラス日の合計</th><th>プラス日/営業日</th><th>出玉指数</th></tr>'+
+    (x.months||[]).slice().reverse().map(m=>`<tr><td class="l">${esc(m.m)}</td><td class="l"><span class="bar" style="width:${Math.round(60*(m.plus_total||0)/mx)}px"></span></td>`+
+      `<td>${sg(m.plus_total)}</td><td>${m.plus_days}/${m.days}</td><td>${sg(m.ev)}</td></tr>`).join('')+'</table>';
+  if(x.strong_days&&x.strong_days.length) h+='<h4>直近の強い日</h4><div class="note">'+x.strong_days.map(esc).join('、')+'</div>';
+  h+=`<a class="btn sub" href="${esc(x.url)}" target="_blank" rel="noopener">アナスロで見る</a>`;
+  if(D.local&&!x.registered) h+=`<button class="btn" id="reg">この店を登録する（毎日の収集対象に）</button><span id="regmsg" class="note"></span>`;
+  const p=document.getElementById('panel'); p.innerHTML=h; p.classList.add('show');
+  document.getElementById('px').onclick=()=>p.classList.remove('show');
+  const rb=document.getElementById('reg');
+  if(rb) rb.onclick=async()=>{
+    rb.disabled=true;
+    const r=await fetch('/scrape_ops/add_store',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({store:x.name,url:x.url,area:x.city||x.pref})});
+    const j=await r.json(); document.getElementById('regmsg').textContent=' '+(j.message||'');
+    if(j.status==='ok'||j.status==='skip'){x.registered=true;}
+  };
+}
+chips(); crawl(); list();
+</script></body></html>
