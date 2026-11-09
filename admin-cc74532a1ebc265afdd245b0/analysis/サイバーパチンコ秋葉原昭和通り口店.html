@@ -3,12 +3,13 @@
 <title>サイバーパチンコ秋葉原昭和通り口店｜外部公開版</title>
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <style>
-:root{--bg:#f5f7fb;--panel:#ffffff;--panel2:#f1f5f9;--line:#e5e9ef;--ink:#0f172a;--sub:#64748b;
---accent:#4f46e5;--blue:#4f46e5;--green:#15a34a;--red:#dc2626;--orange:#ea580c;--chip:#eef2ff;
---shadow:0 1px 3px rgba(15,23,42,.06);--shadow2:0 8px 24px rgba(79,70,229,.10);}
+:root{--bg:#f6f7fb;--panel:#ffffff;--panel2:#f8fafc;--line:#e5e7eb;--ink:#1f2937;--sub:#6b7280;
+--accent:#1f2937;--blue:#334155;--green:#15803d;--red:#c2410c;--orange:#c2410c;--chip:#f3f4f6;
+--shadow:0 1px 2px rgba(15,23,42,.04);--shadow2:0 6px 18px rgba(15,23,42,.08);}  /* 2026-11-09 まぷスロの色 */
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
-font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic UI","Yu Gothic",Meiryo,system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+a.card:hover{border-color:#cbd5e1!important}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(6px);
 border-bottom:1px solid var(--line);box-shadow:var(--shadow);
@@ -16,7 +17,10 @@ display:flex;align-items:center;gap:12px;padding:11px 20px;flex-wrap:wrap}
 header.top .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
 header.top nav{display:flex;gap:4px;flex-wrap:wrap}
 header.top nav a{padding:6px 12px;border-radius:9px;color:var(--sub);font-size:13.5px;font-weight:600}
-header.top nav a.on{background:var(--chip);color:var(--accent)}
+header.top nav a{border:1px solid var(--line);background:#fff;border-radius:999px!important;color:#374151!important}
+header.top nav a.on{background:var(--ink)!important;color:#fff!important;border-color:var(--ink)}
+header.top .brand i{font-style:normal;color:#ff5a5f}header.top .brand small{font-size:10.5px;font-weight:700;color:#fff;background:#1f2937;border-radius:999px;padding:1px 7px;margin-left:4px}
+@media(max-width:640px){header.top nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}header.top nav a{flex-shrink:0;white-space:nowrap}html,body{max-width:100%;overflow-x:hidden}}
 header.top nav a:hover{background:var(--chip);color:var(--accent);text-decoration:none}
 header.top .fresh{font-size:12px;color:var(--sub)}.fresh b{color:var(--green)}
 .wrap{max-width:1120px;margin:0 auto;padding:24px 20px 72px}
@@ -38,7 +42,7 @@ table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
 th,td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:right;white-space:nowrap}
 th{color:var(--sub);position:sticky;top:0;background:var(--panel2);cursor:pointer;user-select:none;font-weight:700}
 td.l,th.l{text-align:left}tbody tr:last-child td{border-bottom:none}tr:hover td{background:#f8fafc}
-.note{background:#eef2ff;border-left:3px solid var(--accent);border-radius:10px;padding:11px 15px;font-size:12.5px;color:#3730a3;margin:12px 0}
+.note{background:#f8fafc;border-left:3px solid #cbd5e1;border-radius:10px;padding:11px 15px;font-size:12.5px;color:#374151;margin:12px 0}
 .rank{color:var(--accent);font-weight:700}
 .panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:14px;padding:15px 17px;margin:14px 0;box-shadow:var(--shadow)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -120,7 +124,7 @@ function fmtPct(v){return v==null?'-':Math.round(v*100)+'%';}
 function fmtNum(v){return v==null?'-':(v>0?'+':'')+Math.round(v);}
 function cls(v){return v==null?'':(v>0?'pos':'neg');}
 function sortRows(rows,key,dir){rows.sort((a,b)=>((b[key]??-1e18)-(a[key]??-1e18))*(dir||1));return rows;}
-const CPOS='#16a34a',CNEG='#dc2626',CLINE='#4f46e5',CGRID='#e6e9ef',CNULL='#cbd5e1';
+const CPOS='#16a34a',CNEG='#dc2626',CLINE='#334155',CGRID='#e6e9ef',CNULL='#cbd5e1';
 const PLT={paper_bgcolor:'#ffffff',plot_bgcolor:'#ffffff',font:{color:'#334155'},margin:{l:56,r:14,t:10,b:40},
  xaxis:{gridcolor:CGRID,zeroline:false},yaxis:{gridcolor:CGRID,zeroline:false}};
 function ax(o){return Object.assign({gridcolor:CGRID,zeroline:false,automargin:true,titlefont:{size:12},tickfont:{size:11}},o||{});}
@@ -149,7 +153,7 @@ function axCat(title){return ax({title:title,type:'category'});}
 </div></div>
 
 <div id="_content">
-<header class="top"><span class="brand">🎰 スロット分析 <span class="muted">外部公開版</span></span>
+<header class="top"><span class="brand">まぷ<i>スロ</i><small>ベース</small></span>
 <nav>
 <a href="../index.html">トップ</a>
 
@@ -165,7 +169,7 @@ function axCat(title){return ax({title:title,type:'category'});}
 <select id="_viewmode" title="表示の切り替え" style="margin-left:auto;font-size:12px;padding:4px 8px">
 <option value="auto">表示: 自動</option><option value="card">表示: スマホ（カード）</option><option value="table">表示: PC（表）</option>
 </select>
-<span class="fresh" style="margin-left:10px">データ最新 <b>2026-11-08</b> <span class="muted" style="font-size:11px">（HTML更新 2026-11-09 20:13:32）</span></header>
+<span class="fresh" style="margin-left:10px">データ最新 <b>2026-11-09</b> <span class="muted" style="font-size:11px">（HTML更新 2026-11-10 07:45:09）</span></header>
 <script>
 (function(){
   var sel = document.getElementById('_viewmode');
